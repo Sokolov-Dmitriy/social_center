@@ -1,0 +1,38 @@
+<template>
+  <div id="app">
+    <router-view/>
+  </div>
+</template>
+
+<script>
+  import $ from 'jquery'
+
+  export default {
+    name: 'App',
+    created() {
+      if (localStorage.getItem('auth_token')) {
+        $.ajaxSetup({
+          headers: {'Authorization': 'Token ' + localStorage.getItem('auth_token')}
+        })
+      }
+    }
+  }
+</script>
+
+<style>
+  #app {
+    /*font-family: 'Avenir', Helvetica, Arial, sans-serif;*/
+    /*-webkit-font-smoothing: antialiased;*/
+    /*-moz-osx-font-smoothing: grayscale;*/
+    /*text-align: center;*/
+    /*color: #2c3e50;*/
+    /*margin-top: 60px;*/
+  }
+
+  body {
+    background: #FFF8DC;
+    font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif
+    /*padding: 20px;*/
+    /*font-family: Helvetica;*/
+  }
+</style>
