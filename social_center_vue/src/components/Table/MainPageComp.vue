@@ -1,9 +1,10 @@
 <template>
   <div>
-  <selection-menu v-show="showSelection" v-on:get-list="getList"></selection-menu>
-  <sub-menu v-bind:matrix="matrix"
-            v-bind:markingArray="markingArray"
-            v-show="showSubMenu"></sub-menu>
+    <nav-bar class="nav"></nav-bar>
+    <selection-menu v-show="showSelection" v-on:get-list="getList"></selection-menu>
+    <sub-menu class="sub-menu" v-bind:matrix="matrix"
+              v-bind:markingArray="markingArray"
+              v-show="showSubMenu"></sub-menu>
   </div>
 </template>
 
@@ -11,18 +12,19 @@
   import SelectionMenu from "./SelectionMenu";
   import SubMenu from "./SubMenu";
   import $ from "jquery";
+  import navBar from "../navBar";
 
   export default {
     name: "MainPageComp",
     data() {
       return {
         showSelection: true,
-        showSubMenu:false,
-        matrix:{
-          labels:[],
-          lines:[]
+        showSubMenu: false,
+        matrix: {
+          labels: [],
+          lines: []
         },
-        markingArray:[]
+        markingArray: []
 
 
       }
@@ -30,6 +32,7 @@
     components: {
       SelectionMenu,
       SubMenu,
+      navBar,
 
     },
     methods: {
@@ -38,34 +41,19 @@
         this.showSelection = !this.showSelection;
         this.showSubMenu = !this.showSubMenu;
         $.ajax({
-          url: this.$store.state.baseUrl+"api/" + "get-table" + "/",
+          url: this.$store.state.baseUrl + "api/" + "get-table" + "/",
           type: "GET",
           data: {
             tables: list
           },
           success: (response) => {
-            // console.log(response.data);
-            // this.matrix = new Map();
-            // this.matrix.set('labels',response.data[0]);
-            // this.matrix.set('lines',[]);
-            this.matrix.labels=response.data[0];
-            this.markingArray=response.data[2];
-            // this.markingArray.notFilterMarking=response.data[2];
+            this.matrix.labels = response.data[0];
+            this.markingArray = response.data[2];
             for (var key in response.data[1]) {
-              // console.log(response.data[1][key] );
-              // this.matrix.get('lines').push(response.data[1][key]);
               this.matrix.lines.push(response.data[1][key]);
-              // console.log("key:"+key);
             }
 
             console.log(response.data[2]);
-            // this.markingArray=response.data[2];
-            // this.notFilterMarkingArray=response.data[2];
-            // for(let value in this.markingArray){
-            //   console.log(value)
-            // }
-            // console.log(this.markingArray);
-
           }
         })
       }
@@ -74,7 +62,16 @@
 </script>
 
 <style scoped>
+  .nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 999;
+  }
 
+  .sub-menu {
+    z-index: 1;
+  }
 </style>
 
 

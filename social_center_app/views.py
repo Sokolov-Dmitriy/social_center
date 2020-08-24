@@ -7,6 +7,7 @@ from social_center_app.serializers import *
 from rest_framework.generics import CreateAPIView, ListAPIView
 from django.contrib.auth import get_user_model
 from collections import Counter
+from social_center_app.models import TestBoyko
 User = get_user_model()
 
 
@@ -1121,7 +1122,8 @@ def deleteExcessDataFromChild(serializer):
     countLabels = len(array[0])
     for i in range(maxCountChild):
         for value in array[0].values():
-            newArray[0].append(value + "(" + str(i + 1) + ")")
+            newArray[0].append(value)
+            # newArray[0].append(value + "(" + str(i + 1) + ")")
         # newArray[0].extend(array[0])
     # newArray.append(array[0])
     newArray.append({})
@@ -1219,8 +1221,8 @@ class TestMy():
 def testAndRes(num, firstSerializer, secondSerializer):
     # attempt 0-Первая попытка,1-Вторая попытка
     attemptAr = [
-        'Первая попытка',
-        'Вторая попытка'
+        'Первичная',
+        'Вторичная'
     ]
     newArray = getIDFN(ClientSerializers(Client.objects.all(), many=True))
     newArray[0].clear()
@@ -1536,3 +1538,30 @@ class GetTable(APIView):
         # return Response(deleteExcessDataFromChild(ChildSerializers(Child.objects.all(), many=True)))
         # return Response(deleteIDForClient(ChildSerializers(Child.objects.all(),many=True)))
         # return Response(getInformation(ChildSerializers(Child.objects.all(),many=True)))
+
+class TestsAnswers(APIView):
+    def get(self, request):
+        dict = {'boyko': {}}
+        fileds = ['aggressiveness',
+                  'alarm',
+                  'memory_disorder',
+                  'criticism',
+                  'self_service',
+                  'work_activity',
+                  'friends',
+                  'family_relation',
+                  'child_parent',
+                  'leisure']
+        num = 1
+        for filed in fileds:
+            name=TestBoyko._meta.get_field(filed).verbose_name
+            dict.get('boyko').update({num:{}})
+            dict.get('boyko').get(num).update({'label':name})
+            choices=[]
+            for choice in TestBoyko._meta.get_field(filed).choices:
+                choices.append(choice[1])
+            dict.get('boyko').get(num).update({
+                'answers':choices
+            })
+            num=num+1
+        return Response(dict)

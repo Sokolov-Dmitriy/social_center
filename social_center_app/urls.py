@@ -55,4 +55,5 @@ urlpatterns = [
     path('graphicSOCRATES/', GraphicSOCRATESView.as_view()),
     path('get-table/', GetTable.as_view()),
     path('userCrud/', UserCRUDView.as_view()),
+    path('tests/', TestsAnswers.as_view())
 ]
