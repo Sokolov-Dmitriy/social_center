@@ -1362,12 +1362,16 @@ def mySwitch(value):
     if value == "0":
 
         # return deleteIDForClient(ClientSerializers(Client.objects.all(), many=True))
+        if (len(ClientSerializers(Client.objects.all(), many=True).data)==0):
+            return []
         return makeMarking(
             deleteIDForClient(ClientSerializers(Client.objects.all(), many=True)),
             'general',
             'Сведения о клиенте(общее)'
         )
     elif value == "1":
+        if (len(GeneralInformationSerializers(GeneralInformation.objects.all(), many=True).data)==0):
+            return []
         # return deleteIDClient(GeneralInformationSerializers(GeneralInformation.objects.all(), many=True))
         return makeMarking(
             deleteIDClient(GeneralInformationSerializers(GeneralInformation.objects.all(), many=True)),
@@ -1375,6 +1379,8 @@ def mySwitch(value):
             'Общая информация'
         )
     elif value == "2":
+        if (len(ASocialBehaviorSerializers(ASocialBehavior.objects.all(), many=True).data)==0):
+            return []
         # return deleteIDClient(ASocialBehaviorSerializers(ASocialBehavior.objects.all(), many=True))
         return makeMarking(
             deleteIDClient(ASocialBehaviorSerializers(ASocialBehavior.objects.all(), many=True)),
@@ -1382,6 +1388,8 @@ def mySwitch(value):
             'Информация о противоправных действиях, правонарушениях, употреблении наркотиков, алкоголя'
         )
     elif value == "3":
+        if (len(ChronicDiseaseSerializers(ChronicDisease.objects.all(), many=True).data)==0):
+            return []
         # return deleteIDClient(ChronicDiseaseSerializers(ChronicDisease.objects.all(), many=True))
         return makeMarking(
             deleteIDClient(ChronicDiseaseSerializers(ChronicDisease.objects.all(), many=True)),
@@ -1389,8 +1397,12 @@ def mySwitch(value):
             'Информация о наличии хронического заболевания'
         )
     elif value == "4":
+        if (len(ChildSerializers(Child.objects.all(), many=True).data)==0):
+            return []
         return deleteExcessDataFromChild(ChildSerializers(Child.objects.all(), many=True))
     elif value == "5":
+        if (len(FamilyMembersInformationSerializers(FamilyMembersInformation.objects.all(), many=True).data)==0):
+            return []
         # return deleteIDClient(FamilyMembersInformationSerializers(FamilyMembersInformation.objects.all(), many=True))
         return makeMarking(
             deleteIDClient(FamilyMembersInformationSerializers(FamilyMembersInformation.objects.all(), many=True)),
@@ -1398,6 +1410,8 @@ def mySwitch(value):
             'Общие сведения о членах семьи'
         )
     elif value == "6":
+        if (len(HusbandInformationSerializers(HusbandInformation.objects.all(), many=True).data)==0):
+            return []
         # return deleteIDClient(
         #     husbendSpecial(HusbandInformationSerializers(HusbandInformation.objects.all(), many=True)))
         return makeMarking(
@@ -1406,6 +1420,8 @@ def mySwitch(value):
             'Информация о муже/партнёре'
         )
     elif value == "7":
+        if (len(SocialLivingConditionSerializers(SocialLivingCondition.objects.all(), many=True).data)==0):
+            return []
         return makeMarking(
             deleteIDClient(SocialLivingConditionSerializers(SocialLivingCondition.objects.all(), many=True)),
             'socialLivingConditions',
@@ -1413,6 +1429,9 @@ def mySwitch(value):
         )
         # return deleteIDClient(SocialLivingConditionSerializers(SocialLivingCondition.objects.all(), many=True))
     elif value == "8":
+        SocialEconomicConditionSerializers(SocialEconomicCondition.objects.all(), many=True)
+        if (len(SocialEconomicConditionSerializers(SocialEconomicCondition.objects.all(), many=True).data)==0):
+            return []
         return makeMarking(
             socialEconomCon(),
             'socialEconomConditions',
@@ -1420,6 +1439,8 @@ def mySwitch(value):
         )
         # return socialEconomCon()
     elif value == "9":
+        if (len(ExpertOpinionSerializers(ExpertOpinion.objects.all(), many=True).data)==0):
+            return []
         return makeMarking(
             deleteIDClient(expertOpinion(ExpertOpinionSerializers(ExpertOpinion.objects.all(), many=True))),
             'expertOpinion',
@@ -1427,6 +1448,8 @@ def mySwitch(value):
         )
         # return deleteIDClient(expertOpinion(ExpertOpinionSerializers(ExpertOpinion.objects.all(), many=True)))
     elif value == "10":
+        if (len(TestBoykoSerializers(TestBoyko.objects.all(), many=True).data)==0):
+            return []
         return makeMarking(
             testAndRes(0,
                        TestBoykoSerializers(TestBoyko.objects.all(), many=True),
@@ -1437,6 +1460,8 @@ def mySwitch(value):
         # return testAndRes(0, TestBoykoSerializers(TestBoyko.objects.all(), many=True),
         # InterpretationBoykoSerializers(InterpretationBoyko.objects.all(), many=True))
     elif value == "11":
+        if (len(TestGAGESerializers(TestGAGE.objects.all(), many=True).data)==0):
+            return []
         return makeMarking(
             testAndRes(0, TestGAGESerializers(TestGAGE.objects.all(), many=True),
                        InterpretationGAGESerializers(InterpretationGAGE.objects.all(), many=True)),
@@ -1446,6 +1471,8 @@ def mySwitch(value):
         # return testAndRes(0, TestGAGESerializers(TestGAGE.objects.all(), many=True),
         #                   InterpretationGAGESerializers(InterpretationGAGE.objects.all(), many=True))
     elif value == "12":
+        if (len(TestSOCRATESSerializers(TestSOCRATES.objects.all(), many=True).data)==0):
+            return []
         return makeMarking(
             testAndRes(0, TestSOCRATESSerializers(TestSOCRATES.objects.all(), many=True),
                        InterpretationSOCRATESSerializers(InterpretationSOCRATES.objects.all(), many=True)),
@@ -1455,6 +1482,8 @@ def mySwitch(value):
         # return testAndRes(0, TestSOCRATESSerializers(TestSOCRATES.objects.all(), many=True),
         #                   InterpretationSOCRATESSerializers(InterpretationSOCRATES.objects.all(), many=True))
     elif value == "13":
+        if (len(TestBoykoSerializers(TestBoyko.objects.all(), many=True).data)==0):
+            return []
         return makeMarking(
             testAndRes(1, TestBoykoSerializers(TestBoyko.objects.all(), many=True),
                        InterpretationBoykoSerializers(InterpretationBoyko.objects.all(), many=True)),
@@ -1464,6 +1493,8 @@ def mySwitch(value):
         # return testAndRes(1, TestBoykoSerializers(TestBoyko.objects.all(), many=True),
         #                   InterpretationBoykoSerializers(InterpretationBoyko.objects.all(), many=True))
     elif value == "14":
+        if (len(TestGAGESerializers(TestGAGE.objects.all(), many=True).data)==0):
+            return []
         return makeMarking(
             testAndRes(1, TestGAGESerializers(TestGAGE.objects.all(), many=True),
                        InterpretationGAGESerializers(InterpretationGAGE.objects.all(), many=True)),
@@ -1473,6 +1504,8 @@ def mySwitch(value):
         # return testAndRes(1, TestGAGESerializers(TestGAGE.objects.all(), many=True),
         #                   InterpretationGAGESerializers(InterpretationGAGE.objects.all(), many=True))
     elif value == "15":
+        if (len(TestSOCRATESSerializers(TestSOCRATES.objects.all(), many=True).data)==0):
+            return []
         return makeMarking(
             testAndRes(1, TestSOCRATESSerializers(TestSOCRATES.objects.all(), many=True),
                        InterpretationSOCRATESSerializers(InterpretationSOCRATES.objects.all(), many=True)),
@@ -1488,9 +1521,6 @@ def mySwitch(value):
 class GetTable(APIView):
 
     def get(self, request):
-        # husbendSpecial(HusbandInformationSerializers(HusbandInformation.objects.all(), many=True))
-        # deleteExcessDataFromChild(ChildSerializers(Child.objects.all(), many=True))
-        # socialEconomCon()
 
         dataArray = getIDFN(ClientSerializers(Client.objects.all(), many=True))
         dataArray.append({
@@ -1505,39 +1535,30 @@ class GetTable(APIView):
             # print(type(num))
             # print(num)
             ar = mySwitch(num)
-            lastPoint=len(dataArray[0])
-            dataArray[0].extend(ar[0])
+            if(len(ar)!=0):
+                lastPoint = len(dataArray[0])
+                dataArray[0].extend(ar[0])
 
-            # lastPoint=dataArray[2]
-            updateMarking(lastPoint,ar[2])
-            # for dict in ar[2].values():
-            #         dict.update({'firstPoint':lastPoint})
-            #         dict.update({'lastPoint':dict.get('firstPoint')+dict.get('lenLabels')-1})
-            #         lastPoint=dict.get('lastPoint')+1
-            dataArray[2].update(ar[2])
-            for key in ar[1].keys():
-                dataArray[1].get(key).extend(ar[1].get(key))
-            count = len(dataArray[0])
-            for key in dataArray[1].keys():
-                if len(dataArray[1].get(key)) < count:
-                    difference = count - len(dataArray[1].get(key))
-                    while (difference > 0):
-                        difference = difference - 1
-                        dataArray[1].get(key).append("")
+                # lastPoint=dataArray[2]
+                updateMarking(lastPoint, ar[2])
+                # for dict in ar[2].values():
+                #         dict.update({'firstPoint':lastPoint})
+                #         dict.update({'lastPoint':dict.get('firstPoint')+dict.get('lenLabels')-1})
+                #         lastPoint=dict.get('lastPoint')+1
+                dataArray[2].update(ar[2])
+                for key in ar[1].keys():
+                    dataArray[1].get(key).extend(ar[1].get(key))
+                count = len(dataArray[0])
+                for key in dataArray[1].keys():
+                    if len(dataArray[1].get(key)) < count:
+                        difference = count - len(dataArray[1].get(key))
+                        while (difference > 0):
+                            difference = difference - 1
+                            dataArray[1].get(key).append("")
 
-        # print(request.GET.get("tables"))
-        # for num in request.GET.get("tables").split(","):
-        #     print(num)
-        # print(ChildSerializers(Child.objects.all(),many=True))
-        print('len:'+str(len(dataArray[0])))
+
+        print('len:' + str(len(dataArray[0])))
         return Response(dataArray)
-        # return Response(socialEconomCon().data)
-        # return Response()
-        # return Response(husbendSpecial(FamilyMemberSpecial(HusbandInformation.objects.all(), many=True)).data)
-        # return Response(husbendSpecial(HusbandInformation.objects.all(), many=True).data)
-        # return Response(deleteExcessDataFromChild(ChildSerializers(Child.objects.all(), many=True)))
-        # return Response(deleteIDForClient(ChildSerializers(Child.objects.all(),many=True)))
-        # return Response(getInformation(ChildSerializers(Child.objects.all(),many=True)))
 
 class TestsAnswers(APIView):
     def get(self, request):
