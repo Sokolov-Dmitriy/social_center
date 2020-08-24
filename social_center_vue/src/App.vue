@@ -32,7 +32,5 @@
   body {
     background: #FFF8DC !important;
     font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif !important
-    /*padding: 20px;*/
-    /*font-family: Helvetica;*/
   }
 </style>
