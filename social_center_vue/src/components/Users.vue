@@ -128,7 +128,7 @@
       },
       getUsers() {
         $.ajax({
-          url: this.$store.state.baseUrl+"api/userCrud/",
+          url: this.$store.state.baseUrl + "api/userCrud/",
           type: "GET",
           data: {},
           success: (response) => {
@@ -170,7 +170,7 @@
             return;
           }
         $.ajax({
-          url: this.$store.state.baseUrl+"api/userCrud/",
+          url: this.$store.state.baseUrl + "api/userCrud/",
           type: "POST",
           data: this.new_user,
           success: (response) => {
@@ -188,7 +188,7 @@
       },
       deleteUser(username) {
         $.ajax({
-          url: this.$store.state.baseUrl+"api/userCrud/",
+          url: this.$store.state.baseUrl + "api/userCrud/",
           type: "DELETE",
           data: {username: username},
           success: (response) => {
@@ -277,6 +277,7 @@
     position: relative;
     left: 50%;
     transform: translate(-50%, 0);
+    border-radius: 40px;
     /*width: 70%;*/
   }
 
