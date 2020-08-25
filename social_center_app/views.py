@@ -1429,11 +1429,11 @@ def mySwitch(value):
         )
         # return deleteIDClient(SocialLivingConditionSerializers(SocialLivingCondition.objects.all(), many=True))
     elif value == "8":
-        if (len(SocialEconomicConditionSerializers(SocialEconomicCondition.objects.all(), many=True).data) == 0 & len(
-                SourceIncomeSerializers(SourceIncome.objects.all(), many=True).data) == 0 & len(
-                SocialPaymentSerializers(SocialPayment.objects.all(), many=True).data) == 0 & len(
+        if (len(SocialEconomicConditionSerializers(SocialEconomicCondition.objects.all(), many=True).data) == 0 or len(
+                SourceIncomeSerializers(SourceIncome.objects.all(), many=True).data) == 0 or len(
+                SocialPaymentSerializers(SocialPayment.objects.all(), many=True).data) == 0 or len(
                 ChildAllowanceAndCompensationSerializers(ChildAllowanceAndCompensation.objects.all(),
-                                                         many=True).data) == 0 & len(
+                                                         many=True).data) == 0 or len(
                 FacilitiesSerializers(Facilities.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
