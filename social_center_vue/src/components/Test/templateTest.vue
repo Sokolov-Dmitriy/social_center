@@ -87,7 +87,7 @@
         var map = {};
         map[this.identifier_field] = this.id;
         $.ajax({
-          url: this.$store.state.baseUrl+"api/" + this.url + '/',
+          url: this.$store.state.baseUrl + "api/" + this.url + '/',
           type: "GET",
           data: map,
           success: (response) => {
@@ -100,14 +100,15 @@
             }
           },
           error: (response) => {
-            alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+            if (response.status === 401) this.logOut();
+            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
           }
         });
         this.getForPutRequest();
       },
       deleteRequest() {
         $.ajax({
-          url: this.$store.state.baseUrl+"api/" + this.url + '/' + this.id,
+          url: this.$store.state.baseUrl + "api/" + this.url + '/' + this.id,
           type: "DELETE",
           success: (response) => {
             this.items = '';
@@ -122,13 +123,14 @@
             else this.$router.push({name: 'testSOCRATESList'});
           },
           error: (response) => {
-            alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+            if (response.status === 401) this.logOut();
+            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
           }
         })
       },
       postRequest(items) {
         $.ajax({
-          url: this.$store.state.baseUrl+"api/" + this.url + '/',
+          url: this.$store.state.baseUrl + "api/" + this.url + '/',
           type: "POST",
           data: items,
           success: (response) => {
@@ -142,26 +144,28 @@
             this.getScore(items, 'post')
           },
           error: (response) => {
-            alert("Не удалось загрузить данные на сервер.\nПовторите попытку позже.")
+            if (response.status === 401) this.logOut();
+            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
           }
         });
       },
       getForPutRequest() {
         $.ajax({
-          url: this.$store.state.baseUrl+"api/" + this.url + '/' + this.id,
+          url: this.$store.state.baseUrl + "api/" + this.url + '/' + this.id,
           type: "GET",
           success: (response) => {
             if (response !== undefined)
               this.edit = response.data[0].attributes;
           },
           error: (response) => {
-            alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+            if (response.status === 401) this.logOut();
+            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
           }
         });
       },
       putRequest(items) {
         $.ajax({
-          url: this.$store.state.baseUrl+"api/" + this.url + '/' + this.id,
+          url: this.$store.state.baseUrl + "api/" + this.url + '/' + this.id,
           type: "PUT",
           data: items,
           success: (response) => {
@@ -173,7 +177,8 @@
             this.getScore(items, 'put')
           },
           error: (response) => {
-            alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+            if (response.status === 401) this.logOut();
+            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
           }
         });
       },
@@ -216,26 +221,28 @@
         items['test'] = parseInt(this.id);
         if (type === 'post')
           $.ajax({
-            url: this.$store.state.baseUrl+"api/interpretationBoyko/",
+            url: this.$store.state.baseUrl + "api/interpretationBoyko/",
             type: "POST",
             data: items,
             success: (response) => {
               alert("Результат добавлен.");
             },
             error: (response) => {
-              alert("Не удалось загрузить результаты теста на сервер.\nПовторите попытку позже.")
+              if (response.status === 401) this.logOut();
+              else alert("Не удалось загрузить результаты теста на сервер.\nПовторите попытку позже.")
             }
           });
         else
           $.ajax({
-            url: this.$store.state.baseUrl+"api/interpretationBoyko/",
+            url: this.$store.state.baseUrl + "api/interpretationBoyko/",
             type: "PUT",
             data: items,
             success: (response) => {
               alert("Результат изменен.");
             },
             error: (response) => {
-              alert("Не удалось загрузить результаты теста на сервер.\nПовторите попытку позже.")
+              if (response.status === 401) this.logOut();
+              else alert("Не удалось загрузить результаты теста на сервер.\nПовторите попытку позже.")
             }
           });
         // console.log(items['overall_points']);
@@ -266,7 +273,7 @@
           fields = ['dose_reduction', 'irritation', 'fault', 'tone'];
           result = 0;
           for (let item in fields) {
-            if (items[fields[item]] !== null  && items[fields[item]] !== '')
+            if (items[fields[item]] !== null && items[fields[item]] !== '')
               result += parseInt(items[fields[item]]);
           }
           if (result >= 2)
@@ -279,26 +286,28 @@
         // console.log(massiv);
         if (type === 'post')
           $.ajax({
-            url: this.$store.state.baseUrl+"api/interpretationGAGE/",
+            url: this.$store.state.baseUrl + "api/interpretationGAGE/",
             type: "POST",
             data: massiv,
             success: (response) => {
               alert("Результат добавлен.");
             },
             error: (response) => {
-              alert("Не удалось загрузить результаты теста на сервер.\nПовторите попытку позже.")
+              if (response.status === 401) this.logOut();
+              else alert("Не удалось загрузить результаты теста на сервер.\nПовторите попытку позже.")
             }
           });
         else
           $.ajax({
-            url: this.$store.state.baseUrl+"api/interpretationGAGE/",
+            url: this.$store.state.baseUrl + "api/interpretationGAGE/",
             type: "PUT",
             data: massiv,
             success: (response) => {
               alert("Результат изменен.");
             },
             error: (response) => {
-              alert("Не удалось загрузить результаты теста на сервер.\nПовторите попытку позже.")
+              if (response.status === 401) this.logOut();
+              else alert("Не удалось загрузить результаты теста на сервер.\nПовторите попытку позже.")
             }
           });
       },
@@ -327,26 +336,28 @@
         massiv['test'] = parseInt(this.id);
         if (type === 'post')
           $.ajax({
-            url: this.$store.state.baseUrl+"api/interpretationSOCRATES/",
+            url: this.$store.state.baseUrl + "api/interpretationSOCRATES/",
             type: "POST",
             data: massiv,
             success: (response) => {
               alert("Результат добавлен.");
             },
             error: (response) => {
-              alert("Не удалось загрузить результаты теста на сервер.\nПовторите попытку позже.")
+              if (response.status === 401) this.logOut();
+              else alert("Не удалось загрузить результаты теста на сервер.\nПовторите попытку позже.")
             }
           });
         else
           $.ajax({
-            url: this.$store.state.baseUrl+"api/interpretationSOCRATES/",
+            url: this.$store.state.baseUrl + "api/interpretationSOCRATES/",
             type: "PUT",
             data: massiv,
             success: (response) => {
               alert("Результат изменен.");
             },
             error: (response) => {
-              alert("Не удалось загрузить результаты теста на сервер.\nПовторите попытку позже.")
+              if (response.status === 401) this.logOut();
+              else alert("Не удалось загрузить результаты теста на сервер.\nПовторите попытку позже.")
             }
           });
       },

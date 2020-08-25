@@ -18,7 +18,7 @@
         <table class="table table-hover">
           <thead class="thead">
           <tr>
-            <th scope="col">Диагностика теста Бойко</th>
+            <th scope="col">Диагностика</th>
             <th scope="col">Статус</th>
           </tr>
           </thead>
@@ -67,7 +67,7 @@
     },
     created() {
       $.ajax({
-        url: this.$store.state.baseUrl+"api/typologicalGroupList/",
+        url: this.$store.state.baseUrl + "api/typologicalGroupList/",
         type: "GET",
         data: {client: sessionStorage.getItem("id")},
         success: (response) => {
@@ -84,7 +84,8 @@
           }
         },
         error: (response) => {
-          alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+          if (response.status === 401) this.logOut();
+          else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
         }
       });
     },

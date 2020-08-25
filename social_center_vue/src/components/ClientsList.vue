@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-<!--           <a href="javascript:window.print()">fff</a>-->
+      <!--           <a href="javascript:window.print()">fff</a>-->
       <input type="text" class="form-search" placeholder="Поиск" v-model="search_text" v-on:input="searchText">
       <button type="button" class="btn my-color" @click="addClient">Добавить клиента <span
         class="fa fa-plus-circle"></span></button>
@@ -71,7 +71,7 @@
       },
       loadClients() {
         $.ajax({
-          url: this.$store.state.baseUrl+"api/clients/",
+          url: this.$store.state.baseUrl + "api/clients/",
           type: "GET",
           success: (response) => {
             // console.log(response.data);
@@ -84,6 +84,9 @@
               this.clients[this.clients.length - 1].set('id', response.data[i].id);
             }
             // console.log(this.clients);
+          },
+          error: (response) => {
+            if(response.status===401) this.logOut();
           }
         })
       },
@@ -173,20 +176,25 @@
     background-color: #D2B48C;
     color: #492727;
   }
+
   .code {
-      width: 20%;
-    }
+    width: 20%;
+  }
+
   .number {
     width: 20%;
   }
+
   @media only screen and (max-width: 520px) {
     .form-search {
       width: 100%;
     }
+
     .my-color {
-       width: 100%;
+      width: 100%;
     }
   }
+
   /* @media only screen and (max-width: 750px) {*/
   /* .code {*/
   /*    width: 30%;*/

@@ -127,7 +127,8 @@
             this.choiceYes('substances', this.items['substances']);
           },
           error: (response) => {
-            alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+            if (response.status === 401) this.logOut();
+            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
           }
         })
       },

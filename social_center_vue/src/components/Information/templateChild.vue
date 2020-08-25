@@ -20,7 +20,7 @@
 
   <div class="card">
     <div class="card-header" v-html="'2.2. Информация о состоянии здоровья ребёнка'" v-if="!isHide"></div>
-    <table class="table table-hover">
+    <table class="table table-hover" v-if="!isHide">
       <thead class="thead noprint" v-if="end">
       <tr>
         <th scope="col">Поле</th>

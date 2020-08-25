@@ -142,7 +142,7 @@
     created() {
       var date = '';
       $.ajax({
-        url: this.$store.state.baseUrl+"api/graphicBoyko/",
+        url: this.$store.state.baseUrl + "api/graphicBoyko/",
         type: "GET",
         data: {client: parseInt(sessionStorage.getItem('id'))},
         success: (response) => {
@@ -169,7 +169,8 @@
           this.graphic()
         },
         error: (response) => {
-          alert("Не удалось получить результаты теста с сервера.\nПовторите попытку позже.")
+          if (response.status === 401) this.logOut();
+          else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
         }
       });
     }

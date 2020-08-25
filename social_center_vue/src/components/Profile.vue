@@ -92,7 +92,7 @@
     methods: {
       getData() {
         $.ajax({
-          url: this.$store.state.baseUrl+"api/user/",
+          url: this.$store.state.baseUrl + "api/user/",
           type: "GET",
           data: {},
           success: (response) => {
@@ -100,7 +100,8 @@
             this.username = this.items.username;
           },
           error: (response) => {
-            alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+            if (response.status === 401) this.logOut();
+            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
           }
         })
       },
@@ -114,7 +115,7 @@
         if (this.new_other === this.username) alert("Новый логин не должен совпадать с предыдущим.");
         else
           $.ajax({
-            url: this.$store.state.baseUrl+"auth/users/set_username/",
+            url: this.$store.state.baseUrl + "auth/users/set_username/",
             type: "POST",
             data: {
               new_username: this.new_other
@@ -126,14 +127,15 @@
               this.hideModal('id_other')
             },
             error: (response) => {
-              alert("Не удалось установить соединение с сервером.\nПовторите попытку позже");
-              this.hideModal('id_other')
+              this.hideModal('id_other');
+              if (response.status === 401) this.logOut(); else
+                alert("Не удалось установить соединение с сервером.\nПовторите попытку позже");
             }
           })
       },
       newPassword() {
         $.ajax({
-          url: this.$store.state.baseUrl+"auth/users/set_password/",
+          url: this.$store.state.baseUrl + "auth/users/set_password/",
           type: "POST",
           data: {
             current_password: this.password,
@@ -144,6 +146,11 @@
             this.hideModal('id_other')
           },
           error: (response) => {
+            if (response.status === 401) {
+              this.hideModal('id_other');
+              this.logOut();
+              return;
+            }
             if (response.status === 400) {
               var err = JSON.parse(response.responseText);
               alert(err.errors[0].detail);
@@ -186,7 +193,7 @@
             break;
         }
         $.ajax({
-          url: this.$store.state.baseUrl+"api/user/",
+          url: this.$store.state.baseUrl + "api/user/",
           type: "PUT",
           data: data,
           success: (response) => {
@@ -194,8 +201,9 @@
             this.hideModal('id_other')
           },
           error: (response) => {
-            alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
-            this.hideModal('id_other')
+            this.hideModal('id_other');
+            if (response.status === 401) this.logOut();
+            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
           }
         })
       },

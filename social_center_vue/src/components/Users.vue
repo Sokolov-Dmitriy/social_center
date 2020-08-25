@@ -145,6 +145,10 @@
             }
           },
           error: (response) => {
+            if (response.status === 401) {
+              this.logOut();
+              return;
+            }
             if (response.status === 403) {
               this.$router.push({name: 'mainwindow'});
               alert("Недостаточно прав для просмотра страницы.");
@@ -178,8 +182,9 @@
             this.hideModal()
           },
           error: (response) => {
-            alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
-            this.hideModal()
+            this.hideModal();
+            if (response.status === 401) this.logOut();
+            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
           }
         })
       },
@@ -195,7 +200,8 @@
             this.getUsers();
           },
           error: (response) => {
-            alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+            if (response.status === 401) this.logOut();
+            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
           }
         })
       }

@@ -9,7 +9,7 @@
         <b-list-group-item class="my-title-one" to="/testGAGEList">Модифицированная методика определения степени вовлечённости в
           потребление ПАВ (GAGE)
         </b-list-group-item>
-        <b-list-group-item class="my-title-one" to="/testSOCRATESList">SOCRATES</b-list-group-item>
+        <b-list-group-item class="my-title-one" to="/testSOCRATESList">Методика SOCRATES</b-list-group-item>
         <b-list-group-item class="my-title-one" to="/typologicalGroupList">Типологические группы</b-list-group-item>
       </b-list-group>
     </b-sidebar>

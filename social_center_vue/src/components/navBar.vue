@@ -50,15 +50,11 @@
 
       signOut() {
         $.ajax({
-          url: this.$store.state.baseUrl+'auth/token/logout/',
+          url: this.$store.state.baseUrl + 'auth/token/logout/',
           type: 'POST',
           success: (response) => {
             // console.log(response.data);
-            localStorage.clear();
-            $.ajaxSetup({
-              headers: {'Authorization': null}
-            });
-            this.$router.push('/login')
+            this.logOut();
           }
         })
       }
@@ -79,6 +75,7 @@
   .marg {
     margin-right: 70px;
   }
+
   .marg-left {
     margin-left: 10px;
   }

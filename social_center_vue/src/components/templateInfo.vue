@@ -21,7 +21,8 @@
       <button class="btn btn-default noprint" type="button" v-if="!no_data" @click="addInfo">РЕДАКТИРОВАТЬ <span
         class="fa fa-pencil fa-2x"/>
       </button>
-      <template-child v-bind:no_data="no_data" v-bind:is-hide="isHide" ref="templateChild" v-if="url==='child'"></template-child>
+      <template-child v-bind:no_data="no_data" v-bind:is-hide="isHide" ref="templateChild"
+                      v-if="url==='child'"></template-child>
       <div class="card" v-if="url!=='child'">
         <div class="card-header" v-if="url==='client' ">{{items.full_name}}</div>
         <div class="card-header" v-else v-html="header"></div>
@@ -39,7 +40,7 @@
           </tr>
           </tbody>
         </table>
-         <navigation v-if="!no_data && !isHide" v-bind:url="url" v-bind:id="id" class="noprint"></navigation>
+        <navigation v-if="!no_data && !isHide" v-bind:url="url" v-bind:id="id" class="noprint"></navigation>
         <button class="btn btn-default" type="button" v-if="no_data && !isHide" @click="addInfo">ДОБАВИТЬ <span
           class="fa fa-plus-circle fa-2x"/></button>
       </div>
@@ -91,7 +92,7 @@
         var map = {};
         map[this.identifier_field] = this.identifier;
         $.ajax({
-          url: this.$store.state.baseUrl+"api/" + this.url + '/',
+          url: this.$store.state.baseUrl + "api/" + this.url + '/',
           type: "GET",
           data: map,
           success: (response) => {
@@ -101,11 +102,12 @@
               this.id = response.data[0].id;
               this.items = response.data[0].attributes;
               this.labels = response.data[0].attributes.labels;
-              if(this.url==='child')this.$refs.templateChild.slice(this.items,this.labels);
+              if (this.url === 'child') this.$refs.templateChild.slice(this.items, this.labels);
             }
           },
           error: (response) => {
-            alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+            if (response.status === 401) this.logOut();
+            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
           }
         });
         if (this.url !== "client")
@@ -113,7 +115,7 @@
       },
       deleteRequest() {
         $.ajax({
-          url: this.$store.state.baseUrl+"api/" + this.url + '/' + this.id,
+          url: this.$store.state.baseUrl + "api/" + this.url + '/' + this.id,
           type: "DELETE",
           success: (response) => {
             this.items = '';
@@ -127,13 +129,14 @@
             else if (this.url === 'child') this.$router.push({name: 'childList'});
           },
           error: (response) => {
-            alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+            if (response.status === 401) this.logOut();
+            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
           }
         })
       },
       postRequest(items) {
         $.ajax({
-          url: this.$store.state.baseUrl+"api/" + this.url + '/',
+          url: this.$store.state.baseUrl + "api/" + this.url + '/',
           type: "POST",
           data: items,
           success: (response) => {
@@ -144,26 +147,28 @@
             this.getRequest();
           },
           error: (response) => {
-            alert("Не удалось загрузить данные на сервер.\nПовторите попытку позже.")
+            if (response.status === 401) this.logOut();
+            else alert("Не удалось загрузить данные на сервер.\nПовторите попытку позже.")
           }
         });
       },
       getForPutRequest() {
         $.ajax({
-          url: this.$store.state.baseUrl+"api/" + this.url + '/' + this.identifier,
+          url: this.$store.state.baseUrl + "api/" + this.url + '/' + this.identifier,
           type: "GET",
           success: (response) => {
             if (response !== undefined)
               this.edit = response.data[0].attributes;
           },
           error: (response) => {
-            alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+            if (response.status === 401) this.logOut();
+            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
           }
         });
       },
       putRequest(items) {
         $.ajax({
-          url: this.$store.state.baseUrl+"api/" + this.url + '/' + this.id,
+          url: this.$store.state.baseUrl + "api/" + this.url + '/' + this.id,
           type: "PUT",
           data: items,
           success: (response) => {
@@ -174,7 +179,8 @@
             this.getRequest();
           },
           error: (response) => {
-            alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+            if (response.status === 401) this.logOut();
+            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
           }
         });
       },

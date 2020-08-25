@@ -9,11 +9,12 @@ import "bootstrap-vue/dist/bootstrap-vue.css"
 import "font-awesome/css/font-awesome.min.css"
 import VueEasyCm from 'vue-easycm'
 import {store} from "./store";
+import LogOutFunc from "./logoutFunction"
 
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 Vue.use(VueEasyCm)
-
+Vue.use(LogOutFunc)
 
 Vue.config.productionTip = false
 /* eslint-disable no-new */

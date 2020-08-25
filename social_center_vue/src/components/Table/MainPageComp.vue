@@ -54,6 +54,9 @@
             }
 
             console.log(response.data[2]);
+          },
+          error: (response) => {
+            if(response.status===401) this.logOut();
           }
         })
       }

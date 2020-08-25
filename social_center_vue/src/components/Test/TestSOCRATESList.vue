@@ -14,7 +14,7 @@
     </div>
     <div class="container">
       <div class="card">
-        <div class="card-header">SOCRATES</div>
+        <div class="card-header">Методика SOCRATES</div>
         <table class="table table-hover">
           <thead class="thead">
           <tr>
@@ -85,7 +85,8 @@
           }
         },
         error: (response) => {
-          alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+          if (response.status === 401) this.logOut();
+          else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
         }
       });
     },

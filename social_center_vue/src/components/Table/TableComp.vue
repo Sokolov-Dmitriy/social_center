@@ -904,6 +904,9 @@
             // console.log(res);
             // return response.data;
 
+          },
+          error: (response) => {
+            if(response.status===401) this.logOut();
           }
 
         })

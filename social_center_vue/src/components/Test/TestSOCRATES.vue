@@ -56,7 +56,7 @@
       addInfo() {
         this.add = true;
         $.ajax({
-          url: this.$store.state.baseUrl+"api/fields/",
+          url: this.$store.state.baseUrl + "api/fields/",
           type: "GET",
           data: {model: 'TestSOCRATES'},
           success: (response) => {
@@ -68,7 +68,8 @@
               this.items = response.data.items;
           },
           error: (response) => {
-            alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+            if (response.status === 401) this.logOut();
+            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
           }
         })
       },

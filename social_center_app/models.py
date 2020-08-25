@@ -333,7 +333,7 @@ class ASocialBehavior(models.Model):
                                                blank=True)
     alcoholUse = models.IntegerField("Употрбление алкоголя",
                                      choices=YESNO, null=True, blank=True)
-    frequencyOfAlcoholUse = models.IntegerField("Частота употрбления алкоголя",
+    frequencyOfAlcoholUse = models.IntegerField("Частота употребления алкоголя",
                                                 choices=FREQUENCY_OF_DRUGS_USE,
                                                 null=True,
                                                 blank=True)
