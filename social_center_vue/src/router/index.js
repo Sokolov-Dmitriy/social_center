@@ -226,6 +226,11 @@ export const router = new Router({
 });
 router.beforeEach((to, from, next) => {
   if (localStorage.getItem('auth_token')) next();
-  else if (to.name !== 'login') next({name: 'login'});
-  else next()
+  else if (to.name !== 'login') {
+    localStorage.clear();
+    $.ajaxSetup({
+      headers: {'Authorization': null}
+    });
+    next({name: 'login'});
+  } else next()
 });
