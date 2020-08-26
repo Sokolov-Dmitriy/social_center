@@ -1,19 +1,21 @@
 <template>
   <div v-show="showMe">
+
+
     <div style="position: fixed; margin-top: -20px;" class="container-fluid big">
       <div class="row">
-        <div class="col-6 d-flex flex-wrap hiden-cont" id="hidediv">
+        <div class="col-md-5 col-sm-4 col-sm-11 d-flex flex-wrap hiden-cont ml-2 mr-2" id="hidediv">
           <div class="hidden-list" v-for="coll in hiddenCols" v-on:click="returnHideLable($event,coll)">{{coll.label}}
           </div>
-
-
         </div>
-        <div>
-          <button v-on:click="clearFilter" type="button" class="btn btn-primary">Очистить фильтры</button>
-          <button v-on:click="buildCharts" type="button" class="btn btn-primary">Построить графики</button>
+        <div class="col-md-6 col-sm-11 d-flex flex-row bd-highlight mt-sm-1 mb-sm-1 mt-1 mb-1 mt-md-0 mb-md-0">
+          <div class="bd-highlight mr-1"><button v-on:click="clearFilter" type="button" class="btn btn-primary">Очистить фильтры</button></div>
+          <div class="bd-highlight ml-1"><button v-on:click="buildCharts" type="button" class="btn btn-primary">Построить графики</button></div>
         </div>
       </div>
     </div>
+
+
     <div class="container smaller">
       <table class="table table-bordered table-sm small" style="width:100%">
         <thead>
@@ -29,7 +31,7 @@
               scope="col"
               class="head-div"
               v-bind:title="label"
-              >
+          >
             <!--            <div style="z-index: 1; background-color: black; position: absolute;">{{label}}</div>-->
             <div class="myhead" @contextmenu="getTableIndex($event)+$easycm($event,$root)">{{label}}</div>
           </th>
@@ -123,11 +125,11 @@
       }
     },
     methods: {
-      isChild(index){
+      isChild(index) {
         for (let make in this.markingArray) {
           if (index >= this.markingArray[make]['firstPoint'] &&
-            index <= this.markingArray[make]['lastPoint'] && make.includes('child')){
-              return true;
+            index <= this.markingArray[make]['lastPoint'] && make.includes('child')) {
+            return true;
           }
         }
         return false;
@@ -298,7 +300,7 @@
         let x = this.lastPoint.x;
         let setBuf = new Set();
         let choices = [];
-        if (!this.specialSimpleField.includes(this.matrixAll.labels[x])){
+        if (!this.specialSimpleField.includes(this.matrixAll.labels[x])) {
           for (let line in this.matrixAll.lines) {
             setBuf.add(this.matrixAll.lines[line][x]);
           }
@@ -307,40 +309,40 @@
           for (let item of setBuf) {
             choices.push({
               text: item,
-              min:item,
-              max:item,
+              min: item,
+              max: item,
               icon: 'iconfont icon-bofang',
               children: []
             })
           }
         } else {
-          if (this.isChild(x)){
-            if (this.specialSimpleField.indexOf(this.matrixAll.labels[x]) === 0){
+          if (this.isChild(x)) {
+            if (this.specialSimpleField.indexOf(this.matrixAll.labels[x]) === 0) {
               choices.push({
                 text: 'До 3 лет',
-                min:0,
-                max:3,
+                min: 0,
+                max: 3,
                 icon: 'iconfont icon-bofang',
                 children: []
               });
               choices.push({
                 text: 'От 4 до 6',
-                min:4,
-                max:6,
+                min: 4,
+                max: 6,
                 icon: 'iconfont icon-bofang',
                 children: []
               });
               choices.push({
                 text: 'От 7 до 17',
-                min:7,
-                max:17,
+                min: 7,
+                max: 17,
                 icon: 'iconfont icon-bofang',
                 children: []
               });
               choices.push({
                 text: 'От 18 и старше',
-                min:18,
-                max:99999,
+                min: 18,
+                max: 99999,
                 icon: 'iconfont icon-bofang',
                 children: []
               });
@@ -349,59 +351,58 @@
             if (this.specialSimpleField.indexOf(this.matrixAll.labels[x]) === 0) {
               choices.push({
                 text: 'До 18',
-                min:0,
-                max:17,
+                min: 0,
+                max: 17,
                 icon: 'iconfont icon-bofang',
                 children: []
               });
               choices.push({
                 text: 'От 18 до 35',
-                min:18,
-                max:35,
+                min: 18,
+                max: 35,
                 icon: 'iconfont icon-bofang',
                 children: []
               });
               choices.push({
                 text: 'От 36 и выше',
-                min:36,
-                max:99999,
+                min: 36,
+                max: 99999,
                 icon: 'iconfont icon-bofang',
                 children: []
               });
-            }
-            else if ([1, 2, 3, 4].includes(this.specialSimpleField.indexOf(this.matrixAll.labels[x]))) {
+            } else if ([1, 2, 3, 4].includes(this.specialSimpleField.indexOf(this.matrixAll.labels[x]))) {
               choices.push({
                 text: 'До года',
-                min:0,
-                max:0.99,
+                min: 0,
+                max: 0.99,
                 icon: 'iconfont icon-bofang',
                 children: []
               });
               choices.push({
                 text: 'От года до двух',
-                min:1,
-                max:1.99,
+                min: 1,
+                max: 1.99,
                 icon: 'iconfont icon-bofang',
                 children: []
               });
               choices.push({
                 text: 'От двух до трех',
-                min:2,
-                max:2.99,
+                min: 2,
+                max: 2.99,
                 icon: 'iconfont icon-bofang',
                 children: []
               });
               choices.push({
                 text: 'От трех до пяти',
-                min:3,
-                max:4.99,
+                min: 3,
+                max: 4.99,
                 icon: 'iconfont icon-bofang',
                 children: []
               });
               choices.push({
                 text: 'От пяти и выше',
-                min:5,
-                max:99999,
+                min: 5,
+                max: 99999,
                 icon: 'iconfont icon-bofang',
                 children: []
               });
@@ -451,9 +452,9 @@
         switch (index[0]) {
           case 0:
             let newLines = [];
-            let bufArray=[];
+            let bufArray = [];
             for (let line of this.matrixAll.lines) {
-              if(line[this.lastPoint.x]!=="" && line[this.lastPoint.x]!=null){
+              if (line[this.lastPoint.x] !== "" && line[this.lastPoint.x] != null) {
                 bufArray.push(line);
               }
             }
@@ -779,7 +780,7 @@
             }
           },
           error: (response) => {
-            if(response.status===401) this.logOut();
+            if (response.status === 401) this.logOut();
           }
         })
 
@@ -1191,8 +1192,7 @@
                   count: 0
                 }
               ]));
-            }
-            else if ([1, 2, 3, 4].includes(this.specialSimpleField.indexOf(this.matrixAll.labels[label]))) {
+            } else if ([1, 2, 3, 4].includes(this.specialSimpleField.indexOf(this.matrixAll.labels[label]))) {
               forBuldCharts.simple.push(this.specialFieldWithYears([label], label, [
                 {
                   name: 'До года',
@@ -1387,11 +1387,13 @@
   .hiden-cont {
     border: 2px solid #D2B48C;
     border-radius: 5px;
-    margin-left: 20px;
-    margin-bottom: 10px;
-    margin-right: 10px;
-    margin-top: 10px;
-    max-height: 60px;
+    /*margin-left: 20px;*/
+    /*margin-bottom: 10px;*/
+    /*margin-right: 10px;*/
+    /*margin-top: 10px;*/
+    /*height: 60px;*/
+    /*max-height: 60px;*/
+    min-height: 30px;
     overflow: auto;
   }
 
@@ -1400,6 +1402,7 @@
     border: 2px solid grey;
     margin: 2px;
     border-radius: 5px;
+    height: 28px;
   }
 
   .hidden-list:hover {
@@ -1410,8 +1413,9 @@
     background-color: #D2B48C;
     color: #492727;
     border-color: #D2B48C;
-    margin-bottom: 10px;
-    margin-top: 10px;
+    /*height: 38px;*/
+    /*margin-bottom: 10px;*/
+    /*margin-top: 10px;*/
   }
 
   .btn-primary:hover {
@@ -1421,6 +1425,8 @@
 
   .big {
     position: fixed;
+    padding-top: 10px;
+    /*padding-bottom: 10;*/
     /*top: 68px;*/
     top: 126px;
     z-index: 998;
@@ -1436,6 +1442,12 @@
   .title {
     background-color: #D2B48C;
     background-color: rgba(210, 180, 140, 0.5);
+  }
+  @media(min-width: 767){
+    .hiden-cont{
+      height: 30px;
+    }
+
   }
 
 </style>

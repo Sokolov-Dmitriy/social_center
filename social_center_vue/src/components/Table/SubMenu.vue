@@ -1,18 +1,11 @@
 <template>
   <div>
     <div style="position: fixed; margin-top: -20px;" class="container-fluid showbtn">
-      <div class="row">
-        <div class="col-2">
-          <div v-bind:hidden="tableShow" class="mt-2 ml-2 mr-1 item noprint" @click="showTableAll">Таблица</div>
-          <div v-bind:hidden="chartsShow" class="mt-2 ml-1 item noprint" @click="showChartsCount">Графики</div>
-        </div>
+      <div class="d-flex flex-row bd-highlight mb-3 pt-2">
+        <div v-bind:hidden="tableShow" class="p-2 bd-highlight item noprint" @click="showTableAll">Таблица</div>
+        <div v-bind:hidden="chartsShow" class="p-2 bd-highlight item noprint" @click="showChartsCount">Графики</div>
       </div>
     </div>
-    <!--    <div class="d-flex justify-content-start showbtn">-->
-    <!--      <div v-bind:hidden="tableShow" class="mt-2 ml-2 mr-1 item noprint" @click="showTableAll">Таблица</div>-->
-    <!--      <div  v-bind:hidden="chartsShow" class="mt-2 ml-1 item noprint" @click="showChartsCount">Подсчеты/Графики</div>-->
-    <!--    </div>-->
-    <!--    {{markingArray}}-->
     <table-comp v-show="showTable"
                 v-bind:matrixAll="matrix"
                 v-bind:notFilterLines="notFilterLines"
@@ -157,7 +150,7 @@
 <style scoped>
   .item {
     background-color: grey;
-    padding: 5px 10px;
+    /*padding: 5px 10px;*/
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
 
