@@ -85,6 +85,6 @@
   }
 
   .margin {
-    margin-bottom: 70px;
+    margin-bottom: 73px;
   }
 </style>
