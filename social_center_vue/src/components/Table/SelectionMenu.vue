@@ -211,6 +211,7 @@
         }
         // console.log(checkedTable);
         // console.log(checkedTable.slice(0,checkedTable.length-1));
+        if(checkedTable!=='')
         this.$emit('get-list', checkedTable.slice(0, checkedTable.length - 1));
 
         // this.getMatrix(checkedTable.slice(0,checkedTable.length-1));
