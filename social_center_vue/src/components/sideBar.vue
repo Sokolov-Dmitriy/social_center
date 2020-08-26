@@ -26,7 +26,7 @@
             </b-list-group-item>
           </b-list-group>
         </b-list-group-item>
-        <b-list-group-item class="my-title-one" to="/expertOpinion">5. Заключение специалиста</b-list-group-item>
+        <b-list-group-item class="my-title-one margin" to="/expertOpinion">5. Заключение специалиста</b-list-group-item>
       </b-list-group>
     </b-sidebar>
   </div>
@@ -82,5 +82,9 @@
 
   .my-big-list-group-item {
     background-color: #FFF8DC;
+  }
+
+  .margin {
+    margin-bottom: 30px;
   }
 </style>
