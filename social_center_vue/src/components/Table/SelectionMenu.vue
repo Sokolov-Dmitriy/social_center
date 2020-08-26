@@ -275,6 +275,7 @@
   .btn-primary:hover {
     background-color: #492727;
     color: #D2B48C;
+    border-color: #492727;
   }
 </style>
 
