@@ -1162,13 +1162,16 @@ def deleteExcessDataFromChild(serializer):
 
 def socialEconomCon():
     mainSerializer = SocialEconomicConditionSerializers(SocialEconomicCondition.objects.all(), many=True)
-    arraySer = [
-        SourceIncomeSerializers(SourceIncome.objects.all(), many=True),
-        SocialPaymentSerializers(SocialPayment.objects.all(), many=True),
-        ChildAllowanceAndCompensationSerializers(ChildAllowanceAndCompensation.objects.all(), many=True),
-        FacilitiesSerializers(Facilities.objects.all(), many=True)
-    ]
-    # return SocialEconomicConditionSerializers(SocialEconomicCondition.objects.all(), many=True)
+    arraySer = []
+    if(len(SourceIncomeSerializers(SourceIncome.objects.all(), many=True).data)!=0):
+        arraySer.append(SourceIncomeSerializers(SourceIncome.objects.all(), many=True))
+    if(len(SocialPaymentSerializers(SocialPayment.objects.all(), many=True).data)!=0):
+        arraySer.append(SocialPaymentSerializers(SocialPayment.objects.all(), many=True))
+    if(len(ChildAllowanceAndCompensationSerializers(ChildAllowanceAndCompensation.objects.all(), many=True).data)!=0):
+        arraySer.append(ChildAllowanceAndCompensationSerializers(ChildAllowanceAndCompensation.objects.all(), many=True))
+    if(len(FacilitiesSerializers(Facilities.objects.all(), many=True).data)!=0):
+        arraySer.append(FacilitiesSerializers(Facilities.objects.all(), many=True))
+
     for serializer in arraySer:
         for value in serializer.data:
             for val in mainSerializer.data:
@@ -1429,12 +1432,7 @@ def mySwitch(value):
         )
         # return deleteIDClient(SocialLivingConditionSerializers(SocialLivingCondition.objects.all(), many=True))
     elif value == "8":
-        if (len(SocialEconomicConditionSerializers(SocialEconomicCondition.objects.all(), many=True).data) == 0 or len(
-                SourceIncomeSerializers(SourceIncome.objects.all(), many=True).data) == 0 or len(
-                SocialPaymentSerializers(SocialPayment.objects.all(), many=True).data) == 0 or len(
-                ChildAllowanceAndCompensationSerializers(ChildAllowanceAndCompensation.objects.all(),
-                                                         many=True).data) == 0 or len(
-                FacilitiesSerializers(Facilities.objects.all(), many=True).data) == 0):
+        if (len(SocialEconomicConditionSerializers(SocialEconomicCondition.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
             socialEconomCon(),

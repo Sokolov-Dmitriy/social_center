@@ -29,9 +29,9 @@
               scope="col"
               class="head-div"
               v-bind:title="label"
-              @contextmenu="getTableIndex($event)+$easycm($event,$root)">
+              >
             <!--            <div style="z-index: 1; background-color: black; position: absolute;">{{label}}</div>-->
-            <div class="myhead">{{label}}</div>
+            <div class="myhead" @contextmenu="getTableIndex($event)+$easycm($event,$root)">{{label}}</div>
           </th>
         </tr>
         </thead>
@@ -123,12 +123,21 @@
       }
     },
     methods: {
+      isChild(index){
+        for (let make in this.markingArray) {
+          if (index >= this.markingArray[make]['firstPoint'] &&
+            index <= this.markingArray[make]['lastPoint'] && make.includes('child')){
+              return true;
+          }
+        }
+        return false;
+      },
       getTableIndex(event) {
+        // console.log(this.markingArray);
         // console.log(event.target.parentNode)
         // this.lastPoint.y = event.target.parentNode.rowIndex;
         this.lastPoint.y = event.target.parentNode.parentNode.rowIndex - 1;
         this.lastPoint.x = event.target.parentNode.cellIndex;
-        // this.lastPoint.x = event.target.cellIndex;
         console.log("x:" + this.lastPoint.x + " y:" + this.lastPoint.y);
         console.log(this.selectLabels);
         this.contextList[0].children = this.getAllChoice();
@@ -286,19 +295,118 @@
         }
       },
       getAllChoice() {
+        let x = this.lastPoint.x;
         let setBuf = new Set();
-        let choices = []
-        for (let line in this.matrixAll.lines) {
-          setBuf.add(this.matrixAll.lines[line][this.lastPoint.x]);
-        }
-        setBuf.delete("");
-        setBuf.delete(null);
-        for (let item of setBuf) {
-          choices.push({
-            text: item,
-            icon: 'iconfont icon-bofang',
-            children: []
-          })
+        let choices = [];
+        if (!this.specialSimpleField.includes(this.matrixAll.labels[x])){
+          for (let line in this.matrixAll.lines) {
+            setBuf.add(this.matrixAll.lines[line][x]);
+          }
+          setBuf.delete("");
+          setBuf.delete(null);
+          for (let item of setBuf) {
+            choices.push({
+              text: item,
+              min:item,
+              max:item,
+              icon: 'iconfont icon-bofang',
+              children: []
+            })
+          }
+        } else {
+          if (this.isChild(x)){
+            if (this.specialSimpleField.indexOf(this.matrixAll.labels[x]) === 0){
+              choices.push({
+                text: 'До 3 лет',
+                min:0,
+                max:3,
+                icon: 'iconfont icon-bofang',
+                children: []
+              });
+              choices.push({
+                text: 'От 4 до 6',
+                min:4,
+                max:6,
+                icon: 'iconfont icon-bofang',
+                children: []
+              });
+              choices.push({
+                text: 'От 7 до 17',
+                min:7,
+                max:17,
+                icon: 'iconfont icon-bofang',
+                children: []
+              });
+              choices.push({
+                text: 'От 18 и старше',
+                min:18,
+                max:99999,
+                icon: 'iconfont icon-bofang',
+                children: []
+              });
+            }
+          } else {
+            if (this.specialSimpleField.indexOf(this.matrixAll.labels[x]) === 0) {
+              choices.push({
+                text: 'До 18',
+                min:0,
+                max:17,
+                icon: 'iconfont icon-bofang',
+                children: []
+              });
+              choices.push({
+                text: 'От 18 до 35',
+                min:18,
+                max:35,
+                icon: 'iconfont icon-bofang',
+                children: []
+              });
+              choices.push({
+                text: 'От 36 и выше',
+                min:36,
+                max:99999,
+                icon: 'iconfont icon-bofang',
+                children: []
+              });
+            }
+            else if ([1, 2, 3, 4].includes(this.specialSimpleField.indexOf(this.matrixAll.labels[x]))) {
+              choices.push({
+                text: 'До года',
+                min:0,
+                max:0.99,
+                icon: 'iconfont icon-bofang',
+                children: []
+              });
+              choices.push({
+                text: 'От года до двух',
+                min:1,
+                max:1.99,
+                icon: 'iconfont icon-bofang',
+                children: []
+              });
+              choices.push({
+                text: 'От двух до трех',
+                min:2,
+                max:2.99,
+                icon: 'iconfont icon-bofang',
+                children: []
+              });
+              choices.push({
+                text: 'От трех до пяти',
+                min:3,
+                max:4.99,
+                icon: 'iconfont icon-bofang',
+                children: []
+              });
+              choices.push({
+                text: 'От пяти и выше',
+                min:5,
+                max:99999,
+                icon: 'iconfont icon-bofang',
+                children: []
+              });
+            }
+          }
         }
         return choices;
       },
@@ -339,12 +447,19 @@
         this.moveEmptyLine();
       },
       underConMenu(index) {
-        // console.log(index);
+        console.log('index' + index);
         switch (index[0]) {
           case 0:
             let newLines = [];
+            let bufArray=[];
             for (let line of this.matrixAll.lines) {
-              if (line[this.lastPoint.x] === this.contextList[0].children[index[1]].text) {
+              if(line[this.lastPoint.x]!=="" && line[this.lastPoint.x]!=null){
+                bufArray.push(line);
+              }
+            }
+            for (let line of bufArray) {
+              if (line[this.lastPoint.x] >= this.contextList[0].children[index[1]].min &&
+                line[this.lastPoint.x] <= this.contextList[0].children[index[1]].max) {
                 newLines.push(line);
               }
             }
@@ -449,11 +564,36 @@
         console.log(this.markingArray);
         this.hiddenCols = [];
       },
+      /**
+       * проверка, пустой ли подпункт(для детей, т.к. данных может не быть, но строки присусттвуют):
+       * @param x
+       * @param y
+       * @returns {boolean}
+       */
+      isEpmty(x, y) {
+        console.log('isSimple');
+        for (var make in this.markingArray) {
+          if (x >= this.markingArray[make]['firstPoint'] &&
+            x <= this.markingArray[make]['lastPoint'] &&
+            make.includes('child')) {
+            for (let i = this.markingArray[make]['firstPoint']; i <= this.markingArray[make]['lastPoint']; i++) {
+              if (this.matrixAll.lines[y][i] !== "" && this.matrixAll.lines[y][i] != null) {
+                return false;
+              }
+            }
+            return true;
+          }
+        }
+      },
+      /**
+       * возвращает все значения в столбце, кол-во их вхождений и кол-во полей всего
+       * @param arrayNum - индексы полей
+       * @returns {{names: [], counts: [], count: number}}
+       */
       countFieldForChart(arrayNum) {
         let setBuf = new Set();
         let countEmptyLine = 0;
         let forChart = {
-
           counts: [],
           names: [],
           count: 0,
@@ -464,16 +604,14 @@
           }
         }
         for (let index of arrayNum) {
-          for (let line of this.matrixAll.lines) {
-            if (line[index] === "" || line[index] == null) {
-              countEmptyLine++;
+          for (let lineI in this.matrixAll.lines) {
+            if (this.matrixAll.lines[lineI][index] === "" || this.matrixAll.lines[lineI][index] == null) {
+              if (!this.isEpmty(index, lineI)) {
+                countEmptyLine++;
+              }
             }
           }
         }
-
-        console.log("daaaata");
-        console.log(setBuf);
-        console.log(countEmptyLine);
         setBuf.delete("");
         setBuf.delete(null);
         for (let item of setBuf) {
@@ -557,13 +695,12 @@
         chart.options.scales.xAxes[0].ticks.stepSize = buf.count / 10;
         return chart;
       },
-      specialFieldChartDuration(nameI, label) {
+      specialFieldWithYears(nameI, label, groups) {
         let chart = {
           chartData: {
             labels: [],
             labelMe: this.matrixAll.labels[label],
             heightMy: 50,
-            // labels: [this.matrixAll.labels[point]],
             datasets: []
           },
           options: {
@@ -578,7 +715,7 @@
                 formatter: function (value, context) {
                   let label = context.dataset.label;
                   let max = context.chart.scales['x-axis-0'].end;
-                  return label + '\n ' + Math.round(value / max * 100) + '% / ' + value;
+                  return Math.round(value / max * 100) + '% / ' + value;
                 }
               }
             },
@@ -596,38 +733,6 @@
           }
         }
         let buf = this.countFieldForChart(nameI);
-        let groups = [
-          {
-            name: 'До года',
-            min: 0,
-            max: 0.99,
-            count: 0
-          },
-          {
-            name: 'От года до двух',
-            min: 1,
-            max: 1.99,
-            count: 0
-          },
-          {
-            name: 'От двух до трех',
-            min: 2,
-            max: 2.99,
-            count: 0
-          },
-          {
-            name: 'От трех до пяти',
-            min: 3,
-            max: 4.99,
-            count: 0
-          },
-          {
-            name: 'От пяти и выше',
-            min: 5,
-            max: 99999,
-            count: 0
-          }
-        ];
         for (let i = 0; i < buf.names.length; i++) {
           for (let group of groups) {
             if (buf.names[i] >= group.min && buf.names[i] <= group.max) {
@@ -656,218 +761,6 @@
         chart.options.scales.xAxes[0].ticks.max = buf.count;
         chart.options.scales.xAxes[0].ticks.stepSize = buf.count / 10;
         return chart;
-      },
-      specialFieldChartAge(nameI, label) {
-        let chart = {
-          chartData: {
-            labels: [],
-            labelMe: this.matrixAll.labels[label],
-            heightMy: 50,
-            // labels: [this.matrixAll.labels[point]],
-            datasets: []
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              datalabels: {
-                color: 'white',
-                font: {
-                  weight: 'bold'
-                },
-                formatter: function (value, context) {
-                  let label = context.dataset.label;
-                  let max = context.chart.scales['x-axis-0'].end;
-                  return label + '\n ' + Math.round(value / max * 100) + '% / ' + value;
-                }
-              }
-            },
-            scales: {
-              xAxes: [
-                {
-                  ticks: {
-                    min: 0,
-                    max: 0,
-                    stepSize: 0
-                  },
-                },
-              ],
-            },
-          }
-        }
-        let buf = this.countFieldForChart(nameI);
-        let groups = [
-          {
-            name: 'До 18',
-            min: 0,
-            max: 17,
-            count: 0
-          },
-          {
-            name: 'От 18 до 35',
-            min: 18,
-            max: 35,
-            count: 0
-          },
-          {
-            name: 'От 36 и выше',
-            min: 36,
-            max: 99999,
-            count: 0
-          }
-        ];
-        for (let i = 0; i < buf.names.length; i++) {
-          for (let group of groups) {
-            if (buf.names[i] >= group.min && buf.names[i] <= group.max) {
-              group.count += buf.counts[i];
-              break;
-            }
-          }
-        }
-        for (let group of groups) {
-          if (group.count > 0) {
-            chart.chartData.datasets.push({
-              label: group.name,
-              backgroundColor: '#' + (Math.random().toString(16) + '000000').substring(2, 8).toUpperCase(),
-              data: [group.count]
-            });
-          }
-        }
-        if (buf.names.indexOf('Не указано') !== -1) {
-          chart.chartData.datasets.push({
-            label: buf.names[buf.names.indexOf('Не указано')],
-            backgroundColor: '#' + (Math.random().toString(16) + '000000').substring(2, 8).toUpperCase(),
-            data: [buf.counts[buf.names.indexOf('Не указано')]]
-          });
-        }
-        chart.chartData.heightMy += chart.chartData.datasets.length * 50;
-        chart.options.scales.xAxes[0].ticks.max = buf.count;
-        chart.options.scales.xAxes[0].ticks.stepSize = buf.count / 10;
-        return chart;
-      },
-      boykoTest(firstPoint, num) {
-        let test = {
-          inter: [],
-          fullBalls: []
-        };
-        let kinds = ['Первичная диагностика/Бойко', 'Вторичная диагностика/Бойко'];
-        test.inter = {
-          chartData: {
-            labels: [],
-            labelMe: kinds[num],
-            // labels: [this.matrixAll.labels[point]],
-            datasets: [
-              {
-                label: 'Среднее кол-во баллов',
-                backgroundColor: 'red',
-                data: []
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              datalabels: {
-                color: 'white',
-                font: {
-                  weight: 'bold'
-                },
-                formatter: function (value, context) {
-                  let label = context.dataset.label;
-                  let max = context.chart.scales['x-axis-0'].end;
-                  return 'Средний балл=' + value.toFixed(2);
-                }
-              }
-            },
-            scales: {
-              xAxes: [
-                {
-                  ticks: {
-                    min: 0,
-                    max: 4,
-                    stepSize: 4 / 10
-                  },
-                },
-              ],
-            },
-          }
-        };
-        for (let inter of this.testsArg.boyko.interpritation) {
-          test.inter.chartData.labels.push(inter.name);
-          let count = 0;
-          let sumBallsOfAnswer = 0;
-          for (let line in this.matrixAll.lines) {
-            let answer = this.matrixAll.lines[line][firstPoint + inter.point];
-
-            for (let i in inter.nameFields) {
-              if (inter.nameFields[i] === answer) {
-                sumBallsOfAnswer += inter.balls[i];
-                count++;
-              }
-            }
-
-
-          }
-          console.log(test.inter);
-          test.inter.chartData.datasets[0].data.push(sumBallsOfAnswer / count);
-          count = 0;
-          sumBallsOfAnswer = 0;
-
-        }
-        let fullSum = 0;
-        let count = 0;
-        for (let line in this.matrixAll.lines) {
-          let balls = this.matrixAll.lines[line][firstPoint + 20];
-          if (balls != "" && balls != null) {
-            count++;
-            fullSum += parseInt(balls, 10);
-            console.log('fullSum' + fullSum);
-          }
-        }
-        test.fullBalls = {
-          chartData: {
-            labels: ['Баллы'],
-            labelMe: 'Среднее кол-во баллов у ' + count + ' клиент(а/ов)',
-            // labels: [this.matrixAll.labels[point]],
-            datasets: [
-              {
-                label: 'Среднее кол-во баллов',
-                backgroundColor: 'blue',
-                data: [fullSum / count]
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              datalabels: {
-                color: 'white',
-                font: {
-                  weight: 'bold'
-                },
-                formatter: function (value, context) {
-                  let label = context.dataset.label;
-                  let max = context.chart.scales['x-axis-0'].end;
-                  return 'Средняя сумма баллов=' + value.toFixed(2);
-                }
-              }
-            },
-            scales: {
-              xAxes: [
-                {
-                  ticks: {
-                    min: 0,
-                    max: 40,
-                    stepSize: 4 / 10
-                  },
-                },
-              ],
-            },
-          }
-        };
-        return test;
       },
       getTestsChoices() {
         let ar;
@@ -877,15 +770,6 @@
           type: "GET",
           success: (response) => {
             this.arTest = response.data;
-
-            // console.log("booooooy");
-            // console.log(response.data['boyko']['1. Агрессивность/аутоагрессивность']);
-            // res=response.data;
-            // for(let testName in response.data){
-            // console.log(response.data[testName]);
-            // res.set(testName,new Map());
-            // res.set(testName,new Map());
-            // this.testChoices.boyko=new Map();
             for (let num in response.data['boyko']) {
               // console.log(num);
               this.testChoices.boyko.push({
@@ -893,22 +777,10 @@
                 answers: response.data['boyko'][num]['answers']
               });
             }
-            // console.log(response.data[0]['boyko']['1']['label'].toString());
-            //     ar=response.data[0]['boyko']['3']['label'].toString();
-            // this.testChoices.boyko.push(response.data['boyko'][num]['label'].toString());
-            // console.log(response.data['boyko'][num]['label']);
-            // this.testChoices.boyko.set(num.toString(),'tttt');
-
-            // }
-            // }
-            // console.log(res);
-            // return response.data;
-
           },
           error: (response) => {
             if(response.status===401) this.logOut();
           }
-
         })
 
         return ar;
@@ -916,8 +788,8 @@
       },
       testGAGESolve(typeTest) {
         let kinds = [
-          'Результаты первичной диагностики по модифицированной методике определения степени вовлечённости в потребление ПАВ (GAGE)',
-          'Результаты вторичной диагностики по модифицированной методике определения степени вовлечённости в потребление ПАВ (GAGE)'
+          'Результаты первичной диагностики по методике GAGE',
+          'Результаты вторичной диагностики по методике GAGE'
         ];
         let test = {
           inter: [],
@@ -991,57 +863,12 @@
         allSumCount.allSum = allSumCount.sum1 + allSumCount.sum2;
         test.inter.chartData.datasets[0].data.push(allSumCount.sum1 / allSumCount.counter);
         test.inter.chartData.datasets[0].data.push(allSumCount.sum2 / allSumCount.counter);
-        test.fullBalls = {
-          chartData: {
-            labels: ['Баллы'],
-            labelMe: 'Средняя сумма значений',
-            // labels: [this.matrixAll.labels[point]],
-            datasets: [
-              {
-                label: 'Среднее кол-во баллов',
-                backgroundColor: 'blue',
-                data: [allSumCount.allSum / allSumCount.counter]
-              }
-            ]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              datalabels: {
-                color: 'white',
-                font: {
-                  weight: 'bold'
-                },
-                formatter: function (value, context) {
-                  return 'Средняя сумма значений=' + value.toFixed(2);
-                }
-              }
-            },
-            scales: {
-              xAxes: [
-                {
-                  ticks: {
-                    min: 0,
-                    max: 56,
-                    stepSize: 56 / 10
-                  },
-                },
-              ],
-            },
-          }
-        };
-        console.log(allSumCount.sum1);
-        console.log(allSumCount.sum2);
-        console.log(allSumCount.allSum);
-        console.log(allSumCount.counter);
         return test;
-      }
-      ,
+      },
       testSOCRATESSolve(typeTest) {
         let kinds = [
-          'Результаты первичной диагностики: SOCRATES',
-          'Результаты вторичной диагностики: SOCRATES'
+          'Результаты первичной диагностики по методике SOCRATES',
+          'Результаты вторичной диагностики по методике SOCRATES'
         ];
         let test = {
           inter: [],
@@ -1120,12 +947,12 @@
         test.inter.chartData.datasets[0].data.push(allSumCount.sum1 / allSumCount.counter);
         test.fullBalls = {
           chartData: {
-            labels: ['Баллы'],
-            labelMe: 'Средняя сумма значений',
+            labels: [],
+            labelMe: 'Общая оценка готовности к изменениям',
             // labels: [this.matrixAll.labels[point]],
             datasets: [
               {
-                label: 'Среднее кол-во баллов',
+                label: 'Средняя сумма значений',
                 backgroundColor: 'blue',
                 data: [allSumCount.allSum / allSumCount.counter]
               }
@@ -1141,7 +968,7 @@
                   weight: 'bold'
                 },
                 formatter: function (value, context) {
-                  return 'Средняя сумма значений=' + value.toFixed(2);
+                  return value.toFixed(2);
                 }
               }
             },
@@ -1260,12 +1087,12 @@
         }
         test.fullBalls = {
           chartData: {
-            labels: ['Средняя сумма значений'],
-            labelMe: 'Средняя сумма значений',
+            labels: [],
+            labelMe: 'Общая оценка социального функционирования',
             // labels: [this.matrixAll.labels[point]],
             datasets: [
               {
-                label: 'Среднее кол-во баллов',
+                label: 'Средняя сумма значений',
                 backgroundColor: 'blue',
                 data: [allSumCount[0] / allSumCount[1]]
               }
@@ -1281,7 +1108,7 @@
                   weight: 'bold'
                 },
                 formatter: function (value, context) {
-                  return 'Средняя сумма значений=' + value.toFixed(2);
+                  return value.toFixed(2);
                 }
               }
             },
@@ -1303,8 +1130,7 @@
 
         return test;
 
-      }
-      ,
+      },
       buildCharts() {
         let forBuldCharts = {
           simple: [],
@@ -1345,10 +1171,60 @@
             forBuldCharts.simple.push(this.simpleCharts([label], label));
           } else {
             if (this.specialSimpleField.indexOf(this.matrixAll.labels[label]) === 0) {
-              forBuldCharts.simple.push(this.specialFieldChartAge([label], label));
+              forBuldCharts.simple.push(this.specialFieldWithYears([label], label, [
+                {
+                  name: 'До 18',
+                  min: 0,
+                  max: 17,
+                  count: 0
+                },
+                {
+                  name: 'От 18 до 35',
+                  min: 18,
+                  max: 35,
+                  count: 0
+                },
+                {
+                  name: 'От 36 и выше',
+                  min: 36,
+                  max: 99999,
+                  count: 0
+                }
+              ]));
             }
-            if ([1, 2, 3, 4].includes(this.specialSimpleField.indexOf(this.matrixAll.labels[label]))) {
-              forBuldCharts.simple.push(this.specialFieldChartDuration([label], label));
+            else if ([1, 2, 3, 4].includes(this.specialSimpleField.indexOf(this.matrixAll.labels[label]))) {
+              forBuldCharts.simple.push(this.specialFieldWithYears([label], label, [
+                {
+                  name: 'До года',
+                  min: 0,
+                  max: 0.99,
+                  count: 0
+                },
+                {
+                  name: 'От года до двух',
+                  min: 1,
+                  max: 1.99,
+                  count: 0
+                },
+                {
+                  name: 'От двух до трех',
+                  min: 2,
+                  max: 2.99,
+                  count: 0
+                },
+                {
+                  name: 'От трех до пяти',
+                  min: 3,
+                  max: 4.99,
+                  count: 0
+                },
+                {
+                  name: 'От пяти и выше',
+                  min: 5,
+                  max: 99999,
+                  count: 0
+                }
+              ]));
             }
           }
         }
@@ -1357,18 +1233,36 @@
             forBuldCharts.childs.push(this.simpleCharts(arrayLabel, arrayLabel[0]));
           } else {
             if (this.specialSimpleField.indexOf(this.matrixAll.labels[arrayLabel[0]]) === 0) {
-              forBuldCharts.childs.push(this.specialFieldChartAge(arrayLabel, arrayLabel[0]));
-            }
-            if ([1, 2, 3, 4].includes(this.specialSimpleField.indexOf(this.matrixAll.labels[arrayLabel[0]]))) {
-              forBuldCharts.childs.push(this.specialFieldChartDuration(arrayLabel, arrayLabel[0]));
+              forBuldCharts.childs.push(this.specialFieldWithYears(arrayLabel, arrayLabel[0], [
+                {
+                  name: 'До 3 лет',
+                  min: 0,
+                  max: 3,
+                  count: 0
+                },
+                {
+                  name: 'От 4 до 6',
+                  min: 4,
+                  max: 6,
+                  count: 0
+                },
+                {
+                  name: 'От 7 до 17',
+                  min: 7,
+                  max: 17,
+                  count: 0
+                },
+                {
+                  name: 'От 18 и старше',
+                  min: 18,
+                  max: 99999,
+                  count: 0
+                },
+              ]));
             }
           }
         }
 
-        // console.log(this.selectLabels);
-        // this.testCharts();
-        // this.testBoykoSolve(1);
-        // this.testGAGESolve(1);
 
         if (forBuldCharts.simple.length !== 0 ||
           forBuldCharts.tests.length !== 0 ||
