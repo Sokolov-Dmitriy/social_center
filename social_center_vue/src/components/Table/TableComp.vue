@@ -1423,7 +1423,7 @@
     position: fixed;
     /*top: 68px;*/
     top: 126px;
-    z-index: 999;
+    z-index: 998;
     background-color: #FFF8DC;
     width: 100%;
   }

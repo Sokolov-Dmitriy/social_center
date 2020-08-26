@@ -178,7 +178,7 @@
     position: fixed;
     /*top: 68px;*/
     top: 80px;
-    z-index: 999;
+    z-index: 998;
     background-color: #FFF8DC;
     padding-bottom: 5px;
   }
