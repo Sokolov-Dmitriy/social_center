@@ -28,7 +28,7 @@
             <h5>Почта: {{user.get('email')}}</h5>
           </div>
           <div class="edging" v-if="user.get('username')===admin">
-            <h5>Администратор</h5>
+            <h5>Текущий пользователь</h5>
           </div>
           <button type="button" class="btn btn-delete" v-if="user.get('username')!==admin"
                   @click="deleteUser(user.get('username'))">Удалить
