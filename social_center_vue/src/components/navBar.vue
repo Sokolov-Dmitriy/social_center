@@ -65,7 +65,7 @@
 <style scoped>
   .color-ser {
     background-color: #D2B48C;
-    z-index: 999999;
+    z-index: 99999;
   }
 
   .dropdown-item:hover {
