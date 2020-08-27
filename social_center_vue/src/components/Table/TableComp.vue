@@ -8,9 +8,9 @@
           <div class="hidden-list" v-for="coll in hiddenCols" v-on:click="returnHideLable($event,coll)">{{coll.label}}
           </div>
         </div>
-        <div class="col-md-6 col-sm-11 d-flex flex-row bd-highlight mt-sm-1 mb-sm-1 mt-1 mb-1 mt-md-0 mb-md-0">
-          <div class="bd-highlight mr-1"><button v-on:click="clearFilter" type="button" class="btn btn-primary">Очистить фильтры</button></div>
-          <div class="bd-highlight ml-1"><button v-on:click="buildCharts" type="button" class="btn btn-primary">Построить графики</button></div>
+        <div class="col-md-6 col-sm-11 d-flex flex-row bd-highlight mt-sm-1 mb-sm-1 mt-1 mb-1 mt-md-0 mb-md-0 mybutmin">
+          <div class="bd-highlight mr-1"><button v-on:click="clearFilter" type="button" class="btn btn-primary" id="oneb">Очистить фильтры</button></div>
+          <div class="bd-highlight ml-1"><button v-on:click="buildCharts" type="button" class="btn btn-primary" id="twob">Построить графики</button></div>
         </div>
       </div>
     </div>
@@ -1443,9 +1443,41 @@
     background-color: #D2B48C;
     background-color: rgba(210, 180, 140, 0.5);
   }
-  @media(min-width: 767){
+  @media(max-width: 396px){
+    .smaller{
+      margin-top: 150px!important;
+    }
+    .btn-primary{
+      /*height: 48px;*/
+      /*font-size: 14px;*/
+      /*text-transform: lowercase;*/
+      /*vertical-align: text-top!important;*/
+    }
     .hiden-cont{
-      height: 30px;
+      visibility: hidden;
+      display: none;
+
+    }
+    #twob{
+      margin-left: 7px!important;
+      /*margin-right: auto!important;*/
+      /*margin-left: auto!important;*/
+      /*display: none;*/
+    }
+    #oneb{
+      /*right: 0!important;*/
+      display: none;
+
+    }
+    .mybutmin{
+      /*align-content: right!important;*/
+    }
+    .big{
+      margin: 0;
+      z-index: 997;
+      padding: 0;
+      top:94px;
+
     }
 
   }

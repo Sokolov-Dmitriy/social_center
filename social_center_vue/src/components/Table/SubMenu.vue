@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="position: fixed; margin-top: -20px;" class="container-fluid showbtn">
-      <div class="d-flex flex-row bd-highlight mb-3 pt-2">
+      <div class="d-flex flex-row bd-highlight mb-3 pt-2 specin">
         <div v-bind:hidden="tableShow" class="p-2 bd-highlight item noprint" @click="showTableAll">Таблица</div>
         <div v-bind:hidden="chartsShow" class="p-2 bd-highlight item noprint" @click="showChartsCount">Графики</div>
       </div>
@@ -173,7 +173,20 @@
     top: 80px;
     z-index: 998;
     background-color: #FFF8DC;
-    padding-bottom: 5px;
+    /*padding-bottom: px;*/
+  }
+  @media(max-width: 396px){
+    .showbtn{
+      /*margin: 0;*/
+      /*padding: 0;*/
+    }
+    .specin{
+      margin: 0!important;
+      /*padding: 0!important;*/
+      padding-top: 6px!important;
+      padding-bottom: 0!important;
+
+    }
   }
 </style>
 
