@@ -10,6 +10,7 @@
     </button>
     <side-bar-test></side-bar-test>
     <side-bar></side-bar>
+    <next-back v-bind:url="'childAdd'"></next-back>
     <div class="container">
       <div class="card">
         <div class="card-header">Добавление ребенка</div>
@@ -64,10 +65,12 @@
   import navBar from "../navBar";
   import {ValidationObserver, ValidationProvider} from "vee-validate/dist/vee-validate.full";
   import sideBarTest from "../Test/sideBarTest";
+  import NextBack from "./NextBack";
 
   export default {
     name: "ChildAdd",
     components: {
+      NextBack,
       sideBar,
       navBar,
       ValidationProvider,
@@ -107,7 +110,7 @@
           data: this.items,
           context: this,
           success: (response) => {
-            alert("Данные добавлены.");
+            // alert("Данные добавлены.");
             this.$router.push({name: 'childList'})
           },
           error: (response) => {

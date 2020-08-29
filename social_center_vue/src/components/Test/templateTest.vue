@@ -117,7 +117,7 @@
             this.isHide = false;
             this.no_data = true;
             this.$emit('postInfo');
-            alert("Удаление прошло успешно.");
+            // alert("Удаление прошло успешно.");
             if (this.url === 'testBoyko') this.$router.push({name: 'testBoykoList'});
             else if (this.url === 'testGAGE') this.$router.push({name: 'testGAGEList'});
             else this.$router.push({name: 'testSOCRATESList'});
@@ -134,7 +134,7 @@
           type: "POST",
           data: items,
           success: (response) => {
-            alert("Данные добавлены.");
+            // alert("Данные добавлены.");
             this.$emit('postInfo');
             this.isHide = false;
             this.no_data = false;
@@ -169,7 +169,7 @@
           type: "PUT",
           data: items,
           success: (response) => {
-            alert("Изменение прошло успешно");
+            // alert("Изменение прошло успешно");
             this.$emit('postInfo');
             this.isHide = false;
             this.no_data = false;
@@ -225,7 +225,7 @@
             type: "POST",
             data: items,
             success: (response) => {
-              alert("Результат добавлен.");
+              // alert("Результат добавлен.");
             },
             error: (response) => {
               if (response.status === 401) this.logOut();
@@ -238,7 +238,7 @@
             type: "PUT",
             data: items,
             success: (response) => {
-              alert("Результат изменен.");
+              // alert("Результат изменен.");
             },
             error: (response) => {
               if (response.status === 401) this.logOut();
@@ -290,7 +290,7 @@
             type: "POST",
             data: massiv,
             success: (response) => {
-              alert("Результат добавлен.");
+              // alert("Результат добавлен.");
             },
             error: (response) => {
               if (response.status === 401) this.logOut();
@@ -303,7 +303,7 @@
             type: "PUT",
             data: massiv,
             success: (response) => {
-              alert("Результат изменен.");
+              // alert("Результат изменен.");
             },
             error: (response) => {
               if (response.status === 401) this.logOut();
@@ -340,7 +340,7 @@
             type: "POST",
             data: massiv,
             success: (response) => {
-              alert("Результат добавлен.");
+              // alert("Результат добавлен.");
             },
             error: (response) => {
               if (response.status === 401) this.logOut();
@@ -353,7 +353,7 @@
             type: "PUT",
             data: massiv,
             success: (response) => {
-              alert("Результат изменен.");
+              // alert("Результат изменен.");
             },
             error: (response) => {
               if (response.status === 401) this.logOut();

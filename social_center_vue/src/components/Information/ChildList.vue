@@ -11,6 +11,7 @@
       </button>
       <side-bar-test></side-bar-test>
       <side-bar></side-bar>
+      <next-back v-bind:url="'childList'"></next-back>
     </div>
     <div class="container">
       <div class="card">
@@ -43,10 +44,12 @@
   import navBar from "../navBar";
   import sideBar from "../sideBar";
   import sideBarTest from "../Test/sideBarTest";
+  import NextBack from "./NextBack";
 
   export default {
     name: "ChildList",
     components: {
+      NextBack,
       sideBar,
       navBar,
       sideBarTest

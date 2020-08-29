@@ -64,7 +64,7 @@
           data: this.items,
           context: this,
           success: (response) => {
-            alert("Данные добавлены.");
+            // alert("Данные добавлены.");
             this.$router.push({name: 'mainwindow'})
           },
           error: (response) => {

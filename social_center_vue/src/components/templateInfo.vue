@@ -11,6 +11,7 @@
       </button>
       <side-bar-test></side-bar-test>
       <side-bar></side-bar>
+      <next-back v-bind:url="url"></next-back>
     </div>
 
 
@@ -54,10 +55,12 @@
   import navigation from "./Information/navigation";
   import sideBarTest from "./Test/sideBarTest";
   import templateChild from "./Information/templateChild";
+  import NextBack from "./Information/NextBack";
 
   export default {
     name: "templateInfo",
     components: {
+      NextBack,
       sideBar,
       navBar,
       navigation,
@@ -124,7 +127,7 @@
             this.isHide = false;
             this.no_data = true;
             this.$emit('postInfo');
-            alert("Удаление прошло успешно.");
+            // alert("Удаление прошло успешно.");
             if (this.url === 'client') this.$router.push({name: 'mainwindow'});
             else if (this.url === 'child') this.$router.push({name: 'childList'});
           },
@@ -140,7 +143,7 @@
           type: "POST",
           data: items,
           success: (response) => {
-            alert("Данные добавлены.");
+            // alert("Данные добавлены.");
             this.$emit('postInfo');
             this.isHide = false;
             this.no_data = false;
@@ -172,7 +175,7 @@
           type: "PUT",
           data: items,
           success: (response) => {
-            alert("Изменение прошло успешно");
+            // alert("Изменение прошло успешно");
             this.$emit('postInfo');
             this.isHide = false;
             this.no_data = false;
