@@ -9,8 +9,12 @@
           </div>
         </div>
         <div class="col-md-6 col-sm-11 d-flex flex-row bd-highlight mt-sm-1 mb-sm-1 mt-1 mb-1 mt-md-0 mb-md-0 mybutmin">
-          <div class="bd-highlight mr-1"><button v-on:click="clearFilter" type="button" class="btn btn-primary" id="oneb">Очистить фильтры</button></div>
-          <div class="bd-highlight ml-1"><button v-on:click="buildCharts" type="button" class="btn btn-primary" id="twob">Построить графики</button></div>
+          <div class="bd-highlight mr-1">
+            <button v-on:click="clearFilter" type="button" class="btn btn-primary" id="oneb">Очистить фильтры</button>
+          </div>
+          <div class="bd-highlight ml-1">
+            <button v-on:click="buildCharts" type="button" class="btn btn-primary" id="twob">Построить графики</button>
+          </div>
         </div>
       </div>
     </div>
@@ -117,10 +121,15 @@
         arTest: [],
         specialSimpleField: [
           'Возраст',
-          'Длительность употрбления (в годах)',
+          'Длительность употребления (в годах)',
           'Длительность ремиссии (в годах)(наркотики)',
           'Длительность ремиссии (в годах)(алкоголь)',
           'Предположительное время инфицирования (в годах)',
+        ],
+        mixedTestName: [
+          'Результаты обоех диагностик по методике Бойко Е.О.',
+          'Результаты обоех диагностик по методике GAGE',
+          'Результаты обоех диагностик по методике SOCRATES'
         ]
       }
     },
@@ -787,6 +796,9 @@
         return ar;
         // return res;
       },
+      fixed(num){
+        return num.toFixed(2);
+      },
       testGAGESolve(typeTest) {
         let kinds = [
           'Результаты первичной диагностики по методике GAGE',
@@ -820,7 +832,7 @@
                   weight: 'bold'
                 },
                 formatter: function (value, context) {
-                  return value.toFixed(2);
+                  return value;
                 }
               }
             },
@@ -862,8 +874,8 @@
           }
         }
         allSumCount.allSum = allSumCount.sum1 + allSumCount.sum2;
-        test.inter.chartData.datasets[0].data.push(allSumCount.sum1 / allSumCount.counter);
-        test.inter.chartData.datasets[0].data.push(allSumCount.sum2 / allSumCount.counter);
+        test.inter.chartData.datasets[0].data.push(this.fixed(allSumCount.sum1 / allSumCount.counter));
+        test.inter.chartData.datasets[0].data.push(this.fixed(allSumCount.sum2 / allSumCount.counter));
         return test;
       },
       testSOCRATESSolve(typeTest) {
@@ -899,7 +911,7 @@
                   weight: 'bold'
                 },
                 formatter: function (value, context) {
-                  return value.toFixed(2);
+                  return value;
                 }
               }
             },
@@ -943,9 +955,9 @@
             allSumCount.counter++;
           }
         }
-        test.inter.chartData.datasets[0].data.push(allSumCount.sum3 / allSumCount.counter);
-        test.inter.chartData.datasets[0].data.push(allSumCount.sum2 / allSumCount.counter);
-        test.inter.chartData.datasets[0].data.push(allSumCount.sum1 / allSumCount.counter);
+        test.inter.chartData.datasets[0].data.push(this.fixed(allSumCount.sum3 / allSumCount.counter));
+        test.inter.chartData.datasets[0].data.push(this.fixed(allSumCount.sum2 / allSumCount.counter));
+        test.inter.chartData.datasets[0].data.push(this.fixed(allSumCount.sum1 / allSumCount.counter));
         test.fullBalls = {
           chartData: {
             labels: [],
@@ -955,7 +967,7 @@
               {
                 label: 'Средняя сумма значений',
                 backgroundColor: 'blue',
-                data: [allSumCount.allSum / allSumCount.counter]
+                data: [this.fixed(allSumCount.allSum / allSumCount.counter)]
               }
             ]
           },
@@ -969,7 +981,7 @@
                   weight: 'bold'
                 },
                 formatter: function (value, context) {
-                  return value.toFixed(2);
+                  return value;
                 }
               }
             },
@@ -1028,7 +1040,7 @@
                   weight: 'bold'
                 },
                 formatter: function (value, context) {
-                  return value.toFixed(2);
+                  return value;
                 }
               }
             },
@@ -1079,7 +1091,7 @@
               }
             }
           }
-          test.inter.chartData.datasets[0].data.push(sumBalls / counter);
+          test.inter.chartData.datasets[0].data.push(this.fixed(sumBalls / counter));
           allSumCount[0] += sumBalls;
           allSumCount[1] = counter;
           // console.log('cont:' + counter + " sum:" + sumBalls);
@@ -1095,7 +1107,7 @@
               {
                 label: 'Средняя сумма значений',
                 backgroundColor: 'blue',
-                data: [allSumCount[0] / allSumCount[1]]
+                data: [this.fixed(allSumCount[0] / allSumCount[1])]
               }
             ]
           },
@@ -1109,7 +1121,7 @@
                   weight: 'bold'
                 },
                 formatter: function (value, context) {
-                  return value.toFixed(2);
+                  return value;
                 }
               }
             },
@@ -1136,13 +1148,16 @@
         let forBuldCharts = {
           simple: [],
           tests: [],
+          testsMixed: [],
           childs: []
         };
+        let testsArray = [];
         for (let label of this.selectLabels.testField) {
           let switchElement;
           for (let i = 0; i < this.testName.length; i++) {
             if (label === this.testName[i]) {
               switchElement = i;
+
               break;
             }
           }
@@ -1166,6 +1181,10 @@
               forBuldCharts.tests.push(this.testSOCRATESSolve(1));
               break;
           }
+          testsArray.push({
+            testNum: switchElement,
+            index: forBuldCharts.tests.length - 1
+          })
         }
         for (let label of this.selectLabels.simpleField) {
           if (!this.specialSimpleField.includes(this.matrixAll.labels[label])) {
@@ -1263,6 +1282,66 @@
           }
         }
 
+        //смешанные тесты
+        for (let i of [0, 1, 2]) {
+          let firstTest = i;
+          let indexFirst = -1;
+          let secondTest = i + 3;
+          let indexSecond = -1;
+          for (let test of testsArray) {
+            if (test.testNum === firstTest) {
+              indexFirst = test.index;
+            }
+            if (test.testNum === secondTest) {
+              indexSecond = test.index;
+            }
+          }
+          if (indexFirst !== -1 && indexSecond !== -1) {
+            //логика
+            let buf = JSON.parse(JSON.stringify(forBuldCharts.tests[indexFirst]));
+            buf.inter.chartData.heightMy*=2;
+            buf.inter.chartData.heightMy-=50;
+            buf.inter.chartData.datasets = [];
+            buf.inter.chartData.labelMe=this.mixedTestName[indexFirst];
+            buf.inter.chartData.datasets.push(
+              {
+                label: 'Первичная диагностика',
+                backgroundColor: 'red',
+                data: []
+              },
+              {
+                label: 'Вторичная диагностика',
+                backgroundColor: 'blue',
+                data: []
+              }
+            );
+            buf.inter.chartData.datasets[0].data=forBuldCharts.tests[indexFirst].inter.chartData.datasets[0].data;
+            buf.inter.chartData.datasets[1].data=forBuldCharts.tests[indexSecond].inter.chartData.datasets[0].data;
+
+
+            if(forBuldCharts.tests[indexFirst].fullBalls.length!==0){
+              buf.fullBalls.chartData.labelMe='Общая оценка социального функционирования по обеим диагностикам';
+              buf.fullBalls.chartData.datasets = [];
+              buf.fullBalls.chartData.datasets.push(
+                {
+                  label: 'Первичная диагностика',
+                  backgroundColor: 'red',
+                  data: []
+                },
+                {
+                  label: 'Вторичная диагностика',
+                  backgroundColor: 'blue',
+                  data: []
+                }
+              );
+              buf.fullBalls.chartData.datasets[0].data=forBuldCharts.tests[indexFirst].fullBalls.chartData.datasets[0].data;
+              buf.fullBalls.chartData.datasets[1].data=forBuldCharts.tests[indexSecond].fullBalls.chartData.datasets[0].data;
+            }
+
+
+            forBuldCharts.testsMixed.push(buf);
+          }
+        }
 
         if (forBuldCharts.simple.length !== 0 ||
           forBuldCharts.tests.length !== 0 ||
@@ -1294,24 +1373,13 @@
     max-height: 200px;
   }
 
-  /*thead{*/
-  /*  max-height: 200px!important;*/
-  /*}*/
+
   table {
     /*table-layout: fixed;*/
     /*width: 100%;*/
   }
 
   .head-div {
-    /*position: relative;*/
-    /*max-width: 150px;*/
-    /*min-width: 100px;*/
-    /*min-height: 30px;*/
-    /*max-height: 150px;*/
-    /*overflow: hidden;*/
-    /*text-overflow: ellipsis;*/
-    /*width: 100%;*/
-    /*text-align: left;*/
     padding: 0;
     margin: 0;
     min-width: 150px;
@@ -1443,40 +1511,47 @@
     background-color: #D2B48C;
     background-color: rgba(210, 180, 140, 0.5);
   }
-  @media(max-width: 396px){
-    .smaller{
-      margin-top: 150px!important;
+
+  @media (max-width: 396px) {
+    .smaller {
+      margin-top: 150px !important;
     }
-    .btn-primary{
+
+    .btn-primary {
       /*height: 48px;*/
       /*font-size: 14px;*/
       /*text-transform: lowercase;*/
       /*vertical-align: text-top!important;*/
     }
-    .hiden-cont{
+
+    .hiden-cont {
       visibility: hidden;
       display: none;
 
     }
-    #twob{
-      margin-left: 7px!important;
+
+    #twob {
+      margin-left: 7px !important;
       /*margin-right: auto!important;*/
       /*margin-left: auto!important;*/
       /*display: none;*/
     }
-    #oneb{
+
+    #oneb {
       /*right: 0!important;*/
       display: none;
 
     }
-    .mybutmin{
+
+    .mybutmin {
       /*align-content: right!important;*/
     }
-    .big{
+
+    .big {
       margin: 0;
       z-index: 997;
       padding: 0;
-      top:94px;
+      top: 94px;
 
     }
 

@@ -578,7 +578,7 @@ class HusbandInformation(models.Model):
                                               choices=FREQUENCY_OF_DRUGS_USE,
                                               null=True,
                                               blank=True)
-    durationOfUse = models.DecimalField("Длительность употрбления (в годах)",
+    durationOfUse = models.DecimalField("Длительность употребления (в годах)",
                                         max_digits=3,
                                         decimal_places=1,
                                         null=True,
@@ -599,7 +599,7 @@ class HusbandInformation(models.Model):
                                                decimal_places=1,
                                                null=True,
                                                blank=True)
-    alcoholUse = models.IntegerField("Употрбление алкоголя",
+    alcoholUse = models.IntegerField("Употребление алкоголя",
                                      choices=YESNO, null=True, blank=True)
     frequencyOfAlcoholUse = models.IntegerField("Частота употрбления алкоголя",
                                                 choices=FREQUENCY_OF_DRUGS_USE,
