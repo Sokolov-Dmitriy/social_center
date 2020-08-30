@@ -55,7 +55,7 @@
                     class="chart-container"></horizontal>
         <p class="h4 text-center" v-if="chart.fullBalls.length!==0">{{chart.fullBalls.chartData.labelMe}}</p>
         <div style="height: 150px;" v-if="chart.fullBalls.length!==0">
-          <horizontal style="height: 100px;" v-if="gotChart" :chart-data="chart.fullBalls.chartData"
+          <horizontal style="height: 150px;" v-if="gotChart" :chart-data="chart.fullBalls.chartData"
                       :options="chart.fullBalls.options"
                       class="chart-container2"></horizontal>
         </div>
