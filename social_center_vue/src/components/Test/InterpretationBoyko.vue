@@ -11,6 +11,7 @@
       </button>
       <side-bar-test></side-bar-test>
       <side-bar></side-bar>
+      <next-back v-bind:url="'interpretationBoyko'"></next-back>
     </div>
     <div class="container">
       <div class="card">
@@ -49,10 +50,12 @@
   // import {HorizontalBar} from "vue-chartjs";
 
   import Horizontal from "./Horizontal";
+  import NextBack from "../Information/NextBack";
 
   export default {
     name: "InterpretationBoyko",
     components: {
+      NextBack,
       sideBarTest,
       sideBar,
       navBar,

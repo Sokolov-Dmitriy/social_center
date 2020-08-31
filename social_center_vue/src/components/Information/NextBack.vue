@@ -33,7 +33,13 @@
           {url: 'socialPayment', component: 'socialPayment'},
           {url: 'childAllowance', component: 'childAllowance'},
           {url: 'facilities', component: 'facilities'},
-        ]
+        ],
+        testurls: [
+          {url: 'testBoykoList', component: 'testBoykoList'},
+          {url: 'testGAGEList', component: 'testGAGEList'},
+          {url: 'testSOCRATESList', component: 'testSOCRATESList'},
+          {url: 'typologicalGroupList', component: 'typologicalGroupList'},
+        ],
       }
     },
     methods: {
@@ -52,8 +58,19 @@
           }
         }
 
-        if(this.url === 'husbandInformation') this.$router.push({name: 'socialLivingCondition'});
-        if(this.url === 'child' || this.url === 'childAdd') this.$router.push({name: 'familyMembers'});
+        if (this.url === 'husbandInformation') this.$router.push({name: 'socialLivingCondition'});
+        if (this.url === 'child' || this.url === 'childAdd') this.$router.push({name: 'familyMembers'});
+
+        for (var testurl in this.testurls) {
+          if (this.url === this.testurls[testurl].url) {
+            if (this.testurls.length - 1 !== parseInt(testurl))
+              this.$router.push({name: this.testurls[parseInt(testurl) + 1].component});
+          }
+        }
+
+        if (['graphicBoyko', 'testBoyko', 'interpretationBoyko'].includes(this.url)) this.$router.push({name: 'testGAGEList'});
+        if (['graphicGAGE', 'testGAGE', 'interpretationGAGE'].includes(this.url)) this.$router.push({name: 'testSOCRATESList'});
+        if (['graphicSOCRATES', 'testSOCRATES', 'interpretationSOCRATES'].includes(this.url)) this.$router.push({name: 'typologicalGroupList'});
       },
       backUrl() {
         for (var url in this.urls)
@@ -69,8 +86,25 @@
           }
         }
 
-        if(this.url === 'husbandInformation') this.$router.push({name: 'familyMembers'});
-        if(this.url === 'child' || this.url === 'childAdd') this.$router.push({name: 'childList'});
+        if (this.url === 'husbandInformation') this.$router.push({name: 'familyMembers'});
+        if (this.url === 'child' || this.url === 'childAdd') this.$router.push({name: 'childList'});
+
+        for (var testurl in this.testurls) {
+          if (this.url === this.testurls[testurl].url) {
+            if (0 !== parseInt(testurl))
+              this.$router.push({name: this.testurls[parseInt(testurl) - 1].component});
+          }
+        }
+
+        if (['graphicBoyko', 'testBoyko'].includes(this.url)) this.$router.push({name: 'testBoykoList'});
+        if (['graphicGAGE', 'testGAGE'].includes(this.url)) this.$router.push({name: 'testGAGEList'});
+        if (['graphicSOCRATES', 'testSOCRATES'].includes(this.url)) this.$router.push({name: 'testSOCRATESList'});
+
+        if (this.url === 'interpretationBoyko') this.$router.push({name: 'testBoyko'});
+        if (this.url === 'interpretationGAGE') this.$router.push({name: 'testGAGE'});
+        if (this.url === 'interpretationSOCRATES') this.$router.push({name: 'testSOCRATES'});
+
+        if(this.url === 'typologicalGroup') this.$router.push({name: 'typologicalGroupList'});
       }
     }
   }

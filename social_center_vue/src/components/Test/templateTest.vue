@@ -11,6 +11,7 @@
       </button>
       <side-bar-test></side-bar-test>
       <side-bar></side-bar>
+      <next-back v-bind:url="url"></next-back>
     </div>
     <div class="container">
       <button class="btn btn-default noprint" type="button" v-if="!no_data" @click="deleteRequest">УДАЛИТЬ <span
@@ -49,10 +50,12 @@
   import navBar from "../navBar";
   import sideBarTest from "../Test/sideBarTest";
   import sideBar from "../sideBar";
+  import NextBack from "../Information/NextBack";
 
   export default {
     name: "templateTest",
     components: {
+      NextBack,
       sideBar,
       navBar,
       sideBarTest

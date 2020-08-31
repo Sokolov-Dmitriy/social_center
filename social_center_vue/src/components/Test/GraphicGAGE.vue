@@ -11,6 +11,7 @@
       </button>
       <side-bar-test></side-bar-test>
       <side-bar></side-bar>
+      <next-back v-bind:url="'graphicGAGE'"></next-back>
     </div>
     <div class="container">
       <div class="card">
@@ -28,10 +29,12 @@
   import sideBar from "../sideBar";
   import navBar from "../navBar";
   import Horizontal from "./Horizontal";
+  import NextBack from "../Information/NextBack";
 
   export default {
     name: "GraphicGAGE",
     components: {
+      NextBack,
       sideBarTest,
       sideBar,
       navBar,

@@ -11,6 +11,7 @@
       </button>
       <side-bar-test></side-bar-test>
       <side-bar></side-bar>
+      <next-back v-bind:url="'typologicalGroup'"></next-back>
     </div>
     <div class="container">
       <div class="card">
@@ -29,10 +30,12 @@
   import sideBar from "../sideBar";
   import navBar from "../navBar";
   import sideBarTest from "./sideBarTest";
+  import NextBack from "../Information/NextBack";
 
   export default {
     name: "TypologicalGroup",
     components: {
+      NextBack,
       sideBar,
       navBar,
       sideBarTest
