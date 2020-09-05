@@ -225,7 +225,7 @@
   .fa-eye {
     display: inline-block;
     position: absolute;
-    top: 12px;
+    top: 4px;
     right: 60px;
     font-size: 20px;
     color: #808080;
@@ -239,7 +239,7 @@
   .fa-eye-slash {
     display: inline-block;
     position: absolute;
-    top: 12px;
+    top: 4px;
     right: 60px;
     font-size: 20px;
     color: #808080;
