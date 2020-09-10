@@ -1,7 +1,14 @@
 <template>
   <div v-show="showMe">
 
+    <chart-choices v-show="showSignal"
 
+                   v-on:simple-choice="buildCharts"
+                   v-on:show-menu="showMenu"
+                   v-bind:testsList="forMenu">
+
+
+    </chart-choices>
     <div style="position: fixed; margin-top: -20px;" class="container-fluid big">
       <div class="row">
         <div class="col-md-5 col-sm-4 col-sm-11 d-flex flex-wrap hiden-cont ml-2 mr-2" id="hidediv">
@@ -13,7 +20,8 @@
             <button v-on:click="clearFilter" type="button" class="btn btn-primary" id="oneb">Очистить фильтры</button>
           </div>
           <div class="bd-highlight ml-1">
-            <button v-on:click="buildCharts" type="button" class="btn btn-primary" id="twob">Построить графики</button>
+            <button v-on:click="showMenu(true)" type="button" class="btn btn-primary" id="twob">Построить графики
+            </button>
           </div>
         </div>
       </div>
@@ -59,13 +67,19 @@
 <script>
 
   import $ from "jquery";
+  import chartChoices from "./chartChoices";
 
   export default {
 
     name: "TableComp",
+    components: {
+      chartChoices
+    },
     props: ['matrixAll', 'notFilterLines', 'markingArray', 'exclusionList'],
     data() {
       return {
+        showSignal: false,
+        forMenu:[],
         lines: [],
         labels: [],
         lastPoint: {
@@ -127,9 +141,9 @@
           'Предположительное время инфицирования (в годах)',
         ],
         mixedTestName: [
-          'Результаты обоех диагностик по методике Бойко Е.О.',
-          'Результаты обоех диагностик по методике GAGE',
-          'Результаты обоех диагностик по методике SOCRATES'
+          'Результаты первичной и вторичной диагностики по методике Бойко Е.О.',
+          'Результаты первичной и вторичной диагностики по методике GAGE',
+          'Результаты первичной и вторичной диагностики по методике SOCRATES'
         ]
       }
     },
@@ -702,7 +716,7 @@
         }
         chart.chartData.heightMy += chart.chartData.datasets.length * 50;
         chart.options.scales.xAxes[0].ticks.max = buf.count;
-        chart.options.scales.xAxes[0].ticks.stepSize = buf.count / 10;
+        chart.options.scales.xAxes[0].ticks.stepSize = Math.round(buf.count / 10);
         return chart;
       },
       specialFieldWithYears(nameI, label, groups) {
@@ -769,7 +783,7 @@
         }
         chart.chartData.heightMy += chart.chartData.datasets.length * 50;
         chart.options.scales.xAxes[0].ticks.max = buf.count;
-        chart.options.scales.xAxes[0].ticks.stepSize = buf.count / 10;
+        chart.options.scales.xAxes[0].ticks.stepSize = Math.round(buf.count / 10);
         return chart;
       },
       getTestsChoices() {
@@ -796,7 +810,7 @@
         return ar;
         // return res;
       },
-      fixed(num){
+      fixed(num) {
         return num.toFixed(2);
       },
       testGAGESolve(typeTest) {
@@ -842,7 +856,7 @@
                   ticks: {
                     min: 0,
                     max: 28,
-                    stepSize: 28 / 10
+                    stepSize: 5
                   },
                 },
               ],
@@ -889,7 +903,7 @@
         };
         test.inter = {
           chartData: {
-            labels: ['Действие', 'Амбивалентность', 'Осознание'],
+            labels: ['Осознание', 'Амбивалентность', 'Действие'],
             labelMe: kinds[typeTest],
             heightMy: 200,
             // labels: [this.matrixAll.labels[point]],
@@ -921,7 +935,7 @@
                   ticks: {
                     min: 0,
                     max: 40,
-                    stepSize: 40 / 10
+                    stepSize: 5
                   },
                 },
               ],
@@ -955,9 +969,11 @@
             allSumCount.counter++;
           }
         }
-        test.inter.chartData.datasets[0].data.push(this.fixed(allSumCount.sum3 / allSumCount.counter));
-        test.inter.chartData.datasets[0].data.push(this.fixed(allSumCount.sum2 / allSumCount.counter));
         test.inter.chartData.datasets[0].data.push(this.fixed(allSumCount.sum1 / allSumCount.counter));
+        test.inter.chartData.datasets[0].data.push(this.fixed(allSumCount.sum2 / allSumCount.counter));
+        test.inter.chartData.datasets[0].data.push(this.fixed(allSumCount.sum3 / allSumCount.counter));
+        // test.inter.chartData.datasets[0].data.push(this.fixed(allSumCount.sum2 / allSumCount.counter));
+        // test.inter.chartData.datasets[0].data.push(this.fixed(allSumCount.sum1 / allSumCount.counter));
         test.fullBalls = {
           chartData: {
             labels: [],
@@ -1050,7 +1066,7 @@
                   ticks: {
                     min: 0,
                     max: 4,
-                    stepSize: 4 / 10
+                    stepSize: 0.5
                   },
                 },
               ],
@@ -1144,15 +1160,50 @@
         return test;
 
       },
-      buildCharts() {
+      readChart(data) {
         let forBuldCharts = {
           simple: [],
           tests: [],
           testsMixed: [],
           childs: []
         };
+        console.log(data);
+        let testFields=[];
+        let bothTest=[];
+        let testForBoth=[];
+        for(let dat of data){
+          if(dat.title!=='Первичная и Вторичная диагностика'){
+            for(let lable of dat.tests){
+              if(lable.pressed){
+                testFields.push(lable.nameBack);
+                // console.log(lable.nameBack);
+              }
+            }
+          }else{
+            let k=0;
+            for(let lable of dat.tests){
+
+              if(lable.pressed){
+                bothTest.push(k);
+                console.log(k);
+                // testFields.push(lable.nameBack);
+                // console.log(lable.nameBack);
+              }
+              k++;
+            }
+          }
+        }
+        for(let dat of data) {
+          if (dat.title !== 'Первичная и Вторичная диагностика') {
+            for (let lable of bothTest) {
+              testForBoth.push(dat.tests[lable].nameBack);
+              console.log(dat.tests[lable].nameBack);
+            }
+          }
+        }
         let testsArray = [];
-        for (let label of this.selectLabels.testField) {
+        for (let label of testForBoth) {
+          // console.log("laaabel"+label);
           let switchElement;
           for (let i = 0; i < this.testName.length; i++) {
             if (label === this.testName[i]) {
@@ -1186,6 +1237,170 @@
             index: forBuldCharts.tests.length - 1
           })
         }
+        for (let i of bothTest) {
+          let firstTest = i;
+          let indexFirst = -1;
+          let secondTest = i + 3;
+          let indexSecond = -1;
+
+          for (let test of testsArray) {
+            if (test.testNum === firstTest) {
+              indexFirst = test.index;
+            }
+            if (test.testNum === secondTest) {
+              indexSecond = test.index;
+            }
+          }
+          if (indexFirst !== -1 && indexSecond !== -1) {
+            //логика
+            let buf = JSON.parse(JSON.stringify(forBuldCharts.tests[indexFirst]));
+            buf.inter.chartData.heightMy *= 2;
+            buf.inter.chartData.heightMy -= 50;
+            buf.inter.chartData.datasets = [];
+            buf.inter.chartData.labelMe = this.mixedTestName[indexFirst];
+            buf.inter.chartData.datasets.push(
+              {
+                label: 'Первичная диагностика',
+                backgroundColor: 'red',
+                data: []
+              },
+              {
+                label: 'Вторичная диагностика',
+                backgroundColor: 'blue',
+                data: []
+              }
+            );
+            buf.inter.chartData.datasets[0].data = forBuldCharts.tests[indexFirst].inter.chartData.datasets[0].data;
+            buf.inter.chartData.datasets[1].data = forBuldCharts.tests[indexSecond].inter.chartData.datasets[0].data;
+
+
+            if (forBuldCharts.tests[indexFirst].fullBalls.length !== 0) {
+              buf.fullBalls.chartData.labelMe = 'Общая оценка социального функционирования по обеим диагностикам';
+              buf.fullBalls.chartData.datasets = [];
+              buf.fullBalls.chartData.datasets.push(
+                {
+                  label: 'Первичная диагностика',
+                  backgroundColor: 'red',
+                  data: []
+                },
+                {
+                  label: 'Вторичная диагностика',
+                  backgroundColor: 'blue',
+                  data: []
+                }
+              );
+              buf.fullBalls.chartData.datasets[0].data = forBuldCharts.tests[indexFirst].fullBalls.chartData.datasets[0].data;
+              buf.fullBalls.chartData.datasets[1].data = forBuldCharts.tests[indexSecond].fullBalls.chartData.datasets[0].data;
+            }
+
+
+            forBuldCharts.testsMixed.push(buf);
+          }
+        }
+        forBuldCharts.tests=[];
+        for (let label of testFields) {
+          // console.log("laaabel"+label);
+          let switchElement;
+          for (let i = 0; i < this.testName.length; i++) {
+            if (label === this.testName[i]) {
+              switchElement = i;
+
+              break;
+            }
+          }
+          switch (switchElement) {
+            case 0:
+              forBuldCharts.tests.push(this.testBoykoSolve(0));
+              break;
+            case 1:
+              forBuldCharts.tests.push(this.testGAGESolve(0));
+              break;
+            case 2:
+              forBuldCharts.tests.push(this.testSOCRATESSolve(0));
+              break;
+            case 3:
+              forBuldCharts.tests.push(this.testBoykoSolve(1));
+              break;
+            case 4:
+              forBuldCharts.tests.push(this.testGAGESolve(1));
+              break;
+            case 5:
+              forBuldCharts.tests.push(this.testSOCRATESSolve(1));
+              break;
+          }
+          testsArray.push({
+            testNum: switchElement,
+            index: forBuldCharts.tests.length - 1
+          })
+        }
+        if (forBuldCharts.simple.length !== 0 ||
+          forBuldCharts.tests.length !== 0 ||
+          forBuldCharts.childs.length !== 0 ||
+          forBuldCharts.testsMixed.length !== 0) {
+          this.showMe = false;
+          this.$emit('send-data', forBuldCharts);
+          this.$emit('open');
+        }else {
+          console.log("что-то не так");
+        }
+      },
+      showMenu(signal) {
+        this.forMenu=[];
+        // console.log("signal", signal);
+        // for(let i=0;i<2;i++){}
+        // console.log("markiing:");
+        // console.log(this.markingArray);
+        for(let name in this.markingArray){
+          // console.log(name);
+          if(this.testName.includes(name)){
+            this.forMenu.push(name);
+          }
+        }
+        this.showSignal = signal;
+      },
+      buildCharts(data) {
+        let forBuldCharts = {
+          simple: [],
+          tests: [],
+          testsMixed: [],
+          childs: []
+        };
+        // let testsArray = [];
+        // for (let label of this.selectLabels.testField) {
+        //   // console.log("laaabel"+label);
+        //   let switchElement;
+        //   for (let i = 0; i < this.testName.length; i++) {
+        //     if (label === this.testName[i]) {
+        //       switchElement = i;
+        //
+        //       break;
+        //     }
+        //   }
+        //   switch (switchElement) {
+        //     case 0:
+        //       forBuldCharts.tests.push(this.testBoykoSolve(0));
+        //       break;
+        //     case 1:
+        //       forBuldCharts.tests.push(this.testGAGESolve(0));
+        //       break;
+        //     case 2:
+        //       forBuldCharts.tests.push(this.testSOCRATESSolve(0));
+        //       break;
+        //     case 3:
+        //       forBuldCharts.tests.push(this.testBoykoSolve(1));
+        //       break;
+        //     case 4:
+        //       forBuldCharts.tests.push(this.testGAGESolve(1));
+        //       break;
+        //     case 5:
+        //       forBuldCharts.tests.push(this.testSOCRATESSolve(1));
+        //       break;
+        //   }
+        //   testsArray.push({
+        //     testNum: switchElement,
+        //     index: forBuldCharts.tests.length - 1
+        //   })
+        // }
         for (let label of this.selectLabels.simpleField) {
           if (!this.specialSimpleField.includes(this.matrixAll.labels[label])) {
             forBuldCharts.simple.push(this.simpleCharts([label], label));
@@ -1281,13 +1496,81 @@
             }
           }
         }
+        let testFields=[];
+        let bothTest=[];
+        let testForBoth=[];
+        for(let dat of data){
+          if(dat.title!=='Первичная и Вторичная диагностика'){
+            for(let lable of dat.tests){
+              if(lable.pressed){
+                testFields.push(lable.nameBack);
+                // console.log(lable.nameBack);
+              }
+            }
+          }else{
+            let k=0;
+            for(let lable of dat.tests){
 
-        //смешанные тесты
-        for (let i of [0, 1, 2]) {
+              if(lable.pressed){
+                bothTest.push(k);
+                console.log(k);
+                // testFields.push(lable.nameBack);
+                // console.log(lable.nameBack);
+              }
+              k++;
+            }
+          }
+        }
+        for(let dat of data) {
+          if (dat.title !== 'Первичная и Вторичная диагностика') {
+            for (let lable of bothTest) {
+              testForBoth.push(dat.tests[lable].nameBack);
+              console.log(dat.tests[lable].nameBack);
+            }
+          }
+        }
+        let testsArray = [];
+        for (let label of testForBoth) {
+          // console.log("laaabel"+label);
+          let switchElement;
+          for (let i = 0; i < this.testName.length; i++) {
+            if (label === this.testName[i]) {
+              switchElement = i;
+
+              break;
+            }
+          }
+          switch (switchElement) {
+            case 0:
+              forBuldCharts.tests.push(this.testBoykoSolve(0));
+              break;
+            case 1:
+              forBuldCharts.tests.push(this.testGAGESolve(0));
+              break;
+            case 2:
+              forBuldCharts.tests.push(this.testSOCRATESSolve(0));
+              break;
+            case 3:
+              forBuldCharts.tests.push(this.testBoykoSolve(1));
+              break;
+            case 4:
+              forBuldCharts.tests.push(this.testGAGESolve(1));
+              break;
+            case 5:
+              forBuldCharts.tests.push(this.testSOCRATESSolve(1));
+              break;
+          }
+          testsArray.push({
+            testNum: switchElement,
+            index: forBuldCharts.tests.length - 1
+          })
+        }
+        for (let i of bothTest) {
           let firstTest = i;
           let indexFirst = -1;
           let secondTest = i + 3;
           let indexSecond = -1;
+
           for (let test of testsArray) {
             if (test.testNum === firstTest) {
               indexFirst = test.index;
@@ -1299,10 +1582,10 @@
           if (indexFirst !== -1 && indexSecond !== -1) {
             //логика
             let buf = JSON.parse(JSON.stringify(forBuldCharts.tests[indexFirst]));
-            buf.inter.chartData.heightMy*=2;
-            buf.inter.chartData.heightMy-=50;
+            buf.inter.chartData.heightMy *= 2;
+            buf.inter.chartData.heightMy -= 50;
             buf.inter.chartData.datasets = [];
-            buf.inter.chartData.labelMe=this.mixedTestName[indexFirst];
+            buf.inter.chartData.labelMe = this.mixedTestName[indexFirst];
             buf.inter.chartData.datasets.push(
               {
                 label: 'Первичная диагностика',
@@ -1315,12 +1598,12 @@
                 data: []
               }
             );
-            buf.inter.chartData.datasets[0].data=forBuldCharts.tests[indexFirst].inter.chartData.datasets[0].data;
-            buf.inter.chartData.datasets[1].data=forBuldCharts.tests[indexSecond].inter.chartData.datasets[0].data;
+            buf.inter.chartData.datasets[0].data = forBuldCharts.tests[indexFirst].inter.chartData.datasets[0].data;
+            buf.inter.chartData.datasets[1].data = forBuldCharts.tests[indexSecond].inter.chartData.datasets[0].data;
 
 
-            if(forBuldCharts.tests[indexFirst].fullBalls.length!==0){
-              buf.fullBalls.chartData.labelMe='Общая оценка социального функционирования по обеим диагностикам';
+            if (forBuldCharts.tests[indexFirst].fullBalls.length !== 0) {
+              buf.fullBalls.chartData.labelMe = 'Общая оценка социального функционирования';
               buf.fullBalls.chartData.datasets = [];
               buf.fullBalls.chartData.datasets.push(
                 {
@@ -1334,24 +1617,130 @@
                   data: []
                 }
               );
-              buf.fullBalls.chartData.datasets[0].data=forBuldCharts.tests[indexFirst].fullBalls.chartData.datasets[0].data;
-              buf.fullBalls.chartData.datasets[1].data=forBuldCharts.tests[indexSecond].fullBalls.chartData.datasets[0].data;
+              buf.fullBalls.chartData.datasets[0].data = forBuldCharts.tests[indexFirst].fullBalls.chartData.datasets[0].data;
+              buf.fullBalls.chartData.datasets[1].data = forBuldCharts.tests[indexSecond].fullBalls.chartData.datasets[0].data;
             }
 
 
             forBuldCharts.testsMixed.push(buf);
           }
         }
+        forBuldCharts.tests=[];
+        for (let label of testFields) {
+          // console.log("laaabel"+label);
+          let switchElement;
+          for (let i = 0; i < this.testName.length; i++) {
+            if (label === this.testName[i]) {
+              switchElement = i;
 
+              break;
+            }
+          }
+          switch (switchElement) {
+            case 0:
+              forBuldCharts.tests.push(this.testBoykoSolve(0));
+              break;
+            case 1:
+              forBuldCharts.tests.push(this.testGAGESolve(0));
+              break;
+            case 2:
+              forBuldCharts.tests.push(this.testSOCRATESSolve(0));
+              break;
+            case 3:
+              forBuldCharts.tests.push(this.testBoykoSolve(1));
+              break;
+            case 4:
+              forBuldCharts.tests.push(this.testGAGESolve(1));
+              break;
+            case 5:
+              forBuldCharts.tests.push(this.testSOCRATESSolve(1));
+              break;
+          }
+          testsArray.push({
+            testNum: switchElement,
+            index: forBuldCharts.tests.length - 1
+          })
+        }
         if (forBuldCharts.simple.length !== 0 ||
           forBuldCharts.tests.length !== 0 ||
-          forBuldCharts.childs.length !== 0) {
+          forBuldCharts.childs.length !== 0 ||
+          forBuldCharts.testsMixed.length !== 0) {
           this.showMe = false;
           this.$emit('send-data', forBuldCharts);
           this.$emit('open');
-        } else {
-          alert('Поля не выбраны!');
+        }else {
+          console.log("что-то не так");
         }
+        //смешанные тесты
+        // for (let i of [0, 1, 2]) {
+        //   let firstTest = i;
+        //   let indexFirst = -1;
+        //   let secondTest = i + 3;
+        //   let indexSecond = -1;
+        //   for (let test of testsArray) {
+        //     if (test.testNum === firstTest) {
+        //       indexFirst = test.index;
+        //     }
+        //     if (test.testNum === secondTest) {
+        //       indexSecond = test.index;
+        //     }
+        //   }
+        //   if (indexFirst !== -1 && indexSecond !== -1) {
+        //     //логика
+        //     let buf = JSON.parse(JSON.stringify(forBuldCharts.tests[indexFirst]));
+        //     buf.inter.chartData.heightMy *= 2;
+        //     buf.inter.chartData.heightMy -= 50;
+        //     buf.inter.chartData.datasets = [];
+        //     buf.inter.chartData.labelMe = this.mixedTestName[indexFirst];
+        //     buf.inter.chartData.datasets.push(
+        //       {
+        //         label: 'Первичная диагностика',
+        //         backgroundColor: 'red',
+        //         data: []
+        //       },
+        //       {
+        //         label: 'Вторичная диагностика',
+        //         backgroundColor: 'blue',
+        //         data: []
+        //       }
+        //     );
+        //     buf.inter.chartData.datasets[0].data = forBuldCharts.tests[indexFirst].inter.chartData.datasets[0].data;
+        //     buf.inter.chartData.datasets[1].data = forBuldCharts.tests[indexSecond].inter.chartData.datasets[0].data;
+        //
+        //
+        //     if (forBuldCharts.tests[indexFirst].fullBalls.length !== 0) {
+        //       buf.fullBalls.chartData.labelMe = 'Общая оценка социального функционирования по обеим диагностикам';
+        //       buf.fullBalls.chartData.datasets = [];
+        //       buf.fullBalls.chartData.datasets.push(
+        //         {
+        //           label: 'Первичная диагностика',
+        //           backgroundColor: 'red',
+        //           data: []
+        //         },
+        //         {
+        //           label: 'Вторичная диагностика',
+        //           backgroundColor: 'blue',
+        //           data: []
+        //         }
+        //       );
+        //       buf.fullBalls.chartData.datasets[0].data = forBuldCharts.tests[indexFirst].fullBalls.chartData.datasets[0].data;
+        //       buf.fullBalls.chartData.datasets[1].data = forBuldCharts.tests[indexSecond].fullBalls.chartData.datasets[0].data;
+        //     }
+        //
+        //
+        //     forBuldCharts.testsMixed.push(buf);
+        //   }
+        // }
+        //
+        // if (forBuldCharts.simple.length !== 0 ||
+        //   forBuldCharts.tests.length !== 0 ||
+        //   forBuldCharts.childs.length !== 0) {
+        //   this.showMe = false;
+        //   this.$emit('send-data', forBuldCharts);
+        //   this.$emit('open');
+        // } else {
+        //   alert('Поля не выбраны!');
+        // }
       }
 
     },
