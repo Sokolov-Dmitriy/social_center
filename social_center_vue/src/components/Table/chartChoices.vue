@@ -2,7 +2,8 @@
   <div class="chart-choice">
 
     <div v-for="butForm in butsForm">
-      <p class="h5 title-choice mt-1 ml-1">{{butForm.title}}</p>
+<!--      <p class="h5 title-choice mt-1 ml-1" v-if="checkIn(butForm.tests)"></p>-->
+      <p class="h5 title-choice mt-1 ml-1" v-if="checkIn(butForm.tests)">{{butForm.title}}</p>
       <div class="d-flex bd-highlight pr-1 pl-1">
         <div
           v-for="test in butForm.tests"
@@ -19,7 +20,7 @@
 
     <div class="d-flex justify-content-between mt-1 ml-1 mr-1 mb-1">
       <div @click="$emit('simple-choice',butsForm) + $emit('show-menu',false)" class="p-2 bd-highlight btn-choice">Построить</div>
-<!--      <div @click="$emit('chart-choice',butsForm) + $emit('show-menu',false)" class="p-2 bd-highlight btn-choice">Построить выбранные</div>-->
+      <!--      <div @click="$emit('chart-choice',butsForm) + $emit('show-menu',false)" class="p-2 bd-highlight btn-choice">Построить выбранные</div>-->
     </div>
 
   </div>
@@ -62,6 +63,20 @@
       },
       pressBut(test) {
         test.pressed = !test.pressed;
+      },
+      checkIn(array){
+        console.log(array);
+        let i=0;
+        for(let test of array){
+          if(this.check(test.nameBack)){
+            i++
+          }
+        }
+        console.log(i);
+        if(i===3){
+          return false;
+        }
+        return true;
       }
     },
     beforeMount() {
