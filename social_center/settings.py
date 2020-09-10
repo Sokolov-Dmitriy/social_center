@@ -161,7 +161,7 @@ REST_FRAMEWORK = {
 # все запросы, которые идут на бекенд разрешены
 CORS_ORIGIN_ALLOW_ALL = True
 
-настройки разработки и продакшена
+# настройки разработки и продакшена
 try:
     from .local_settings import *
 except ImportError:
