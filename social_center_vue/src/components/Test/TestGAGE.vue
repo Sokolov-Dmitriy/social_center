@@ -22,8 +22,13 @@
                                     class="my-radio"></b-form-radio-group>
               </validation-provider>
               <validation-provider :rules="{required: false}" v-slot="validationContext" v-else-if="choices[key]">
-                <b-form-radio-group :options="choices[key]" v-model="items[key]" :value="items[key]"
+                <b-form-radio-group v-if="!['loss_documents','do_not_work','lots_alcohol'].includes(key)"
+                                    :options="choices[key]" v-model="items[key]" :value="items[key]"
                                     :state="getValidationState(validationContext)"
+                                    class="my-radio"></b-form-radio-group>
+                <b-form-radio-group v-else :options="choices[key]" v-model="items[key]" :value="items[key]"
+                                    :state="getValidationState(validationContext)"
+                                    @input="choiceSubsection(key,items[key])"
                                     class="my-radio"></b-form-radio-group>
               </validation-provider>
               <validation-provider :rules="{required: false}" v-slot="validationContext" v-else>
@@ -71,6 +76,41 @@
       this.attempt = sessionStorage.getItem('test_attempt');
     },
     methods: {
+      choiceSubsection(key, choice) {
+        var fields_loss_documents = ['loss_documents_when', 'loss_documents_time'];
+        var fields_do_not_work = 'do_not_work_when';
+        var fields_lots_alcohol = 'lots_alcohol_time';
+        if (key === 'loss_documents') {
+          if (choice === 0) {
+            for (var item in fields_loss_documents) {
+              this.labels[fields_loss_documents[item]] = null;
+              this.items[fields_loss_documents[item]] = null;
+            }
+          } else if (choice === 1) {
+            for (var item in fields_loss_documents)
+              this.labels[fields_loss_documents[item]] = this.save_labels[fields_loss_documents[item]];
+          }
+        }
+
+        if (key === 'do_not_work') {
+          if (choice === 0) {
+            this.labels[fields_do_not_work] = null;
+            this.items[fields_do_not_work] = null;
+          } else if (choice === 1) {
+            this.labels[fields_do_not_work] = this.save_labels[fields_do_not_work];
+          }
+        }
+
+
+        if (key === 'lots_alcohol') {
+          if (choice === 0) {
+            this.labels[fields_lots_alcohol] = null;
+            this.items[fields_lots_alcohol] = null;
+          } else if (choice === 1) {
+              this.labels[fields_lots_alcohol] = this.save_labels[fields_lots_alcohol];
+          }
+        }
+      },
       choiceYes(key, choice) {
         var fields_all = ['loss_documents', 'loss_documents_when', 'loss_documents_time', 'dose_reduction',
           'irritation', 'fault', 'tone'];
@@ -125,6 +165,10 @@
               this.items = response.data.items;
             this.choiceYes('alcohol', this.items['alcohol']);
             this.choiceYes('substances', this.items['substances']);
+
+            this.choiceSubsection('loss_documents', this.items['loss_documents']);
+            this.choiceSubsection('do_not_work', this.items['do_not_work']);
+            this.choiceSubsection('lots_alcohol', this.items['lots_alcohol']);
           },
           error: (response) => {
             if (response.status === 401) this.logOut();

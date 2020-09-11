@@ -26,7 +26,9 @@
           <tbody class="tbody">
           <tr v-for="group in groups" @click="toGroup(group.id,group.value)">
             <td>{{group.name}}</td>
-            <td>{{group.status}}</td>
+            <td v-if="group.status==='Добавлен'">{{group.status}}</td>
+            <b-button v-else class="btn btn-add" @click="toAddGroup(group.value)">Добавить <span
+              class="fa fa-plus-circle"></span></b-button>
           </tr>
           </tbody>
         </table>
@@ -96,8 +98,10 @@
       toGroup(id, attempt) {
         if (id !== '')
           this.$router.push({name: 'typologicalGroup', params: {id: id, attempt: attempt}});
-        else this.$router.push({name: 'typologicalGroup', params: {id: 0, attempt: attempt}})
-      }
+      },
+      toAddGroup(attempt) {
+        this.$router.push({name: 'typologicalGroup', params: {id: 0, attempt: attempt}})
+      },
     }
   }
 </script>
@@ -159,6 +163,24 @@
     color: #492727;
     text-align: center;
     border-color: #f5eed5;
+  }
+
+  td {
+    border-color: #f5eed5;
+  }
+
+  .btn-add {
+    margin-top: 6px;
+    background-color: #D2B48C;
+    color: #492727;
+    border-color: #D2B48C;
+  }
+
+  .btn-add:hover {
+    margin-top: 6px;
+    background-color: #492727;
+    color: #D2B48C;
+    border-color: #492727;
   }
 
   @media print {

@@ -26,12 +26,16 @@
           <tbody class="tbody">
           <tr v-for="test in tests" @click="toTest(test.id,test.value)">
             <td>{{test.name}}</td>
-            <td>{{test.status}}</td>
+            <td v-if="test.status==='Добавлен'">{{test.status}}</td>
+            <b-button v-else class="btn btn-add" @click="toAddTest(test.value)">Добавить <span
+              class="fa fa-plus-circle"></span></b-button>
           </tr>
           </tbody>
         </table>
-        <button v-if="tests.first.status==='Добавлен' && tests.second.status==='Добавлен'" class="btn btn-graphic noprint"
-                type="button" @click="toGraphic">Сравнение результатов <span class="fa fa-bar-chart-o fa-2x"></span></button>
+        <button v-if="tests.first.status==='Добавлен' && tests.second.status==='Добавлен'"
+                class="btn btn-graphic noprint"
+                type="button" @click="toGraphic">Сравнение результатов <span class="fa fa-bar-chart-o fa-2x"></span>
+        </button>
       </div>
     </div>
   </div>
@@ -97,7 +101,9 @@
       toTest(id, attempt) {
         if (id !== '')
           this.$router.push({name: 'testSOCRATES', params: {id: id, attempt: attempt}});
-        else this.$router.push({name: 'testSOCRATES', params: {id: 0, attempt: attempt}})
+      },
+      toAddTest(attempt) {
+        this.$router.push({name: 'testSOCRATES', params: {id: 0, attempt: attempt}})
       },
       toGraphic() {
         this.$router.push({name: 'graphicSOCRATES'})
@@ -173,6 +179,24 @@
     color: #492727;
     text-align: center;
     border-color: #f5eed5;
+  }
+
+  td {
+    border-color: #f5eed5;
+  }
+
+  .btn-add {
+    margin-top: 6px;
+    background-color: #D2B48C;
+    color: #492727;
+    border-color: #D2B48C;
+  }
+
+  .btn-add:hover {
+    margin-top: 6px;
+    background-color: #492727;
+    color: #D2B48C;
+    border-color: #492727;
   }
 
   @media print {

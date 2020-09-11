@@ -49,7 +49,7 @@ class ClientInformationView(APIView):
         client = ClientSerializers(data=request.data)
         if client.is_valid():
             client.save()
-            return Response(status=201)
+            return Response({'id': client.data.get('id')})
         else:
             return Response(status=400)
 

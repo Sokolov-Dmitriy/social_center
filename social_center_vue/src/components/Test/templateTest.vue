@@ -80,6 +80,8 @@
     created() {
       this.id = this.identifier;
       this.getRequest();
+      if(parseInt(this.id)===0)
+        this.addInfo();
     },
     methods: {
       addInfo() {

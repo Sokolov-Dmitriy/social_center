@@ -65,7 +65,8 @@
           context: this,
           success: (response) => {
             // alert("Данные добавлены.");
-            this.$router.push({name: 'mainwindow'})
+            this.$router.push({name: 'clientView', params: {id: response.data.id}})
+            // this.$router.push({name: 'mainwindow'})
           },
           error: (response) => {
             if (response.status === 401) this.logOut();
