@@ -1,18 +1,19 @@
 from django.db import models
-# from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
+from django.utils import timezone
 
 YESNO = [(1, 'да'), (2, 'нет')]
 YES_NO_DONTKNOW = [(1, 'да'), (2, 'нет'), (3, 'не знаю')]
 
 
 class Client(models.Model):
+    """Общие сведения о клиенте"""
     number = models.IntegerField(verbose_name='№', null=True, blank=True)
     code = models.TextField(verbose_name='Код', null=True, blank=True)
     came = models.TextField(verbose_name='Пришли', null=True, blank=True)
     dependence = models.TextField(verbose_name='Зависимость', null=True, blank=True)
-    number_vz = models.IntegerField(verbose_name='Количество вз', null=True, blank=True)  # по любому количество это Int
+    number_vz = models.IntegerField(verbose_name='Количество вз', null=True, blank=True)
     nl = models.TextField(verbose_name='Н/л', null=True, blank=True)
     criminal_record = models.TextField(verbose_name='Наличие судимости', null=True, blank=True)
     state_dependence = models.TextField(verbose_name='Состояние зависимости', null=True, blank=True)
@@ -20,7 +21,7 @@ class Client(models.Model):
     hiv_status = models.TextField(verbose_name='ВИЧ-статус', null=True, blank=True)
     vzr = models.TextField(verbose_name='взр', null=True, blank=True)
     number_children = models.IntegerField(verbose_name='Количество детей', null=True,
-                                          blank=True)  # по любому количество это Int
+                                          blank=True)
     undefined = models.TextField(verbose_name='Неопределен', null=True, blank=True)
     in_window = models.TextField(verbose_name='В окне', null=True, blank=True)
     full_name = models.TextField(verbose_name='ФИО клиента', null=True, blank=True)
@@ -31,7 +32,7 @@ class Client(models.Model):
     category = models.TextField(verbose_name='Категория', null=True, blank=True)
     address_phone = models.TextField(verbose_name='Адрес, телефон', null=True, blank=True)
     passport = models.TextField(verbose_name='Паспортные данные', null=True, blank=True)
-    production_date = models.DateField(verbose_name='Дата постановки', null=True, blank=True)  # 100% дата
+    production_date = models.DateField(verbose_name='Дата постановки', null=True, blank=True)
     support = models.TextField(verbose_name='Какое сопровождение', null=True, blank=True)
     children = models.TextField(verbose_name='Дети (ФИО)', null=True, blank=True)
     mo = models.TextField(verbose_name='М/О', null=True, blank=True)
@@ -43,6 +44,16 @@ class Client(models.Model):
 
 
 class Child(models.Model):
+    """
+    Социальная диагностика
+    ======================
+
+    2. Сведения о детях
+    -------------------
+
+    2.1 Общая информация
+    2.2 Информация о состоянии здоровья ребёнка
+    """
     SEX = [(1, 'мужской'), (2, 'женский')]
     STATUS = [(1, 'родной'), (2, 'усыновлен'), (3, 'оформлена опека'),
               (4, 'оставшийся без попечения родителей/лишение родительских прав'), (5, 'сирота'), (6, 'инвалидность')]
@@ -93,6 +104,15 @@ class Child(models.Model):
 
 
 class SocialLivingCondition(models.Model):
+    """
+    Социальная диагностика
+    ======================
+
+    4. Сведения о социально-бытовом и социально-экономическом положении
+    -------------------------------------------------------------------
+
+    4.1 Социально-бытовые условия
+    """
     TYPE = [(1, 'жилой дом'), (2, 'отдельная квартира'), (3, 'комната в коммунальной квартире'),
             (4, 'комната в общежитии'), (5, 'отсутствует')]
     SANITARY_CONDITION = [(1, 'хорошее'), (2, 'удовлетворительное'), (3, 'антисанитарное'),
@@ -100,14 +120,14 @@ class SocialLivingCondition(models.Model):
     OWNERSHIP = [(1, 'договор по найму жилья'), (2, 'договор аренды'), (3, 'собственность клиента')]
     PAYMENT = [(1, 'своевременно в полном объеме'), (2, 'незначительная задолженность'),
                (3, 'значительная задолженность'), (4, 'начилие задолженности по алиментам/кредиту')]
-    client = models.OneToOneField(Client, on_delete=models.CASCADE)  # здесь вроде тоже 1 к 1
+    client = models.OneToOneField(Client, on_delete=models.CASCADE)
     type_room = models.IntegerField(verbose_name='Вид жилого помещения', choices=TYPE, null=True,
                                     blank=True)
     sanitary_condition = models.IntegerField(
         verbose_name='Санитарно-гигиеническое и техническое состояние жилого помещения', choices=SANITARY_CONDITION,
         null=True, blank=True)
     room_area = models.FloatField(verbose_name='Жилая площадь в расчете на человека (кв.м.)', null=True,
-                                  blank=True)  # проверить
+                                  blank=True)
     ownership = models.IntegerField(verbose_name='Право собственности,владения и пользования', choices=OWNERSHIP,
                                     null=True, blank=True)
     payment = models.IntegerField(verbose_name='Оплата за жилье и коммунальные услуги', choices=PAYMENT, null=True,
@@ -121,6 +141,15 @@ class SocialLivingCondition(models.Model):
 
 
 class SocialEconomicCondition(models.Model):
+    """
+    Социальная диагностика
+    ======================
+
+    4. Сведения о социально-бытовом и социально-экономическом положении
+    -------------------------------------------------------------------
+
+    4.2 Социально-экономические условия проживания
+    """
     LEVEL = [(1, 'высокий уровень'), (2, 'около двух прожиточных минимумов на человека'),
              (3, 'на уровне прожиточного минимума'), (4, 'ниже прожиточного минимума'), (5, 'нет дохода')]
     CONFIRMATION = [(1, 'возможно подтвердить документально'), (2, 'необходим сбор документов'),
@@ -143,6 +172,18 @@ class SocialEconomicCondition(models.Model):
 
 
 class SourceIncome(models.Model):
+    """
+    Социальная диагностика
+    ======================
+
+    4. Сведения о социально-бытовом и социально-экономическом положении
+    -------------------------------------------------------------------
+
+    4.2 Социально-экономические условия проживания
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    Источники дохода
+    """
     SALARY = [(1, 'постоянно'), (2, 'переодически'), (3, 'редко')]
     MEANS = [(1, 'родственниками'), (2, 'партнером'), (3, 'мужем')]
     RENT = [(1, 'комнаты'), (2, 'оборудования'), (3, 'участка')]
@@ -165,6 +206,18 @@ BASIS = [(1, 'нет оснований для оформления выплат
 
 
 class SocialPayment(models.Model):
+    """
+    Социальная диагностика
+    ======================
+
+    4. Сведения о социально-бытовом и социально-экономическом положении
+    -------------------------------------------------------------------
+
+    4.2 Социально-экономические условия проживания
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    Социальные выплаты
+    """
     PENSION = [(1, 'по старости'), (2, 'по потере кормильца'), (3, 'по инвалидности')]
     TYPE_SOCIAL_PAYMENT = [(1, 'единовременные выплаты'), (2, 'ежемесячные выплаты'),
                            (3, 'государственная социальная помощь,доплата до прожиточного минимума'),
@@ -182,6 +235,18 @@ class SocialPayment(models.Model):
 
 
 class ChildAllowanceAndCompensation(models.Model):
+    """
+    Социальная диагностика
+    ======================
+
+    4. Сведения о социально-бытовом и социально-экономическом положении
+    -------------------------------------------------------------------
+
+    4.2 Социально-экономические условия проживания
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    Детские пособия и компенсационные выплаты
+    """
     TYPE_BENEFIT_PAYMENT = [(1, 'единовременная компенсационная выплата при рождении ребенка (СПБ)'),
                             (2, 'единовременное пособие при рождении ребенка (РФ)'),
                             (3, 'ежемесячное пособие на ребёнка в возрасте от рождения до 1 года (СПб)'),
@@ -202,6 +267,18 @@ class ChildAllowanceAndCompensation(models.Model):
 
 
 class Facilities(models.Model):
+    """
+    Социальная диагностика
+    ======================
+
+    4. Сведения о социально-бытовом и социально-экономическом положении
+    -------------------------------------------------------------------
+
+    4.2 Социально-экономические условия проживания
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    Льготы и меры социальной поддержки, предусмотренные для определённых категорий
+    """
     STAGE = [(1, 'оформлено полностью'), (2, 'частично оформлено'), (3, 'в стадии оформления'), (4, 'не оформлено')]
     economic_condition = models.OneToOneField(SocialEconomicCondition, on_delete=models.CASCADE)
     basis_facilities = models.IntegerField(verbose_name='Основания для льгот', choices=YESNO, null=True, blank=True)
@@ -216,8 +293,16 @@ class Facilities(models.Model):
         verbose_name_plural = 'Льготы и меры социальной поддержки,предусмотренные для определенных категорий'
 
 
-# 1.1. Общая информация
 class GeneralInformation(models.Model):
+    """
+    Социальная диагностика
+    ======================
+
+    1. Сведения о клиенте
+    ---------------------
+
+    1.1. Общая информация
+    """
     SEX = [(1, "мужской"), (2, "женский")]
     WORK_PLACE = [(1, "постоянное"),
                   (2, "временное"),
@@ -279,18 +364,26 @@ class GeneralInformation(models.Model):
                                                 choices=PROFESSIONAL_EDUCATION, null=True, blank=True)
     specialSocialStatus = models.IntegerField("Особый социальный статус",
                                               choices=SPECIAL_SOCIAL_STATUS, null=True,
-                                              blank=True)  # мб и нет
+                                              blank=True)
     disabilityGroup = models.IntegerField("Группа инвалидности",
                                           choices=DISABILITY_GROUP, null=True,
-                                          blank=True)  # мб и нет
+                                          blank=True)
 
     class Meta:
         verbose_name = 'Общая информация'
         verbose_name_plural = 'Общая информация'
 
 
-# 1.2. Информация о противоправных действиях, правонарушениях, употреблении наркотиков, алкоголя
 class ASocialBehavior(models.Model):
+    """
+    Социальная диагностика
+    ======================
+
+    1. Сведения о клиенте
+    ---------------------
+
+    1.2 Информация о противоправных действиях, правонарушениях, употреблении наркотиков, алкоголя
+    """
     FREQUENCY_OF_DRUGS_USE = [(1, "ежедневно"),
                               (2, "раз в два-три дня"),
                               (3, "раз в неделю"),
@@ -382,25 +475,29 @@ class ASocialBehavior(models.Model):
         verbose_name_plural = 'Информация о противоправных действиях, правонарушениях, употреблении наркотиков, алкоголя'
 
 
-# 1.3. Информация о наличии хронического заболевания
 class ChronicDisease(models.Model):
+    """
+    Социальная диагностика
+    ======================
+
+    1. Сведения о клиенте
+    ---------------------
+
+    1.3 Информация о наличии хронического заболевания
+    """
     DISEASE = [(1, 'есть'), (2, 'нет')]
-    # Предположительный путь заражения
     TYPE_INVASION = [(1, 'половой'),
                      (2, 'инъекционный'),
                      (3, 'неизвестно')]
 
-    # Получал химиопрофилактику
     CHEMOPROPHYLAXIS = [(1, 'во время беременности'),
                         (2, 'во время родов'),
                         (3, 'после родов')]
 
-    # Получает ли лечение по ВИЧ
     HIV_TREATMENT = [(1, 'да, регулярно'),
                      (2, 'да, не регулярно'),
                      (3, 'нет')]
 
-    # Кто из членов семьи знает о ВИЧ-статусе клиента
     HIV_FAMILY_AWARENESS = [(1, 'да'),
                             (2, 'нет'),
                             (3, 'подозревают'),
@@ -455,15 +552,21 @@ class ChronicDisease(models.Model):
         verbose_name_plural = 'Информация о наличии хронического заболевания'
 
 
-# Сведения о членах семьи
 class FamilyMembersInformation(models.Model):
-    #    Семейное положение
+    """
+    Социальная диагностика
+    ======================
+
+    3. Сведения о членах семьи
+    --------------------------
+
+    3.1 Общие сведения
+    """
     MARITAL_STATUS = [(1, 'не замужем'),
                       (2, 'замужем'),
                       (3, 'разведена'),
                       (4, 'вдова')]
 
-    # С кем проживает
     LIVING_WITH_WHOM = [(1, 'одна'),
                         (2, 'с детьми'),
                         (3, 'со своими родителями'),
@@ -484,21 +587,24 @@ class FamilyMembersInformation(models.Model):
         verbose_name_plural = 'Сведения о членах семьи'
 
 
-# 3.1. Информация о муже/партнёре
 class HusbandInformation(models.Model):
-    # Место работы
+    """
+    Социальная диагностика
+    ======================
 
+    3. Сведения о членах семьи
+    --------------------------
+
+    3.2 Информация о муже/партнёре
+    """
     WORK_PLACE = [(1, "постоянное"),
                   (2, "временное"),
                   (3, "эпизодическое"),
                   (4, "не работает"),
                   (5, "состоит в центре занятости населения в качестве безработного")]
 
-    # Гражданство
     CITYZENSHIP = [(1, 'Россия'),
                    (2, 'страна СНГ')]
-
-    # Регистрация
 
     REGISTRATION = [(1, 'постоянная'),
                     (2, 'временная')]
@@ -524,8 +630,6 @@ class HusbandInformation(models.Model):
     DISABILITY_GROUP = [(1, "I группа"),
                         (2, "II группа"),
                         (3, "III группа")]
-
-    # Частота употребления наркотиков
 
     FREQUENCY_OF_DRUGS_USE = [(1, "ежедневно"),
                               (2, "раз в два-три дня"),
@@ -639,22 +743,13 @@ class User(AbstractUser):
                                 max_length=80, null=True, blank=True)
 
 
-# class Specialist(models.Model):
-#     lastName = models.CharField("Фамилия",
-#                                 max_length=40)
-#     firstName = models.CharField("Имя",
-#                                  max_length=40)
-#     patronymic = models.CharField("Отчество",
-#                                   max_length=40)
-#     position = models.CharField("Должность",
-#                                 max_length=60)
-#
-#     class Meta:
-#         verbose_name = 'Специалист'
-
-
-# Заключение специалиста
 class ExpertOpinion(models.Model):
+    """
+    Социальная диагностика
+    ======================
+
+    5. Заключение специалиста
+    """
     client = models.OneToOneField(Client,
                                   on_delete=models.CASCADE)
     specialist = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -679,6 +774,7 @@ ATTEMPT = [
 
 
 class TestBoyko(models.Model):
+    """Тест Бойко"""
     AGGRESS = [
         (0, 'дружелюбен, не наносит вреда себе и другим'),
         (1, 'грубоват, замкнут, но не наносит вреда себе и другим'),
@@ -803,10 +899,8 @@ class TestBoyko(models.Model):
         verbose_name_plural = 'Тесты Бойко'
 
 
-from django.utils import timezone
-
-
 class InterpretationBoyko(models.Model):
+    """Интерпретация теста Бойко"""
     AGGRESS = [
         (0, 'проблемы не выявлены'),
         (1, 'проблемы не выявлены'),
@@ -877,7 +971,7 @@ class InterpretationBoyko(models.Model):
         (3, 'пассивный досуг ("убивает время")'),
         (4, 'отсутствие досуга, всё время посвящено употреблению')
     ]
-    OVERALL_ASSESSMENT = [  # НЕ ХВАТАЕТ МАКСИМАЛЬНОГО ПОРОГА
+    OVERALL_ASSESSMENT = [
         (0, 'нормализация клинических и социальных показателей, стабильное социальное функционирование'),
         (11,
          'частичная нормализация клинических и социальных показателей, средний уровень социального функционирования'),
@@ -916,6 +1010,7 @@ GAGE_YESNO = [(0, 'Нет'), (1, 'Да')]
 
 
 class TestGAGE(models.Model):
+    """Тест GAGE"""
     SUBSTANCES = [
         (0, 'Нет'),
         (1, 'Да (за исключением лекарств, выписанные врачом)')
@@ -1040,6 +1135,7 @@ class TestGAGE(models.Model):
 
 
 class InterpretationGAGE(models.Model):
+    """Интерпретация теста GAGE"""
     RISK_ABUSE = [
         (0, 'проблемы не выявлены'),
         (3, 'выраженные признаки злоупотребления')
@@ -1063,6 +1159,7 @@ class InterpretationGAGE(models.Model):
 
 
 class TestSOCRATES(models.Model):
+    """Тест SOCRATES"""
     FORM = [
         (1, 'Полностью не согласен'),
         (2, 'Не согласен'),
@@ -1119,6 +1216,7 @@ class TestSOCRATES(models.Model):
 
 
 class InterpretationSOCRATES(models.Model):
+    """Интерпретация теста SOCRATES"""
     REALIZATION = [
         (35, 'высокое осознание проблем с алкоголем/наркотиками, признаёт проблемы с употреблением ПАВ, '
              'желает измениться и осознаёт, что вред от употребления ПАВ будет продолжаться, '
@@ -1182,13 +1280,13 @@ class InterpretationSOCRATES(models.Model):
 
 
 class TypologicalGroup(models.Model):
+    """Типологическая группа"""
     GROUP = [
         (0, 'Клиент не может быть относен к типологической группе потребителей ПАВ'),
         (1, 'Группа 1'),
         (2, 'Группа 2')
     ]
     SUBGROUP = [
-        # (0, 'Не может быть относен к типологической подгруппе группы 2'),
         (1, 'Группа 2.1'),
         (2, 'Группа 2.2')
     ]

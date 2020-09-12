@@ -4,6 +4,8 @@ from rest_framework.fields import SerializerMethodField
 
 
 class MyModelSerializer(serializers.ModelSerializer):
+    """Сериализатор для вывода описаний полей"""
+
     def __init__(self, *args, **kwargs):
         super(MyModelSerializer, self).__init__(*args, **kwargs)
 
@@ -16,6 +18,12 @@ class MyModelSerializer(serializers.ModelSerializer):
         self.fields['labels'] = SerializerMethodField()
 
     def get_labels(self, *args):
+        """
+        Функция для получения словаря labels с названием поля и его описанием
+
+        :param args: Аргументы
+        :return: Словарь labels
+        """
         labels = {}
 
         for field in self.Meta.model._meta.get_fields():
@@ -26,12 +34,21 @@ class MyModelSerializer(serializers.ModelSerializer):
 
 
 class ChoiceField(serializers.ChoiceField):
+    """Вывод вариантов полей"""
 
     def to_representation(self, obj):
+        """
+        Функция для получения вариантов поля
+
+        :param obj: Объект, содержащий выборку
+        :return: Список полей
+        """
         return self._choices[obj]
 
 
 class ClientListForMainWindow(serializers.ModelSerializer):
+    """Информация о клиенте для главного окна"""
+
     class Meta:
         model = Client
         fields = ("number", "code", "full_name")
@@ -56,7 +73,6 @@ class ChildListSerializers(serializers.ModelSerializer):
 
 class ChildSerializers(MyModelSerializer):
     """Ребенок"""
-    # client = ClientSerializers()
     sex = ChoiceField(choices=Child.SEX)
     status = ChoiceField(choices=Child.STATUS)
     location = ChoiceField(choices=Child.LOCATION)
@@ -81,6 +97,8 @@ class ChildSerializers(MyModelSerializer):
 
 
 class ChildCRUDSerializers(serializers.ModelSerializer):
+    """Информация о ребенке без обозначений и вариантов полей"""
+
     class Meta:
         model = Child
         fields = '__all__'
@@ -88,7 +106,6 @@ class ChildCRUDSerializers(serializers.ModelSerializer):
 
 class SocialLivingConditionSerializers(MyModelSerializer):
     """Социально бытовые условия"""
-    # client = ClientSerializers()
     type_room = ChoiceField(choices=SocialLivingCondition.TYPE)
     sanitary_condition = ChoiceField(choices=SocialLivingCondition.SANITARY_CONDITION)
     ownership = ChoiceField(choices=SocialLivingCondition.OWNERSHIP)
@@ -100,6 +117,8 @@ class SocialLivingConditionSerializers(MyModelSerializer):
 
 
 class SocialLivingConditionCRUDSerializers(serializers.ModelSerializer):
+    """Социально бытовые условия без обозначений и вариантов полей"""
+
     class Meta:
         model = SocialLivingCondition
         fields = '__all__'
@@ -107,7 +126,6 @@ class SocialLivingConditionCRUDSerializers(serializers.ModelSerializer):
 
 class SocialEconomicConditionSerializers(MyModelSerializer):
     """Социально экономические условия проживания"""
-    # client = ClientSerializers()
     income_level = ChoiceField(choices=SocialEconomicCondition.LEVEL)
     income_confirmation = ChoiceField(choices=SocialEconomicCondition.CONFIRMATION)
     client_security = ChoiceField(choices=SocialEconomicCondition.SECURITY)
@@ -118,6 +136,8 @@ class SocialEconomicConditionSerializers(MyModelSerializer):
 
 
 class SocialEconomicConditionCRUDSerializers(serializers.ModelSerializer):
+    """Социально экономические условия проживания без обозначений и вариантов полей"""
+
     class Meta:
         model = SocialEconomicCondition
         fields = '__all__'
@@ -125,7 +145,6 @@ class SocialEconomicConditionCRUDSerializers(serializers.ModelSerializer):
 
 class SourceIncomeSerializers(MyModelSerializer):
     """Источники дохода"""
-    # economic_condition = SocialEconomicConditionSerializers()
     salary = ChoiceField(choices=SourceIncome.SALARY)
     alimony = ChoiceField(choices=YESNO)
     material_means = ChoiceField(choices=SourceIncome.MEANS)
@@ -138,6 +157,8 @@ class SourceIncomeSerializers(MyModelSerializer):
 
 
 class SourceIncomeCRUDSerializers(serializers.ModelSerializer):
+    """Источники дохода без обозначений и вариантов полей"""
+
     class Meta:
         model = SourceIncome
         fields = '__all__'
@@ -145,7 +166,6 @@ class SourceIncomeCRUDSerializers(serializers.ModelSerializer):
 
 class SocialPaymentSerializers(MyModelSerializer):
     """Социальные выплаты"""
-    # economic_condition = SocialEconomicConditionSerializers()
     basis_social_payments = ChoiceField(choices=BASIS)
     pension = ChoiceField(choices=SocialPayment.PENSION)
     type_social_payment = ChoiceField(choices=SocialPayment.TYPE_SOCIAL_PAYMENT)
@@ -156,6 +176,8 @@ class SocialPaymentSerializers(MyModelSerializer):
 
 
 class SocialPaymentCRUDSerializers(serializers.ModelSerializer):
+    """Социальные выплаты без обозначений и вариантов полей"""
+
     class Meta:
         model = SocialPayment
         fields = '__all__'
@@ -163,7 +185,6 @@ class SocialPaymentCRUDSerializers(serializers.ModelSerializer):
 
 class ChildAllowanceAndCompensationSerializers(MyModelSerializer):
     """Детские пособия и компенсационные выплаты"""
-    # economic_condition = SocialEconomicConditionSerializers()
     basis_payments = ChoiceField(choices=BASIS)
     type_benefit_payment = ChoiceField(choices=ChildAllowanceAndCompensation.TYPE_BENEFIT_PAYMENT)
 
@@ -173,6 +194,8 @@ class ChildAllowanceAndCompensationSerializers(MyModelSerializer):
 
 
 class ChildAllowanceAndCompensationCRUDSerializers(serializers.ModelSerializer):
+    """Детские пособия и компенсационные выплаты без обозначений и вариантов полей"""
+
     class Meta:
         model = ChildAllowanceAndCompensation
         fields = '__all__'
@@ -180,7 +203,6 @@ class ChildAllowanceAndCompensationCRUDSerializers(serializers.ModelSerializer):
 
 class FacilitiesSerializers(MyModelSerializer):
     """Льготы и меры социальной поддержки,предусмотренные для определенных категорий"""
-    # economic_condition = SocialEconomicConditionSerializers()
     basis_facilities = ChoiceField(choices=YESNO)
     right_facilities = ChoiceField(choices=YESNO)
     stage_registration_facilities = ChoiceField(choices=Facilities.STAGE)
@@ -191,6 +213,8 @@ class FacilitiesSerializers(MyModelSerializer):
 
 
 class FacilitiesCRUDSerializers(serializers.ModelSerializer):
+    """Льготы и меры социальной поддержки,предусмотренные для определенных категорий без обозначений и вариантов полей"""
+
     class Meta:
         model = Facilities
         fields = '__all__'
@@ -198,7 +222,6 @@ class FacilitiesCRUDSerializers(serializers.ModelSerializer):
 
 class GeneralInformationSerializers(MyModelSerializer):
     """Общая информация"""
-    # client = ClientSerializers()
 
     sex = ChoiceField(choices=GeneralInformation.SEX)
     workPlace = ChoiceField(choices=GeneralInformation.WORK_PLACE)
@@ -217,6 +240,8 @@ class GeneralInformationSerializers(MyModelSerializer):
 
 
 class GeneralInformationCRUDSerializers(serializers.ModelSerializer):
+    """Общая информация без обозначений и вариантов полей"""
+
     class Meta:
         model = GeneralInformation
         fields = '__all__'
@@ -224,7 +249,6 @@ class GeneralInformationCRUDSerializers(serializers.ModelSerializer):
 
 class ASocialBehaviorSerializers(MyModelSerializer):
     """Информация о противоправных действиях, правонарушениях, употреблении наркотиков, алкоголя"""
-    # client = ClientSerializers()
     drugUse = ChoiceField(choices=YESNO)
     frequencyOfDrugsUse = ChoiceField(choices=ASocialBehavior.FREQUENCY_OF_DRUGS_USE)
     theTreatmentWasD = ChoiceField(choices=YESNO)
@@ -250,6 +274,8 @@ class ASocialBehaviorSerializers(MyModelSerializer):
 
 
 class ASocialBehaviorCRUDSerializers(serializers.ModelSerializer):
+    """Информация о противоправных действиях, правонарушениях, употреблении наркотиков, алкоголя без обозначений и вариантов полей"""
+
     class Meta:
         model = ASocialBehavior
         fields = '__all__'
@@ -257,7 +283,6 @@ class ASocialBehaviorCRUDSerializers(serializers.ModelSerializer):
 
 class ChronicDiseaseSerializers(MyModelSerializer):
     """Информация о наличии хронического заболевания"""
-    # client = ClientSerializers()
 
     hepatitisC = ChoiceField(choices=ChronicDisease.DISEASE)
     HIVStatus = ChoiceField(choices=ChronicDisease.DISEASE)
@@ -274,6 +299,8 @@ class ChronicDiseaseSerializers(MyModelSerializer):
 
 
 class ChronicDiseaseCRUDSerializers(serializers.ModelSerializer):
+    """Информация о наличии хронического заболевания без обозначений и вариантов полей"""
+
     class Meta:
         model = ChronicDisease
         fields = '__all__'
@@ -281,7 +308,6 @@ class ChronicDiseaseCRUDSerializers(serializers.ModelSerializer):
 
 class FamilyMembersInformationSerializers(MyModelSerializer):
     """Сведения о членах семьи"""
-    # client = ClientSerializers()
     maritalStatus = ChoiceField(choices=FamilyMembersInformation.MARITAL_STATUS)
     withWhomLiving = ChoiceField(choices=FamilyMembersInformation.LIVING_WITH_WHOM)
     regularPartner = ChoiceField(choices=YESNO)
@@ -292,6 +318,8 @@ class FamilyMembersInformationSerializers(MyModelSerializer):
 
 
 class FamilyMembersInformationCRUDSerializers(serializers.ModelSerializer):
+    """Сведения о членах семьи без обозначений и вариантов полей"""
+
     class Meta:
         model = FamilyMembersInformation
         fields = '__all__'
@@ -299,7 +327,6 @@ class FamilyMembersInformationCRUDSerializers(serializers.ModelSerializer):
 
 class HusbandInformationSerializers(MyModelSerializer):
     """Информация о муже/партнёре"""
-    # husband = FamilyMembersInformationSerializers()
     workPlace = ChoiceField(choices=HusbandInformation.WORK_PLACE)
     avDoc = ChoiceField(choices=YESNO)
     cityzenship = ChoiceField(choices=HusbandInformation.CITYZENSHIP)
@@ -327,6 +354,8 @@ class HusbandInformationSerializers(MyModelSerializer):
 
 
 class HusbandInformationCRUDSerializers(serializers.ModelSerializer):
+    """Информация о муже/партнёре без обозначений и вариантов полей"""
+
     class Meta:
         model = HusbandInformation
         fields = '__all__'
@@ -343,15 +372,14 @@ class UserSerializers(serializers.ModelSerializer):
 class ExpertOpinionSerializers(MyModelSerializer):
     """Заключение специалиста"""
 
-    # client = ClientSerializers()
-    # specialist = UserSerializers()
-
     class Meta:
         model = ExpertOpinion
         fields = '__all__'
 
 
 class ExpertOpinionCRUDSerializers(serializers.ModelSerializer):
+    """Заключение специалиста без обозначений и вариантов полей"""
+
     class Meta:
         model = ExpertOpinion
         fields = ('client', 'otherInformation', 'expectations', 'personaImpressions')
@@ -385,6 +413,8 @@ class TestBoykoSerializers(MyModelSerializer):
 
 
 class TestBoykoCRUDSerializers(serializers.ModelSerializer):
+    """Тест Бойко без обозначений и вариантов полей"""
+
     class Meta:
         model = TestBoyko
         fields = '__all__'
@@ -410,6 +440,8 @@ class InterpretationBoykoSerializers(MyModelSerializer):
 
 
 class InterpretationBoykoCRUDSerializers(serializers.ModelSerializer):
+    """Интерпретация теста Бойко без обозначений и вариантов полей"""
+
     class Meta:
         model = InterpretationBoyko
         fields = '__all__'
@@ -455,6 +487,8 @@ class TestGAGESerializers(MyModelSerializer):
 
 
 class TestGAGECRUDSerializers(serializers.ModelSerializer):
+    """Тест GAGE без обозначений и вариантов полей"""
+
     class Meta:
         model = TestGAGE
         fields = '__all__'
@@ -471,6 +505,8 @@ class InterpretationGAGESerializers(MyModelSerializer):
 
 
 class InterpretationGAGECRUDSerializers(serializers.ModelSerializer):
+    """Интерпретация теста GAGE без обозначений и вариантов полей"""
+
     class Meta:
         model = InterpretationGAGE
         fields = '__all__'
@@ -513,6 +549,8 @@ class TestSOCRATESSerializers(MyModelSerializer):
 
 
 class TestSOCRATESCRUDSerializers(serializers.ModelSerializer):
+    """Тест SOCRATES без обозначений и вариантов полей"""
+
     class Meta:
         model = TestSOCRATES
         fields = '__all__'
@@ -531,6 +569,8 @@ class InterpretationSOCRATESSerializers(MyModelSerializer):
 
 
 class InterpretationSOCRATESCRUDSerializers(serializers.ModelSerializer):
+    """Интерпретация тестов SOCRATES без обозначений и вариантов полей"""
+
     class Meta:
         model = InterpretationSOCRATES
         fields = '__all__'
@@ -546,7 +586,7 @@ class TypologicalGroupListSerializers(serializers.ModelSerializer):
 
 
 class TypologicalGroupSerializers(MyModelSerializer):
-    """Типологические группы"""
+    """Типологическая группа"""
     group = ChoiceField(choices=TypologicalGroup.GROUP)
     subgroup = ChoiceField(choices=TypologicalGroup.SUBGROUP)
 
@@ -556,36 +596,44 @@ class TypologicalGroupSerializers(MyModelSerializer):
 
 
 class TypologicalGroupCRUDSerializers(serializers.ModelSerializer):
+    """Типологическая группа без обозначений и вариантов полей"""
+
     class Meta:
         model = TypologicalGroup
         fields = '__all__'
 
 
 class GroupASocialBehaviorSerializers(serializers.ModelSerializer):
+    """Поля Информации о противоправных действиях для определения типологической группы"""
+
     class Meta:
         model = ASocialBehavior
         fields = ('id', 'caseExaminedInKDN_ZP')
 
 
 class GroupTestBoykoSerializers(serializers.ModelSerializer):
+    """Поля Теста Бойко для определения типологической группы"""
     class Meta:
         model = TestBoyko
         fields = ('id', 'aggressiveness')
 
 
 class GroupGeneralInformationSerializers(serializers.ModelSerializer):
+    """Поля Общей информации о клиенте для определения типологической группы"""
     class Meta:
         model = GeneralInformation
         fields = ('id', 'age')
 
 
 class GroupChronicDiseaseSerializers(serializers.ModelSerializer):
+    """Поля Информации о наличии хронического заболевания для определения типологической группы"""
     class Meta:
         model = ChronicDisease
         fields = ('id', 'hepatitisC', 'HIVStatus')
 
 
 class FamilyMemberSpecial(serializers.ModelSerializer):
+    """Определенные поля для Общих сведений о членах семьи"""
     class Meta:
         model = FamilyMembersInformation
         fields = ('id', 'client')
@@ -593,6 +641,7 @@ class FamilyMemberSpecial(serializers.ModelSerializer):
 
 
 class ExpertForTable(serializers.ModelSerializer):
+    """Имя и фамилия специалиста для отображения в общей таблице"""
     class Meta:
         model = User
         fields = ("id", "first_name", "last_name")

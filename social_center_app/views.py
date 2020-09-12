@@ -8,18 +8,31 @@ from rest_framework.generics import CreateAPIView, ListAPIView
 from django.contrib.auth import get_user_model
 from collections import Counter
 from social_center_app.models import TestBoyko
+
 User = get_user_model()
 
 
 class UserView(APIView):
-    """Вывод информации по текущему пользователю"""
+    """Иинформация по текущему пользователю (специалисту)"""
 
     def get(self, request):
+        """
+        Получение записи
+
+        :param request: Запрос
+        :return: Информация о пользователе
+        """
         user = User.objects.filter(id=self.request.user.id)
         serializer = UserSerializers(user, many=True)
         return Response(serializer.data)
 
     def put(self, request):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :return: Статус Created
+        """
         user = get_object_or_404(User.objects.all(), pk=self.request.user.id)
         serializer = UserSerializers(instance=user, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -27,10 +40,16 @@ class UserView(APIView):
         return Response(status=201)
 
 
-# информация о клиенте(начальная)
 class ClientView(APIView):
+    """Информация о клиентах для главной страницы"""
 
     def get(self, request):
+        """
+        Получение записи
+
+        :param request: Запрос
+        :return: Информация о клиентах
+        """
         clients = Client.objects.all()
         serializer = ClientListForMainWindow(clients, many=True)
         return Response(serializer.data)
@@ -40,12 +59,24 @@ class ClientInformationView(APIView):
     """Вся информация о клиенте"""
 
     def get(self, request):
+        """
+        Получение записи
+
+        :param request: Запрос с id клиента
+        :return: Вся информация о клиенте
+        """
         client_id = request.GET.get("client")
         client = Client.objects.filter(pk=client_id)
         serializer = ClientSerializers(client, many=True)
         return Response(serializer.data)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: id созданного клиента, в случае ошибки создания Bad Request
+        """
         client = ClientSerializers(data=request.data)
         if client.is_valid():
             client.save()
@@ -54,6 +85,13 @@ class ClientInformationView(APIView):
             return Response(status=400)
 
     def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id клиента
+        :return: Статус Created
+        """
         client = get_object_or_404(Client.objects.all(), pk=pk)
         serializer = ClientSerializers(instance=client, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -61,6 +99,13 @@ class ClientInformationView(APIView):
         return Response(status=201)
 
     def delete(self, request, pk):
+        """
+        Удаление клиента
+
+        :param request: Запрос
+        :param pk: id клиента
+        :return: Статус Created
+        """
         client = get_object_or_404(Client.objects.all(), pk=pk)
         client.delete()
         return Response(status=201)
@@ -70,6 +115,13 @@ class GeneralInformationView(APIView):
     """Общая информация по конкретному клиенту"""
 
     def get(self, request, pk=None):
+        """
+        Получение записи
+
+        :param request: Запрос с id клиента
+        :param pk: id клиента
+        :return: Общая информация, в случае отсутствия записи No Content
+        """
         if pk is None:
             client = request.GET.get("client")
         else:
@@ -85,6 +137,12 @@ class GeneralInformationView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос c новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         general_information = GeneralInformationCRUDSerializers(data=request.data)
         if general_information.is_valid():
             client = get_object_or_404(Client, id=self.request.data.get('client'))
@@ -94,6 +152,13 @@ class GeneralInformationView(APIView):
             return Response(status=400)
 
     def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id обновляемой записи
+        :return: Статус Created
+        """
         general_information = get_object_or_404(GeneralInformation.objects.all(), pk=pk)
         serializer = GeneralInformationCRUDSerializers(instance=general_information, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -101,6 +166,13 @@ class GeneralInformationView(APIView):
         return Response(status=201)
 
     def delete(self, request, pk):
+        """
+        Удаление записи
+
+        :param request: Запрос
+        :param pk: id удаляемой записи
+        :return: Статус Created
+        """
         general_information = get_object_or_404(GeneralInformation.objects.all(), pk=pk)
         general_information.delete()
         return Response(status=201)
@@ -110,6 +182,13 @@ class ASocialBehaviorView(APIView):
     """Информация о противоправных действиях, правонарушениях, употреблении наркотиков, алкоголя"""
 
     def get(self, request, pk=None):
+        """
+        Получение записи
+
+        :param request: Запрос с id клиента
+        :param pk: id клиента
+        :return: Информации о противоправных действиях, в случае отсутствия записи No Content
+        """
         if pk is None:
             client = request.GET.get("client")
         else:
@@ -125,6 +204,12 @@ class ASocialBehaviorView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         social_behavior = ASocialBehaviorCRUDSerializers(data=request.data)
         if social_behavior.is_valid():
             client = get_object_or_404(Client, id=self.request.data.get('client'))
@@ -134,6 +219,13 @@ class ASocialBehaviorView(APIView):
             return Response(status=400)
 
     def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id обновляемой записи
+        :return: Статус Created
+        """
         social_behavior = get_object_or_404(ASocialBehavior.objects.all(), pk=pk)
         serializer = ASocialBehaviorCRUDSerializers(instance=social_behavior, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -141,6 +233,13 @@ class ASocialBehaviorView(APIView):
         return Response(status=201)
 
     def delete(self, request, pk):
+        """
+        Удаление записи
+
+        :param request: Запрос
+        :param pk: id удаляемой записи
+        :return: Статус Created
+        """
         social_behavior = get_object_or_404(ASocialBehavior.objects.all(), pk=pk)
         social_behavior.delete()
         return Response(status=201)
@@ -150,6 +249,13 @@ class ChronicDiseaseView(APIView):
     """Информация о наличии хронического заболевания"""
 
     def get(self, request, pk=None):
+        """
+        Получение записи
+
+        :param request: Запрос с id клиента
+        :param pk: id клиента
+        :return: Информация о наличии хронического заболевания, в случае отсутствия записи No Content
+        """
         if pk is None:
             client = request.GET.get("client")
         else:
@@ -165,6 +271,12 @@ class ChronicDiseaseView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         chronic_disease = ChronicDiseaseCRUDSerializers(data=request.data)
         if chronic_disease.is_valid():
             client = get_object_or_404(Client, id=self.request.data.get('client'))
@@ -174,6 +286,13 @@ class ChronicDiseaseView(APIView):
             return Response(status=400)
 
     def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id обновляемой записи
+        :return: Статус Created
+        """
         chronic_disease = get_object_or_404(ChronicDisease.objects.all(), pk=pk)
         serializer = ChronicDiseaseCRUDSerializers(instance=chronic_disease, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -181,6 +300,13 @@ class ChronicDiseaseView(APIView):
         return Response(status=201)
 
     def delete(self, request, pk):
+        """
+        Удаление записи
+
+        :param request: Запрос
+        :param pk: id удаляемой записи
+        :return: Стутус Created
+        """
         chronic_disease = get_object_or_404(ChronicDisease.objects.all(), pk=pk)
         chronic_disease.delete()
         return Response(status=201)
@@ -190,6 +316,12 @@ class ChildListView(APIView):
     """Список детей клиента"""
 
     def get(self, request):
+        """
+        Получение записи
+
+        :param request: Запрос с id клиента
+        :return: Список детей клиента
+        """
         client = request.GET.get("client")
         child_list = Child.objects.filter(client=client)
         serializer = ChildListSerializers(child_list, many=True)
@@ -200,6 +332,13 @@ class ChildView(APIView):
     """Ребенок"""
 
     def get(self, request, pk=None):
+        """
+        Получение записи
+
+        :param request: Запрос с id ребенка
+        :param pk: id ребенка
+        :return: Информацию о ребенке, в случае отсутствия записи No Content
+        """
         if pk is None:
             child_id = request.GET.get("child")
         else:
@@ -215,6 +354,12 @@ class ChildView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         child = ChildCRUDSerializers(data=request.data)
         if child.is_valid():
             client = get_object_or_404(Client, id=self.request.data.get('client'))
@@ -224,6 +369,13 @@ class ChildView(APIView):
             return Response(status=400)
 
     def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id обновляемой записи
+        :return: Статус Created
+        """
         child = get_object_or_404(Child.objects.all(), pk=pk)
         serializer = ChildCRUDSerializers(instance=child, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -231,6 +383,13 @@ class ChildView(APIView):
         return Response(status=201)
 
     def delete(self, request, pk):
+        """
+        Удаление записи
+
+        :param request:
+        :param pk: id удаляемой записи
+        :return: Статус Created
+        """
         child = get_object_or_404(Child.objects.all(), pk=pk)
         child.delete()
         return Response(status=201)
@@ -240,6 +399,13 @@ class FamilyMembersInformationView(APIView):
     """Сведения о членах семьи"""
 
     def get(self, request, pk=None):
+        """
+        Получение записи
+
+        :param request: Запрос с id клиента
+        :param pk: id клиента
+        :return: Сведения о членах семьи, в случае отсутствия записи No Content
+        """
         if pk is None:
             client = request.GET.get("client")
         else:
@@ -255,6 +421,12 @@ class FamilyMembersInformationView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         family = FamilyMembersInformationCRUDSerializers(data=request.data)
         if family.is_valid():
             client = get_object_or_404(Client, id=self.request.data.get('client'))
@@ -264,6 +436,13 @@ class FamilyMembersInformationView(APIView):
             return Response(status=400)
 
     def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id обновляемой записи
+        :return: Статус Created
+        """
         family = get_object_or_404(FamilyMembersInformation.objects.all(), pk=pk)
         serializer = FamilyMembersInformationCRUDSerializers(instance=family, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -271,6 +450,13 @@ class FamilyMembersInformationView(APIView):
         return Response(status=201)
 
     def delete(self, request, pk):
+        """
+        Удаление записи
+
+        :param request: Запрос
+        :param pk: id удаляемой записи
+        :return: Статус Created
+        """
         family = get_object_or_404(FamilyMembersInformation.objects.all(), pk=pk)
         family.delete()
         return Response(status=201)
@@ -280,6 +466,13 @@ class HusbandInformationView(APIView):
     """Информация о муже/партнёре"""
 
     def get(self, request, pk=None):
+        """
+        Получение записи
+
+        :param request: Запрос с id Сведений о членах семьи
+        :param pk: id Сведений о членах семьи
+        :return: Информация о муже/партнёре, в случае отсутствия записи No Content
+        """
         if pk is None:
             husband = request.GET.get("husband")
         else:
@@ -295,6 +488,12 @@ class HusbandInformationView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         husband_information = HusbandInformationCRUDSerializers(data=request.data)
         if husband_information.is_valid():
             husband = get_object_or_404(FamilyMembersInformation, id=self.request.data.get('husband'))
@@ -304,6 +503,13 @@ class HusbandInformationView(APIView):
             return Response(status=400)
 
     def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id обновляемой записи
+        :return: Статус Created
+        """
         husband_information = get_object_or_404(HusbandInformation.objects.all(), pk=pk)
         serializer = HusbandInformationCRUDSerializers(instance=husband_information, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -311,6 +517,13 @@ class HusbandInformationView(APIView):
         return Response(status=201)
 
     def delete(self, request, pk):
+        """
+        Удаление записи
+
+        :param request: Запрос
+        :param pk: id удаляемой записи
+        :return: Статус Created
+        """
         husband_information = get_object_or_404(HusbandInformation.objects.all(), pk=pk)
         husband_information.delete()
         return Response(status=201)
@@ -320,6 +533,13 @@ class SocialLivingConditionView(APIView):
     """Социально бытовые условия"""
 
     def get(self, request, pk=None):
+        """
+        Просмотр записи
+
+        :param request: Запрос с id клиента
+        :param pk: id клиента
+        :return: Социально бытовые условия, в случае отсутствия записи No Content
+        """
         if pk is None:
             client = request.GET.get("client")
         else:
@@ -335,6 +555,12 @@ class SocialLivingConditionView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         living_condition = SocialLivingConditionCRUDSerializers(data=request.data)
         if living_condition.is_valid():
             client = get_object_or_404(Client, id=self.request.data.get('client'))
@@ -344,6 +570,13 @@ class SocialLivingConditionView(APIView):
             return Response(status=400)
 
     def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id обновляемой записи
+        :return: Статус Created
+        """
         living_condition = get_object_or_404(SocialLivingCondition.objects.all(), pk=pk)
         serializer = SocialLivingConditionCRUDSerializers(instance=living_condition, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -351,6 +584,13 @@ class SocialLivingConditionView(APIView):
         return Response(status=201)
 
     def delete(self, request, pk):
+        """
+        Удаление записи
+
+        :param request: Запрос
+        :param pk: id удаляемой записи
+        :return: Статус Created
+        """
         living_condition = get_object_or_404(SocialLivingCondition.objects.all(), pk=pk)
         living_condition.delete()
         return Response(status=201)
@@ -360,6 +600,13 @@ class SocialEconomicConditionView(APIView):
     """Социально экономические условия проживания"""
 
     def get(self, request, pk=None):
+        """
+        Получение данных
+
+        :param request: Запрос с id клиента
+        :param pk: id клиента
+        :return: Социально экономические условия проживания, в случае отсутствия записи No Content
+        """
         if pk is None:
             client = request.GET.get("client")
         else:
@@ -375,6 +622,12 @@ class SocialEconomicConditionView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         economic_condition = SocialEconomicConditionCRUDSerializers(data=request.data)
         if economic_condition.is_valid():
             client = get_object_or_404(Client, id=self.request.data.get('client'))
@@ -384,6 +637,13 @@ class SocialEconomicConditionView(APIView):
             return Response(status=400)
 
     def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id обновляемой записи
+        :return: Статус Created
+        """
         economic_condition = get_object_or_404(SocialEconomicCondition.objects.all(), pk=pk)
         serializer = SocialEconomicConditionCRUDSerializers(instance=economic_condition, data=request.data,
                                                             partial=True)
@@ -392,6 +652,13 @@ class SocialEconomicConditionView(APIView):
         return Response(status=201)
 
     def delete(self, request, pk):
+        """
+        Удаление записи
+
+        :param request: Запрос
+        :param pk: id удаляемой записи
+        :return: Статус Created
+        """
         economic_condition = get_object_or_404(SocialEconomicCondition.objects.all(), pk=pk)
         economic_condition.delete()
         return Response(status=201)
@@ -401,6 +668,13 @@ class SourceIncomeView(APIView):
     """Источники дохода"""
 
     def get(self, request, pk=None):
+        """
+        Получение записи
+
+        :param request: Запрос с id Социально экономических условий проживания
+        :param pk: id Социально экономических условий проживания
+        :return: Источники дохода, в случае отсутствия записи No Content
+        """
         if pk is None:
             economic_condition = request.GET.get("economic_condition")
         else:
@@ -416,6 +690,12 @@ class SourceIncomeView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         source_income = SourceIncomeCRUDSerializers(data=request.data)
         if source_income.is_valid():
             economic_condition = get_object_or_404(SocialEconomicCondition,
@@ -426,6 +706,13 @@ class SourceIncomeView(APIView):
             return Response(status=400)
 
     def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id обновляемой записи
+        :return: Статус Created
+        """
         source_income = get_object_or_404(SourceIncome.objects.all(), pk=pk)
         serializer = SourceIncomeCRUDSerializers(instance=source_income, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -433,6 +720,13 @@ class SourceIncomeView(APIView):
         return Response(status=201)
 
     def delete(self, request, pk):
+        """
+        Удаление записи
+
+        :param request: Запрос
+        :param pk: id удаляемой записи
+        :return: Статус Created
+        """
         source_income = get_object_or_404(SourceIncome.objects.all(), pk=pk)
         source_income.delete()
         return Response(status=201)
@@ -442,6 +736,13 @@ class SocialPaymentView(APIView):
     """Социальные выплаты"""
 
     def get(self, request, pk=None):
+        """
+        Получение записи
+
+        :param request: Запрос с id Социально экономических условий проживания
+        :param pk: id Социально экономических условий проживания
+        :return: Социальные выплаты, в случае отсутствия записи No Content
+        """
         if pk is None:
             economic_condition = request.GET.get("economic_condition")
         else:
@@ -457,6 +758,12 @@ class SocialPaymentView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         social_payment = SocialPaymentCRUDSerializers(data=request.data)
         if social_payment.is_valid():
             economic_condition = get_object_or_404(SocialEconomicCondition,
@@ -467,6 +774,13 @@ class SocialPaymentView(APIView):
             return Response(status=400)
 
     def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id обновляемой записи
+        :return: Статус Created
+        """
         social_payment = get_object_or_404(SocialPayment.objects.all(), pk=pk)
         serializer = SocialPaymentCRUDSerializers(instance=social_payment, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -474,6 +788,13 @@ class SocialPaymentView(APIView):
         return Response(status=201)
 
     def delete(self, request, pk):
+        """
+        Удаление записи
+
+        :param request: Запрос
+        :param pk: id удаляемой записи
+        :return: Статус Created
+        """
         social_payment = get_object_or_404(SocialPayment.objects.all(), pk=pk)
         social_payment.delete()
         return Response(status=201)
@@ -483,6 +804,13 @@ class ChildAllowanceAndCompensationView(APIView):
     """Детские пособия и компенсационные выплаты"""
 
     def get(self, request, pk=None):
+        """
+        Получение записи
+
+        :param request: Запрос с id Социально экономических условий проживания
+        :param pk: id Социально экономических условий проживания
+        :return: Детские пособия и компенсационные выплаты, в случае отсутствия записи No Content
+        """
         if pk is None:
             economic_condition = request.GET.get("economic_condition")
         else:
@@ -498,6 +826,12 @@ class ChildAllowanceAndCompensationView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         child_allowance = ChildAllowanceAndCompensationCRUDSerializers(data=request.data)
         if child_allowance.is_valid():
             economic_condition = get_object_or_404(SocialEconomicCondition,
@@ -508,6 +842,13 @@ class ChildAllowanceAndCompensationView(APIView):
             return Response(status=400)
 
     def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id обновляемой записи
+        :return: Статус Created
+        """
         child_allowance = get_object_or_404(ChildAllowanceAndCompensation.objects.all(), pk=pk)
         serializer = ChildAllowanceAndCompensationCRUDSerializers(instance=child_allowance, data=request.data,
                                                                   partial=True)
@@ -516,6 +857,13 @@ class ChildAllowanceAndCompensationView(APIView):
         return Response(status=201)
 
     def delete(self, request, pk):
+        """
+        Удаление записи
+
+        :param request: Запрос
+        :param pk: id удаляемой записи
+        :return: Статус Created
+        """
         child_allowance = get_object_or_404(ChildAllowanceAndCompensation.objects.all(), pk=pk)
         child_allowance.delete()
         return Response(status=201)
@@ -525,6 +873,13 @@ class FacilitiesView(APIView):
     """Льготы и меры социальной поддержки,предусмотренные для определенных категорий"""
 
     def get(self, request, pk=None):
+        """
+        Получение записи
+
+        :param request: Запрос с id Социально экономических условий проживания
+        :param pk: id Социально экономических условий проживания
+        :return: Льготы и меры социальной поддержки, в случае отсутствия записи No Content
+        """
         if pk is None:
             economic_condition = request.GET.get("economic_condition")
         else:
@@ -540,6 +895,12 @@ class FacilitiesView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         facilities = FacilitiesCRUDSerializers(data=request.data)
         if facilities.is_valid():
             economic_condition = get_object_or_404(SocialEconomicCondition,
@@ -550,6 +911,13 @@ class FacilitiesView(APIView):
             return Response(status=400)
 
     def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id обновляемой записи
+        :return: Статус Created
+        """
         facilities = get_object_or_404(Facilities.objects.all(), pk=pk)
         serializer = FacilitiesCRUDSerializers(instance=facilities, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -557,6 +925,13 @@ class FacilitiesView(APIView):
         return Response(status=201)
 
     def delete(self, request, pk):
+        """
+        Удаление записи
+
+        :param request: Запрос
+        :param pk: id удаляемой записи
+        :return: Статус Created
+        """
         facilities = get_object_or_404(Facilities.objects.all(), pk=pk)
         facilities.delete()
         return Response(status=201)
@@ -566,6 +941,13 @@ class ExpertOpinionView(APIView):
     """Заключение специалиста"""
 
     def get(self, request, pk=None):
+        """
+        Получение записи
+
+        :param request: Запрос с id клиента
+        :param pk: id клиента
+        :return: Заключение специалиста, в случае отсутствия записи No Content
+        """
         if pk is None:
             client = request.GET.get("client")
         else:
@@ -581,6 +963,12 @@ class ExpertOpinionView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         expert_opinion = ExpertOpinionCRUDSerializers(data=request.data)
         if expert_opinion.is_valid():
             specialist = get_object_or_404(User, id=request.user.id)
@@ -591,6 +979,13 @@ class ExpertOpinionView(APIView):
             return Response(status=400)
 
     def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id обновляемой записи
+        :return: Статус Created
+        """
         expert_opinion = get_object_or_404(ExpertOpinion.objects.all(), pk=pk)
         serializer = ExpertOpinionCRUDSerializers(instance=expert_opinion, data=request.data,
                                                   partial=True)
@@ -599,6 +994,13 @@ class ExpertOpinionView(APIView):
         return Response(status=201)
 
     def delete(self, request, pk):
+        """
+        Удаление записи
+
+        :param request: Запрос
+        :param pk: id удаляемой записи
+        :return: Статус Created
+        """
         expert_opinion = get_object_or_404(ExpertOpinion.objects.all(), pk=pk)
         expert_opinion.delete()
         return Response(status=201)
@@ -608,6 +1010,12 @@ class TestBoykoListView(APIView):
     """Список тестов Бойко"""
 
     def get(self, request):
+        """
+        Получение списка
+
+        :param request: Запрос с id клиента
+        :return: Список
+        """
         client = request.GET.get("client")
         tests = TestBoyko.objects.filter(client=client)
         serializer = TestBoykoListSerializers(tests, many=True)
@@ -618,6 +1026,13 @@ class TestBoykoView(APIView):
     """Тест Бойко"""
 
     def get(self, request, pk=None):
+        """
+        Получение записи
+
+        :param request: Запрос с id Теста Бойко
+        :param pk: id Теста Бойко
+        :return: Тест Бойко, в случае отсутствия записи No Content
+        """
         if pk is None:
             test = request.GET.get("test")
         else:
@@ -633,6 +1048,12 @@ class TestBoykoView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         boyko = TestBoykoCRUDSerializers(data=request.data)
         if boyko.is_valid():
             client = get_object_or_404(Client, id=self.request.data.get('client'))
@@ -642,6 +1063,13 @@ class TestBoykoView(APIView):
             return Response(status=400)
 
     def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id обновляемой записи
+        :return: Статус Created
+        """
         boyko = get_object_or_404(TestBoyko.objects.all(), pk=pk)
         serializer = TestBoykoCRUDSerializers(instance=boyko, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -649,15 +1077,28 @@ class TestBoykoView(APIView):
         return Response(status=201)
 
     def delete(self, request, pk):
+        """
+        Удаление записи
+
+        :param request: Запрос
+        :param pk: id удаляемой записи
+        :return: Статус Created
+        """
         boyko = get_object_or_404(TestBoyko.objects.all(), pk=pk)
         boyko.delete()
         return Response(status=201)
 
 
 class GraphicBoykoView(APIView):
-    """Получение значений двух тестов Бойко для графика"""
+    """Получение значений двух интерпретаций тестов Бойко (первичная и вторичная диагностика) для графика"""
 
     def get(self, request):
+        """
+        Получение значений
+
+        :param request:  Запрос с id интерпретаций тестов Бойко
+        :return: Значения по двум интерпретациям
+        """
         client = request.GET.get("client")
         tests = TestBoyko.objects.filter(client=client)
         interpretation_1 = InterpretationBoyko.objects.filter(test=tests.values('id').first().get('id'))
@@ -679,6 +1120,12 @@ class InterpretationBoykoView(APIView):
     """Интерпретация теста Бойко"""
 
     def get(self, request):
+        """
+        Получение записи
+
+        :param request: Запрос с id Теста Бойко
+        :return: Интерпретация теста Бойко, в случае отсутствия записи No Content
+        """
         test = request.GET.get("test")
         result = InterpretationBoyko.objects.filter(test=test)
         if result.exists():
@@ -688,6 +1135,12 @@ class InterpretationBoykoView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         result = InterpretationBoykoCRUDSerializers(data=request.data)
         if result.is_valid():
             test = get_object_or_404(TestBoyko, id=self.request.data.get('test'))
@@ -697,6 +1150,12 @@ class InterpretationBoykoView(APIView):
             return Response(status=400)
 
     def put(self, request):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :return: Статус Created
+        """
         result = get_object_or_404(InterpretationBoyko.objects.all(), test=self.request.data.get('test'))
         serializer = InterpretationBoykoCRUDSerializers(instance=result, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -713,6 +1172,12 @@ class TestGAGEListView(APIView):
     """Список тестов GAGE"""
 
     def get(self, request):
+        """
+        Получение списка
+
+        :param request: Запрос с id клиента
+        :return: Список
+        """
         client = request.GET.get("client")
         tests = TestGAGE.objects.filter(client=client)
         serializer = TestGAGEListSerializers(tests, many=True)
@@ -723,6 +1188,13 @@ class TestGAGEView(APIView):
     """Тест GAGE"""
 
     def get(self, request, pk=None):
+        """
+        Получение записи
+
+        :param request: Запрос с id Теста GAGE
+        :param pk: id Теста GAGE
+        :return: Тест GAGE, в случае отсутствия записи No Content
+        """
         if pk is None:
             test = request.GET.get("test")
         else:
@@ -738,6 +1210,12 @@ class TestGAGEView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         gage = TestGAGECRUDSerializers(data=request.data)
         if gage.is_valid():
             client = get_object_or_404(Client, id=self.request.data.get('client'))
@@ -747,6 +1225,13 @@ class TestGAGEView(APIView):
             return Response(status=400)
 
     def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id обновляемой записи
+        :return: Статус Created
+        """
         gage = get_object_or_404(TestGAGE.objects.all(), pk=pk)
         serializer = TestGAGECRUDSerializers(instance=gage, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -754,15 +1239,28 @@ class TestGAGEView(APIView):
         return Response(status=201)
 
     def delete(self, request, pk):
+        """
+        Удаление записи
+
+        :param request: Запрос
+        :param pk: id удаляемой записи
+        :return: Статус Created
+        """
         socrates = get_object_or_404(TestGAGE.objects.all(), pk=pk)
         socrates.delete()
         return Response(status=201)
 
 
 class GraphicGAGEView(APIView):
-    """Получение значений двух тестов GAGE для графика"""
+    """Получение значений двух интерпретаций тестов GAGE для графика"""
 
     def get(self, request):
+        """
+        Получение значений
+
+        :param request: Запрос с id интерпретаций тестов GAGE
+        :return: Значения по двум интерпретациям
+        """
         client = request.GET.get("client")
         tests = TestGAGE.objects.filter(client=client)
         interpretation_1 = InterpretationGAGE.objects.filter(test=tests.values('id').first().get('id'))
@@ -783,6 +1281,12 @@ class InterpretationGAGEView(APIView):
     """Интерпретация теста GAGE"""
 
     def get(self, request):
+        """
+        Получение записи
+
+        :param request: Запрос с id Теста GAGE
+        :return: Интерпретация теста GAGE, в случае отсутствия записи No Content
+        """
         test = request.GET.get("test")
         result = InterpretationGAGE.objects.filter(test=test)
         if result.exists():
@@ -792,6 +1296,12 @@ class InterpretationGAGEView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         result = InterpretationGAGECRUDSerializers(data=request.data)
         if result.is_valid():
             test = get_object_or_404(TestGAGE, id=self.request.data.get('test'))
@@ -801,6 +1311,12 @@ class InterpretationGAGEView(APIView):
             return Response(status=400)
 
     def put(self, request):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :return: Статус Created
+        """
         result = get_object_or_404(InterpretationGAGE.objects.all(), test=self.request.data.get('test'))
         serializer = InterpretationGAGECRUDSerializers(instance=result, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -812,6 +1328,12 @@ class TestSOCRATESListView(APIView):
     """Список тестов SOCRATES"""
 
     def get(self, request):
+        """
+        Получение списка
+
+        :param request: Запрос с id клиента
+        :return: Список
+        """
         client = request.GET.get("client")
         tests = TestSOCRATES.objects.filter(client=client)
         serializer = TestSOCRATESListSerializers(tests, many=True)
@@ -822,6 +1344,13 @@ class TestSOCRATESView(APIView):
     """Тест SOCRATES"""
 
     def get(self, request, pk=None):
+        """
+        Получение записи
+
+        :param request: Запрос с id Теста SOCRATES
+        :param pk: id Теста SOCRATES
+        :return: Тест SOCRATES, в случае отсутствия записи No Content
+        """
         if pk is None:
             test = request.GET.get("test")
         else:
@@ -837,6 +1366,12 @@ class TestSOCRATESView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         socrates = TestSOCRATESCRUDSerializers(data=request.data)
         if socrates.is_valid():
             client = get_object_or_404(Client, id=self.request.data.get('client'))
@@ -846,6 +1381,13 @@ class TestSOCRATESView(APIView):
             return Response(status=400)
 
     def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id обновляемой записи
+        :return: Статус Created
+        """
         socrates = get_object_or_404(TestSOCRATES.objects.all(), pk=pk)
         serializer = TestSOCRATESCRUDSerializers(instance=socrates, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -853,6 +1395,13 @@ class TestSOCRATESView(APIView):
         return Response(status=201)
 
     def delete(self, request, pk):
+        """
+        Удаление записи
+
+        :param request: Запрос
+        :param pk: id удаляемой записи
+        :return: Статус Created
+        """
         socrates = get_object_or_404(TestSOCRATES.objects.all(), pk=pk)
         socrates.delete()
         return Response(status=201)
@@ -862,6 +1411,12 @@ class GraphicSOCRATESView(APIView):
     """Получение значений двух тестов SOCRATES для графика"""
 
     def get(self, request):
+        """
+        Получение значений
+
+        :param request: Запрос с id интерпретаций тестов SOCRATES
+        :return: Значения по двум интерпретациям
+        """
         client = request.GET.get("client")
         tests = TestSOCRATES.objects.filter(client=client)
         interpretation_1 = InterpretationSOCRATES.objects.filter(test=tests.values('id').first().get('id'))
@@ -882,6 +1437,12 @@ class InterpretationSOCRATESView(APIView):
     """Интерпретация теста SOCRATES"""
 
     def get(self, request):
+        """
+        Получение записи
+
+        :param request: Запрос с id Теста SOCRATES
+        :return: Интерпретация теста SOCRATES, в случае отсутствия записи No Content
+        """
         test = request.GET.get("test")
         result = InterpretationSOCRATES.objects.filter(test=test)
         if result.exists():
@@ -891,6 +1452,12 @@ class InterpretationSOCRATESView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         result = InterpretationSOCRATESCRUDSerializers(data=request.data)
         if result.is_valid():
             test = get_object_or_404(TestSOCRATES, id=self.request.data.get('test'))
@@ -900,6 +1467,12 @@ class InterpretationSOCRATESView(APIView):
             return Response(status=400)
 
     def put(self, request):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :return: Статус Created
+        """
         result = get_object_or_404(InterpretationSOCRATES.objects.all(), test=self.request.data.get('test'))
         serializer = InterpretationSOCRATESCRUDSerializers(instance=result, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -911,6 +1484,12 @@ class TypologicalGroupListView(APIView):
     """Список типологических групп"""
 
     def get(self, request):
+        """
+        Получение списка
+
+        :param request: Запрос с id клиента
+        :return: Список
+        """
         client = request.GET.get("client")
         tests = TypologicalGroup.objects.filter(client=client)
         serializer = TypologicalGroupListSerializers(tests, many=True)
@@ -918,7 +1497,14 @@ class TypologicalGroupListView(APIView):
 
 
 class TypologicalGroupView(APIView):
+    """Типологическая группа"""
     def get(self, request):
+        """
+        Получение записи
+
+        :param request: Запрос с id Типологической группы
+        :return: Типологическая группа, в случае отсутствия записи No Content
+        """
         group_id = request.GET.get("group")
         group = TypologicalGroup.objects.filter(pk=group_id)
         if group.exists():
@@ -928,6 +1514,12 @@ class TypologicalGroupView(APIView):
             return Response(status=204)
 
     def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
         group = TypologicalGroupCRUDSerializers(data=request.data)
         if group.is_valid():
             client = get_object_or_404(Client, id=self.request.data.get('client'))
@@ -938,6 +1530,13 @@ class TypologicalGroupView(APIView):
             return Response(status=400)
 
     def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id обновляемой записи
+        :return: Статус Created
+        """
         group = get_object_or_404(TypologicalGroup.objects.all(), pk=pk)
         serializer = TypologicalGroupCRUDSerializers(instance=group, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -945,13 +1544,27 @@ class TypologicalGroupView(APIView):
         return Response(status=201)
 
     def delete(self, request, pk):
+        """
+        Удаление записи
+
+        :param request: Запрос
+        :param pk: id удаляемой записи
+        :return: Статус Created
+        """
         group = get_object_or_404(TypologicalGroup.objects.all(), pk=pk)
         group.delete()
         return Response(status=201)
 
 
 class FieldsGroupView(APIView):
+    """Список полей для определения Типологической группы"""
     def get(self, request):
+        """
+        Получения списка
+
+        :param request: Запрос с id клиента и id Теста Бойко
+        :return: Список
+        """
         client = request.GET.get("client")
         test = request.GET.get("test")
         social_behavior = ASocialBehavior.objects.filter(client=client)
@@ -982,6 +1595,12 @@ class FieldsGroupView(APIView):
 #         # choices[field.name] = field.choices
 #     return {'labels': labels, 'choices': choices, 'items': items}
 def get_model_fields(model):
+    """
+    Получение обозначений, выборов и значений полей
+
+    :param model: Выбранная модель
+    :return: Обозначения, выборка и значения полей модели
+    """
     labels = {}
     choices = {}
     items = {}
@@ -1008,8 +1627,15 @@ MODEL = {'GeneralInformation': GeneralInformation, 'Client': Client, 'ASocialBeh
 
 
 class FieldsView(APIView):
+    """Обозначения, выборы и значения для модели"""
 
     def get(self, request):
+        """
+        Получение полей
+
+        :param request: Запрос с моделью
+        :return: Поля
+        """
         model = request.GET.get("model")
         fields = get_model_fields(MODEL.get(model))
         return Response(fields)
@@ -1022,14 +1648,27 @@ from rest_framework.permissions import IsAdminUser
 
 
 class UserCRUDView(APIView):
+    """Пользователь (специалист)"""
     permission_classes = [IsAdminUser]
 
     def get(self, request):
+        """
+        Информация о пользователях
+
+        :param request: Запрос
+        :return: Информация о пользователях
+        """
         users = User.objects.all()
         serializer = UserSerializers(users, many=True)
         return Response(serializer.data)
 
     def post(self, request):
+        """
+        Создание пользователя
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created
+        """
         data = dict(
             [('username', None), ('email', None), ('password', None), ('first_name', None), ('patronymic', None),
              ('last_name', None), ('position', None)])
@@ -1042,6 +1681,12 @@ class UserCRUDView(APIView):
         return Response(status=201)
 
     def delete(self, request):
+        """
+        Удаление пользователя
+
+        :param request: Запрос с username пользователя
+        :return: Статус Created
+        """
         user = get_object_or_404(User, username=request.data.get('username'))
         user.delete()
         return Response(status=201)
@@ -1150,11 +1795,11 @@ def deleteExcessDataFromChild(serializer):
     newArray.append({})
     for i in range(maxCountChild):
         newArray[2].update({
-            'child'+str(i+1):{
-                'nameRUS': str(i+1)+'ый '+'ребенок',
+            'child' + str(i + 1): {
+                'nameRUS': str(i + 1) + 'ый ' + 'ребенок',
                 'firstPoint': None,
                 'lastPoint': None,
-                'lenLabels': len(newArray[0])//maxCountChild
+                'lenLabels': len(newArray[0]) // maxCountChild
             }
         })
     return newArray
@@ -1163,13 +1808,15 @@ def deleteExcessDataFromChild(serializer):
 def socialEconomCon():
     mainSerializer = SocialEconomicConditionSerializers(SocialEconomicCondition.objects.all(), many=True)
     arraySer = []
-    if(len(SourceIncomeSerializers(SourceIncome.objects.all(), many=True).data)!=0):
+    if (len(SourceIncomeSerializers(SourceIncome.objects.all(), many=True).data) != 0):
         arraySer.append(SourceIncomeSerializers(SourceIncome.objects.all(), many=True))
-    if(len(SocialPaymentSerializers(SocialPayment.objects.all(), many=True).data)!=0):
+    if (len(SocialPaymentSerializers(SocialPayment.objects.all(), many=True).data) != 0):
         arraySer.append(SocialPaymentSerializers(SocialPayment.objects.all(), many=True))
-    if(len(ChildAllowanceAndCompensationSerializers(ChildAllowanceAndCompensation.objects.all(), many=True).data)!=0):
-        arraySer.append(ChildAllowanceAndCompensationSerializers(ChildAllowanceAndCompensation.objects.all(), many=True))
-    if(len(FacilitiesSerializers(Facilities.objects.all(), many=True).data)!=0):
+    if (len(ChildAllowanceAndCompensationSerializers(ChildAllowanceAndCompensation.objects.all(),
+                                                     many=True).data) != 0):
+        arraySer.append(
+            ChildAllowanceAndCompensationSerializers(ChildAllowanceAndCompensation.objects.all(), many=True))
+    if (len(FacilitiesSerializers(Facilities.objects.all(), many=True).data) != 0):
         arraySer.append(FacilitiesSerializers(Facilities.objects.all(), many=True))
 
     for serializer in arraySer:
@@ -1355,17 +2002,19 @@ def makeMarking(array, nameEN, nameRUS):
     })
     return array
 
-def updateMarking(lastPoint,dictionary):
+
+def updateMarking(lastPoint, dictionary):
     for dict in dictionary.values():
-        dict.update({'firstPoint':lastPoint})
-        dict.update({'lastPoint':dict.get('firstPoint')+dict.get('lenLabels')-1})
-        lastPoint=dict.get('lastPoint')+1
+        dict.update({'firstPoint': lastPoint})
+        dict.update({'lastPoint': dict.get('firstPoint') + dict.get('lenLabels') - 1})
+        lastPoint = dict.get('lastPoint') + 1
+
 
 def mySwitch(value):
     if value == "0":
 
         # return deleteIDForClient(ClientSerializers(Client.objects.all(), many=True))
-        if (len(ClientSerializers(Client.objects.all(), many=True).data)==0):
+        if (len(ClientSerializers(Client.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
             deleteIDForClient(ClientSerializers(Client.objects.all(), many=True)),
@@ -1373,7 +2022,7 @@ def mySwitch(value):
             'Сведения о клиенте(общее)'
         )
     elif value == "1":
-        if (len(GeneralInformationSerializers(GeneralInformation.objects.all(), many=True).data)==0):
+        if (len(GeneralInformationSerializers(GeneralInformation.objects.all(), many=True).data) == 0):
             return []
         # return deleteIDClient(GeneralInformationSerializers(GeneralInformation.objects.all(), many=True))
         return makeMarking(
@@ -1382,7 +2031,7 @@ def mySwitch(value):
             'Общая информация'
         )
     elif value == "2":
-        if (len(ASocialBehaviorSerializers(ASocialBehavior.objects.all(), many=True).data)==0):
+        if (len(ASocialBehaviorSerializers(ASocialBehavior.objects.all(), many=True).data) == 0):
             return []
         # return deleteIDClient(ASocialBehaviorSerializers(ASocialBehavior.objects.all(), many=True))
         return makeMarking(
@@ -1391,7 +2040,7 @@ def mySwitch(value):
             'Информация о противоправных действиях, правонарушениях, употреблении наркотиков, алкоголя'
         )
     elif value == "3":
-        if (len(ChronicDiseaseSerializers(ChronicDisease.objects.all(), many=True).data)==0):
+        if (len(ChronicDiseaseSerializers(ChronicDisease.objects.all(), many=True).data) == 0):
             return []
         # return deleteIDClient(ChronicDiseaseSerializers(ChronicDisease.objects.all(), many=True))
         return makeMarking(
@@ -1400,11 +2049,11 @@ def mySwitch(value):
             'Информация о наличии хронического заболевания'
         )
     elif value == "4":
-        if (len(ChildSerializers(Child.objects.all(), many=True).data)==0):
+        if (len(ChildSerializers(Child.objects.all(), many=True).data) == 0):
             return []
         return deleteExcessDataFromChild(ChildSerializers(Child.objects.all(), many=True))
     elif value == "5":
-        if (len(FamilyMembersInformationSerializers(FamilyMembersInformation.objects.all(), many=True).data)==0):
+        if (len(FamilyMembersInformationSerializers(FamilyMembersInformation.objects.all(), many=True).data) == 0):
             return []
         # return deleteIDClient(FamilyMembersInformationSerializers(FamilyMembersInformation.objects.all(), many=True))
         return makeMarking(
@@ -1413,7 +2062,7 @@ def mySwitch(value):
             'Общие сведения о членах семьи'
         )
     elif value == "6":
-        if (len(HusbandInformationSerializers(HusbandInformation.objects.all(), many=True).data)==0):
+        if (len(HusbandInformationSerializers(HusbandInformation.objects.all(), many=True).data) == 0):
             return []
         # return deleteIDClient(
         #     husbendSpecial(HusbandInformationSerializers(HusbandInformation.objects.all(), many=True)))
@@ -1423,7 +2072,7 @@ def mySwitch(value):
             'Информация о муже/партнёре'
         )
     elif value == "7":
-        if (len(SocialLivingConditionSerializers(SocialLivingCondition.objects.all(), many=True).data)==0):
+        if (len(SocialLivingConditionSerializers(SocialLivingCondition.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
             deleteIDClient(SocialLivingConditionSerializers(SocialLivingCondition.objects.all(), many=True)),
@@ -1440,7 +2089,7 @@ def mySwitch(value):
             'Социально-экономические условия проживания'
         )
     elif value == "9":
-        if (len(ExpertOpinionSerializers(ExpertOpinion.objects.all(), many=True).data)==0):
+        if (len(ExpertOpinionSerializers(ExpertOpinion.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
             deleteIDClient(expertOpinion(ExpertOpinionSerializers(ExpertOpinion.objects.all(), many=True))),
@@ -1449,7 +2098,7 @@ def mySwitch(value):
         )
         # return deleteIDClient(expertOpinion(ExpertOpinionSerializers(ExpertOpinion.objects.all(), many=True)))
     elif value == "10":
-        if (len(TestBoykoSerializers(TestBoyko.objects.all(), many=True).data)==0):
+        if (len(TestBoykoSerializers(TestBoyko.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
             testAndRes(0,
@@ -1461,7 +2110,7 @@ def mySwitch(value):
         # return testAndRes(0, TestBoykoSerializers(TestBoyko.objects.all(), many=True),
         # InterpretationBoykoSerializers(InterpretationBoyko.objects.all(), many=True))
     elif value == "11":
-        if (len(TestGAGESerializers(TestGAGE.objects.all(), many=True).data)==0):
+        if (len(TestGAGESerializers(TestGAGE.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
             testAndRes(0, TestGAGESerializers(TestGAGE.objects.all(), many=True),
@@ -1472,7 +2121,7 @@ def mySwitch(value):
         # return testAndRes(0, TestGAGESerializers(TestGAGE.objects.all(), many=True),
         #                   InterpretationGAGESerializers(InterpretationGAGE.objects.all(), many=True))
     elif value == "12":
-        if (len(TestSOCRATESSerializers(TestSOCRATES.objects.all(), many=True).data)==0):
+        if (len(TestSOCRATESSerializers(TestSOCRATES.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
             testAndRes(0, TestSOCRATESSerializers(TestSOCRATES.objects.all(), many=True),
@@ -1483,7 +2132,7 @@ def mySwitch(value):
         # return testAndRes(0, TestSOCRATESSerializers(TestSOCRATES.objects.all(), many=True),
         #                   InterpretationSOCRATESSerializers(InterpretationSOCRATES.objects.all(), many=True))
     elif value == "13":
-        if (len(TestBoykoSerializers(TestBoyko.objects.all(), many=True).data)==0):
+        if (len(TestBoykoSerializers(TestBoyko.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
             testAndRes(1, TestBoykoSerializers(TestBoyko.objects.all(), many=True),
@@ -1494,7 +2143,7 @@ def mySwitch(value):
         # return testAndRes(1, TestBoykoSerializers(TestBoyko.objects.all(), many=True),
         #                   InterpretationBoykoSerializers(InterpretationBoyko.objects.all(), many=True))
     elif value == "14":
-        if (len(TestGAGESerializers(TestGAGE.objects.all(), many=True).data)==0):
+        if (len(TestGAGESerializers(TestGAGE.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
             testAndRes(1, TestGAGESerializers(TestGAGE.objects.all(), many=True),
@@ -1505,7 +2154,7 @@ def mySwitch(value):
         # return testAndRes(1, TestGAGESerializers(TestGAGE.objects.all(), many=True),
         #                   InterpretationGAGESerializers(InterpretationGAGE.objects.all(), many=True))
     elif value == "15":
-        if (len(TestSOCRATESSerializers(TestSOCRATES.objects.all(), many=True).data)==0):
+        if (len(TestSOCRATESSerializers(TestSOCRATES.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
             testAndRes(1, TestSOCRATESSerializers(TestSOCRATES.objects.all(), many=True),
@@ -1536,7 +2185,7 @@ class GetTable(APIView):
             # print(type(num))
             # print(num)
             ar = mySwitch(num)
-            if(len(ar)!=0):
+            if (len(ar) != 0):
                 lastPoint = len(dataArray[0])
                 dataArray[0].extend(ar[0])
 
@@ -1557,9 +2206,9 @@ class GetTable(APIView):
                             difference = difference - 1
                             dataArray[1].get(key).append("")
 
-
         print('len:' + str(len(dataArray[0])))
         return Response(dataArray)
+
 
 class TestsAnswers(APIView):
     def get(self, request):
@@ -1576,14 +2225,14 @@ class TestsAnswers(APIView):
                   'leisure']
         num = 1
         for filed in fileds:
-            name=TestBoyko._meta.get_field(filed).verbose_name
-            dict.get('boyko').update({num:{}})
-            dict.get('boyko').get(num).update({'label':name})
-            choices=[]
+            name = TestBoyko._meta.get_field(filed).verbose_name
+            dict.get('boyko').update({num: {}})
+            dict.get('boyko').get(num).update({'label': name})
+            choices = []
             for choice in TestBoyko._meta.get_field(filed).choices:
                 choices.append(choice[1])
             dict.get('boyko').get(num).update({
-                'answers':choices
+                'answers': choices
             })
-            num=num+1
+            num = num + 1
         return Response(dict)
