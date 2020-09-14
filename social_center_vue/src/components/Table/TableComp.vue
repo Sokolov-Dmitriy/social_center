@@ -481,13 +481,15 @@
                 bufArray.push(line);
               }
             }
-            for (let line of bufArray) {
-              if (line[this.lastPoint.x] >= this.contextList[0].children[index[1]].min &&
-                line[this.lastPoint.x] <= this.contextList[0].children[index[1]].max) {
-                newLines.push(line);
+            if(bufArray.length!==0) {
+              for (let line of bufArray) {
+                if (line[this.lastPoint.x] >= this.contextList[0].children[index[1]].min &&
+                  line[this.lastPoint.x] <= this.contextList[0].children[index[1]].max) {
+                  newLines.push(line);
+                }
               }
+              this.matrixAll.lines = newLines;
             }
-            this.matrixAll.lines = newLines;
             break;
           case 1:
             let x = this.lastPoint.x;
@@ -1007,7 +1009,7 @@
                   ticks: {
                     min: 0,
                     max: 95,
-                    stepSize: 95 / 10
+                    stepSize: 5
                   },
                 },
               ],
@@ -1147,7 +1149,7 @@
                   ticks: {
                     min: 0,
                     max: 40,
-                    stepSize: 4 / 10
+                    stepSize: 5
                   },
                 },
               ],
