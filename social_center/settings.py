@@ -166,3 +166,8 @@ try:
     from .local_settings import *
 except ImportError:
     from .prod_settings import *
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = True
+SECURE_REDIRECT_EXEMPT = [r'^(?!admin/).*']
