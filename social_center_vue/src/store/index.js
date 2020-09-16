@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex);
 export const store = new Vuex.Store({
   state: {
-    baseUrl: 'http://185.209.29.77/',
+    baseUrl: 'https://v325098.hosted-by-vdsina.ru/',
     // baseUrl: 'http://127.0.0.1:8000/',
   },
   getters: {},
