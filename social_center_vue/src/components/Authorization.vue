@@ -18,6 +18,7 @@
               <a class="fa fa-eye-slash" @click="check" v-else></a>
             </div>
             <div class="form-group">
+              <a class="link" href="#/enterEmail">Я не помню пароль</a>
               <button type="submit" class="btn btn-default" @click="setLogin">ВХОД</button>
             </div>
           </div>
@@ -170,6 +171,15 @@
     border: none;
     text-transform: capitalize;
     transition: all 0.5s ease 0s;
+  }
+  .link {
+    margin-right: 60px;
+    color: #492727;
+  }
+
+  .btn-default:hover {
+    background-color: #492727;
+    color: #D2B48C;
   }
 
   @media only screen and (max-width: 479px) {

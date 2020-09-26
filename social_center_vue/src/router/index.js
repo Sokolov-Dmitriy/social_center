@@ -37,6 +37,8 @@ import GraphicSOCRATES from "../components/Test/GraphicSOCRATES";
 // import "bootstrap-vue/dist/bootstrap-vue.min.css"
 import MainPageComp from "../components/Table/MainPageComp";
 import Users from "../components/Users";
+import EnterEmail from "../components/Reset/EnterEmail";
+import ConfirmPassword from "../components/Reset/ConfirmPassword";
 
 Vue.use(Router)
 
@@ -222,6 +224,16 @@ export const router = new Router({
       name: 'users',
       component: Users,
     },
+    {
+      path: '/enterEmail',
+      name: 'enterEmail',
+      component: EnterEmail,
+    },
+    {
+      path: '/confirmPassword/:uid/:token',
+      name: 'confirmPassword',
+      component: ConfirmPassword,
+    },
   ],
 });
 router.beforeEach((to, from, next) => {
@@ -231,6 +243,7 @@ router.beforeEach((to, from, next) => {
     $.ajaxSetup({
       headers: {'Authorization': null}
     });
-    next({name: 'login'});
+    if(['enterEmail','confirmPassword'].includes(to.name)) next();
+    else next({name: 'login'});
   } else next()
 });

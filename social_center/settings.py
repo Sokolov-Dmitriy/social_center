@@ -161,13 +161,27 @@ REST_FRAMEWORK = {
 # все запросы, которые идут на бекенд разрешены
 CORS_ORIGIN_ALLOW_ALL = True
 
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# if DEBUG:
+#     EMAIL_USE_TLS = True
+#     EMAIL_HOST = 'mx.sokolovds.com'
+#     EMAIL_PORT = 25
+#     EMAIL_HOST_USER = 'person'
+#     EMAIL_HOST_PASSWORD = 'BMr5RsngqY'
+
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': '#/confirmPassword/{uid}/{token}',
+}
+
 # настройки разработки и продакшена
 try:
     from .local_settings import *
 except ImportError:
     from .prod_settings import *
 
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = True
-SECURE_REDIRECT_EXEMPT = [r'^(?!admin/).*']
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# SECURE_SSL_REDIRECT = True
+# SECURE_REDIRECT_EXEMPT = [r'^(?!admin/).*']
