@@ -1358,7 +1358,12 @@
             this.forMenu.push(name);
           }
         }
-        this.showSignal = signal;
+        if(this.forMenu.length===0){
+          this.buildCharts([]);
+        }else {
+          this.showSignal = signal;
+        }
+
       },
       buildCharts(data) {
         let forBuldCharts = {
@@ -1852,7 +1857,8 @@
     /*margin-top: 10px;*/
     /*height: 60px;*/
     /*max-height: 60px;*/
-    min-height: 30px;
+    height: 52px;
+    /*min-height: 30px;*/
     overflow: auto;
   }
 
@@ -1861,7 +1867,7 @@
     border: 2px solid grey;
     margin: 2px;
     border-radius: 5px;
-    height: 28px;
+    height: 28px!important;
   }
 
   .hidden-list:hover {
@@ -1896,7 +1902,7 @@
 
   .smaller {
     z-index: 1;
-    margin-top: 200px;
+    margin-top: 210px;
   }
 
   .title {

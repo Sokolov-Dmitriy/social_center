@@ -65,6 +65,10 @@
         test.pressed = !test.pressed;
       },
       checkIn(array){
+        // if(this.testsList.length===0){
+        //   this.$emit('simple-choice',this.butsForm);
+        //   this.$emit('show-menu',false);
+        // }
         console.log(array);
         let i=0;
         for(let test of array){

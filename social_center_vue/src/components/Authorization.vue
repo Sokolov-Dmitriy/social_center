@@ -25,6 +25,12 @@
         </div>
       </div>
     </div>
+
+    <div class="footer">
+      <div class="d-flex justify-content-center">
+          <h6>КСЦОН Красносельского района</h6>
+      </div>
+    </div>
   </div>
 </template>
 
