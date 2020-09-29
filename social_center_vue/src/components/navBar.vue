@@ -90,6 +90,6 @@
   }
 
   a {
-    color: #492727;
+    color: #492727 !important;
   }
 </style>

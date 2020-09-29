@@ -126,7 +126,7 @@
   }
 
   .navbar-brand {
-    color: #492727;
+    color: #492727 !important;
     font-weight: bolder;
     font-size: 30px;
     position: absolute;
