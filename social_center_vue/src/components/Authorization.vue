@@ -1,6 +1,9 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #D2B48C;padding: 30px"/>
+    <nav class="navbar navbar-expand-lg navbar-light " style="background-color: #D2B48C;padding: 30px;">
+      <span class="navbar-brand"><font style="color: #FFF8DC;">КСЦОН</font> Красносельского района</span>
+      <span class="navbar-brand" style="color: #0b2e13"></span>
+    </nav>
     <div class="container">
       <div class="row align-items-center">
         <div class="offset-md-3 col-md-6">
@@ -25,10 +28,9 @@
         </div>
       </div>
     </div>
-
-    <div class="footer">
+    <div class="container-fluid myfooter">
       <div class="d-flex justify-content-center">
-          <h6>КСЦОН Красносельского района</h6>
+        <h6>2020, КСЦОН Красносельского района</h6>
       </div>
     </div>
   </div>
@@ -49,7 +51,7 @@
     methods: {
       setLogin() {
         $.ajax({
-          url: this.$store.state.baseUrl+'auth/token/login/',
+          url: this.$store.state.baseUrl + 'auth/token/login/',
           type: 'POST',
           data: {
             username: this.login,
@@ -178,6 +180,16 @@
     text-transform: capitalize;
     transition: all 0.5s ease 0s;
   }
+
+  .navbar-brand {
+    color: #492727;
+    font-weight: bolder;
+    font-size: 30px;
+    position: absolute;
+    left: 50%;
+    transform: translatex(-50%);
+  }
+
   .link {
     margin-right: 60px;
     color: #492727;
@@ -188,7 +200,36 @@
     color: #D2B48C;
   }
 
+  .myfooter {
+    position: absolute;
+    bottom: 0;
+    /*background-color: red;*/
+    margin-bottom: 10px;
+  }
+
+  @media only screen and (max-width: 992px) {
+    .btn {
+      margin-top: 20px;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    .btn {
+      margin-top: 0;
+    }
+  }
+
+  @media only screen and (max-width: 580px) {
+    .navbar-brand {
+      font-size: 25px;
+    }
+  }
+
   @media only screen and (max-width: 479px) {
+    .navbar-brand {
+      font-size: 20px;
+    }
+
     .form-horizontal .form-group {
       padding: 0 25px;
     }
@@ -199,6 +240,18 @@
 
     .form-horizontal .btn {
       padding: 10px 20px;
+    }
+  }
+
+  @media only screen and (max-width: 388px) {
+    .btn {
+      margin-top: 20px;
+    }
+  }
+
+  @media only screen and (max-width: 379px) {
+    .navbar-brand {
+      font-size: 16px;
     }
   }
 

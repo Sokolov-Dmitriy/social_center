@@ -1,6 +1,9 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #D2B48C;padding: 30px"/>
+    <nav class="navbar navbar-expand-lg navbar-light " style="background-color: #D2B48C;padding: 30px;">
+      <span class="navbar-brand"><font style="color: #FFF8DC;">КСЦОН</font> Красносельского района</span>
+      <span class="navbar-brand" style="color: #0b2e13"></span>
+    </nav>
     <div class="container">
       <div class="row align-items-center">
         <div class="offset-md-3 col-md-6">
@@ -163,5 +166,32 @@
 
   .form-horizontal .fa-eye-slash:hover {
     color: #000;
+  }
+
+  .navbar-brand {
+    color: #492727;
+    font-weight: bolder;
+    font-size: 30px;
+    position: absolute;
+    left: 50%;
+    transform: translatex(-50%);
+  }
+
+  @media only screen and (max-width: 580px) {
+    .navbar-brand {
+      font-size: 25px;
+    }
+  }
+
+  @media only screen and (max-width: 479px) {
+    .navbar-brand {
+      font-size: 20px;
+    }
+  }
+
+  @media only screen and (max-width: 379px) {
+    .navbar-brand {
+      font-size: 16px;
+    }
   }
 </style>

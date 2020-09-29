@@ -1,6 +1,9 @@
 <template>
   <div>
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #D2B48C;padding: 30px"/>
+    <nav class="navbar navbar-expand-lg navbar-light " style="background-color: #D2B48C;padding: 30px;">
+      <span class="navbar-brand"><font style="color: #FFF8DC;">КСЦОН</font> Красносельского района</span>
+      <span class="navbar-brand" style="color: #0b2e13"></span>
+    </nav>
     <div class="container">
       <div class="row align-items-center">
         <div class="offset-md-3 col-md-6">
@@ -12,7 +15,8 @@
               <button class="btn btn-default" type="submit">Подтвердить</button>
             </form>
             <h5 class="text" v-if="help_text" v-html="text"/>
-            <button class="btn btn-default" v-if="help_text" @click="back">Вернуться</button>
+            <button class="btn btn-default-center" v-if="help_text" @click="back">Вернуться</button>
+            <button class="btn btn-default-right" v-else @click="back">Вернуться</button>
           </div>
         </div>
       </div>
@@ -40,13 +44,13 @@
             email: this.email
           },
           success: (response) => {
-            this.help_text=true;
+            this.help_text = true;
           },
           error: (response) => {
           }
         })
       },
-      back(){
+      back() {
         this.$router.push({name: 'login'})
       }
     }
@@ -95,16 +99,57 @@
     outline: 0 none;
   }
 
-  .btn-default {
+  .btn {
     background-color: #D2B48C;
     color: #492727;
     border-radius: 20px;
     height: 40px;
-    margin-top: 30px;
   }
 
-  .btn-default:hover {
+  .btn:hover {
     background-color: #492727;
     color: #D2B48C;
   }
+
+  .btn-default-right {
+    float: left;
+    margin-top: 15px;
+  }
+
+  .btn-default {
+    float: right;
+    margin-top: 30px;
+  }
+
+  .btn-default-center {
+    margin-top: 15px;
+  }
+
+  .navbar-brand {
+    color: #492727;
+    font-weight: bolder;
+    font-size: 30px;
+    position: absolute;
+    left: 50%;
+    transform: translatex(-50%);
+  }
+
+  @media only screen and (max-width: 580px) {
+    .navbar-brand {
+      font-size: 25px;
+    }
+  }
+
+  @media only screen and (max-width: 479px) {
+    .navbar-brand {
+      font-size: 20px;
+    }
+  }
+
+  @media only screen and (max-width: 379px) {
+    .navbar-brand {
+      font-size: 16px;
+    }
+  }
+
 </style>
