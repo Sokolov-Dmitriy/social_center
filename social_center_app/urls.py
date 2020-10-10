@@ -6,8 +6,6 @@ urlpatterns = [
     path('clients/', ClientView.as_view()),
     path('client/', ClientInformationView.as_view()),
     path('client/<int:pk>', ClientInformationView.as_view()),
-    path('generalInformation/', GeneralInformationView.as_view()),
-    path('generalInformation/<int:pk>', GeneralInformationView.as_view()),
     path('socialBehavior/', ASocialBehaviorView.as_view()),
     path('socialBehavior/<int:pk>', ASocialBehaviorView.as_view()),
     path('chronicDisease/', ChronicDiseaseView.as_view()),

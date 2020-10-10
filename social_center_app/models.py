@@ -7,25 +7,19 @@ from django.utils import timezone
 YESNO = [(1, 'да'), (2, 'нет')]
 YES_NO_DONTKNOW = [(1, 'да'), (2, 'нет'), (3, 'не знаю')]
 
-####################################
-####################################
-###                              ###
-###   ИЗМЕНЕНИЯ!!!!!             ###
-###                              ###
-####################################
-####################################
-
-
 
 class Client(models.Model):
-    """Общие сведения о клиенте"""
-    # ПЕРЕДЕЛАН ПОД!!!!!!!!!!!!! ЯВЛЯЕТСЯ РОДИТЕЛЬСКОЙ ТАБЛИЦЕЙ!!!!!!!!!!
-    #     1. Сведения о клиенте
-    #     ---------------------
-    #
-    #     1.1. Общая информация
+    """
+    Социальная диагностика
+    ======================
+
+    1. Сведения о клиенте
+    ---------------------
+
+    1.1. Общая информация
+    """
     FORM_OF_REFERRAL = [
-        (1, 'самообращени'),
+        (1, 'самообращение'),
         (2, 'КДН и ЗП'),
         (3, 'органы опеки и попечительства'),
         (4, 'образовательные учреждения'),
@@ -90,15 +84,15 @@ class Client(models.Model):
                  (9, "начальная школа")]
 
     FAMILIES_CATEGORY = [
-        (1,'полная семья'),
-        (2,'одинокий родитель'),
-        (3,'многодетная семья'),
-        (4,'разведённые'),
-        (5,'беженцы / переселенцы'),
-        (6,'несовершеннолетние родители'),
-        (7,'замещающая семья'),
-        (8,'семья с инвалидом'),
-        (9,'другое')
+        (1, 'полная семья'),
+        (2, 'одинокий родитель'),
+        (3, 'многодетная семья'),
+        (4, 'разведённые'),
+        (5, 'беженцы / переселенцы'),
+        (6, 'несовершеннолетние родители'),
+        (7, 'замещающая семья'),
+        (8, 'семья с инвалидом'),
+        (9, 'другое')
     ]
 
     dateOfInterview = models.DateField("Дата проведения интервью", null=True, blank=True)
@@ -167,133 +161,14 @@ class Client(models.Model):
     education = models.IntegerField("Образование",
                                     choices=EDUCATION, null=True, blank=True)
     familiesCategory = models.IntegerField("Категория семей",
-                                    choices=FAMILIES_CATEGORY, null=True, blank=True)
+                                           choices=FAMILIES_CATEGORY, null=True, blank=True)
     disability = models.IntegerField("Инвалидность",
-                                          choices=YESNO, null=True,
-                                          blank=True)
+                                     choices=YESNO, null=True,
+                                     blank=True)
+
     class Meta:
         verbose_name = 'Клиент'
         verbose_name_plural = 'Клиенты'
-
-
-
-
-
-
-
-    # number = models.IntegerField(verbose_name='№', null=True, blank=True)
-    # code = models.TextField(verbose_name='Код', null=True, blank=True)
-    # came = models.TextField(verbose_name='Пришли', null=True, blank=True)
-    # dependence = models.TextField(verbose_name='Зависимость', null=True, blank=True)
-    # number_vz = models.IntegerField(verbose_name='Количество вз', null=True, blank=True)
-    # nl = models.TextField(verbose_name='Н/л', null=True, blank=True)
-    # criminal_record = models.TextField(verbose_name='Наличие судимости', null=True, blank=True)
-    # state_dependence = models.TextField(verbose_name='Состояние зависимости', null=True, blank=True)
-    # employment = models.TextField(verbose_name='Трудовая занятость', null=True, blank=True)
-    # hiv_status = models.TextField(verbose_name='ВИЧ-статус', null=True, blank=True)
-    # vzr = models.TextField(verbose_name='взр', null=True, blank=True)
-    # number_children = models.IntegerField(verbose_name='Количество детей', null=True,
-    #                                       blank=True)
-    # undefined = models.TextField(verbose_name='Неопределен', null=True, blank=True)
-    # in_window = models.TextField(verbose_name='В окне', null=True, blank=True)
-    # full_name = models.TextField(verbose_name='ФИО клиента', null=True, blank=True)
-    # boy = models.TextField(verbose_name='Мал.', null=True, blank=True)
-    # girl = models.TextField(verbose_name='Дев.', null=True, blank=True)
-    # man = models.TextField(verbose_name='Муж.', null=True, blank=True)
-    # woman = models.TextField(verbose_name='Жен.', null=True, blank=True)
-    # category = models.TextField(verbose_name='Категория', null=True, blank=True)
-    # address_phone = models.TextField(verbose_name='Адрес, телефон', null=True, blank=True)
-    # passport = models.TextField(verbose_name='Паспортные данные', null=True, blank=True)
-    # production_date = models.DateField(verbose_name='Дата постановки', null=True, blank=True)
-    # support = models.TextField(verbose_name='Какое сопровождение', null=True, blank=True)
-    # children = models.TextField(verbose_name='Дети (ФИО)', null=True, blank=True)
-    # mo = models.TextField(verbose_name='М/О', null=True, blank=True)
-    # question = models.TextField(verbose_name='?', null=True, blank=True)
-    #
-    # class Meta:
-    #     verbose_name = 'Клиент'
-    #     verbose_name_plural = 'Клиенты'
-
-
-# class GeneralInformation(models.Model):
-#     """
-#     Социальная диагностика
-#     ======================
-#
-#     1. Сведения о клиенте
-#     ---------------------
-#
-#     1.1. Общая информация
-#     """
-#     SEX = [(1, "мужской"), (2, "женский")]
-#     WORK_PLACE = [(1, "постоянное"),
-#                   (2, "временное"),
-#                   (3, "эпизодическое"),
-#                   (4, "не работает"),
-#                   (5, "состоит в центре занятости населения в качестве безработного")]
-#
-#     CITYZENSHIP = [(1, "Россия"),
-#                    (2, "страна СНГ")]
-#     REGISTRATION = [(1, "постоянная"),
-#                     (2, "временная")]
-#     PLACE_OF_REGISTRATION = [(1, "Санкт-Петербург"),
-#                              (2, "Ленинградская область"),
-#                              (3, "другой регион РФ"),
-#                              (4, "страна СНГ")]
-#     EDUCATION = [(1, "полное среднее (11 классов)"),
-#                  (2, "общее среднее (9 классов)"),
-#                  (3, "неоконченное общее среднее"),
-#                  (4, "начальная школа")]
-#     PROFESSIONAL_EDUCATION = [(1, "высшее"),
-#                               (2, "неоконченное высшее"),
-#                               (3, "среднее специальное"),
-#                               (4, "начальное профессиональное"),
-#                               (5, "отсутствует"),
-#                               (6, "обучается")]
-#     SPECIAL_SOCIAL_STATUS = [(1, "инвалидность"),
-#                              (2, "многодетная семья"),
-#                              (3, "одинокая мать"),
-#                              (4, "лицо из числа детей сирот и детей, оставшихся без попечения родителей")]
-#     DISABILITY_GROUP = [(1, "I группа"),
-#                         (2, "II группа"),
-#                         (3, "III группа")]
-#
-#     client = models.OneToOneField(Client, on_delete=models.CASCADE)
-#
-#     sex = models.IntegerField("Пол",
-#                               choices=SEX, null=True, blank=True)
-#     dod = models.DateField("Дата рождения", null=True, blank=True)
-#     age = models.IntegerField("Возраст", null=True, blank=True)
-#     workPlace = models.IntegerField("Место работы",
-#                                     choices=WORK_PLACE, null=True, blank=True)
-#     aboutWork = models.TextField("Где, кем работает (при наличии работы)",
-#                                  null=True,
-#                                  blank=True)
-#     aboutNoWork = models.TextField("Причина, по которой не работает",
-#                                    null=True,
-#                                    blank=True)
-#     avDoc = models.IntegerField("Наличие документов",
-#                                 choices=YESNO, null=True, blank=True)
-#     cityzenship = models.IntegerField("Гражданство",
-#                                       choices=CITYZENSHIP, null=True, blank=True)
-#     registration = models.IntegerField("Регистрация",
-#                                        choices=REGISTRATION, null=True, blank=True)
-#     placeOfRegistration = models.IntegerField("Место регистрации",
-#                                               choices=PLACE_OF_REGISTRATION, null=True, blank=True)
-#     education = models.IntegerField("Образование",
-#                                     choices=EDUCATION, null=True, blank=True)
-#     professionalEducation = models.IntegerField("Профессиональное образование",
-#                                                 choices=PROFESSIONAL_EDUCATION, null=True, blank=True)
-#     specialSocialStatus = models.IntegerField("Особый социальный статус",
-#                                               choices=SPECIAL_SOCIAL_STATUS, null=True,
-#                                               blank=True)
-#     disabilityGroup = models.IntegerField("Группа инвалидности",
-#                                           choices=DISABILITY_GROUP, null=True,
-#                                           blank=True)
-#
-#     class Meta:
-#         verbose_name = 'Общая информация'
-#         verbose_name_plural = 'Общая информация'
 
 
 class Child(models.Model):
@@ -310,7 +185,7 @@ class Child(models.Model):
     SEX = [(1, 'мужской'), (2, 'женский')]
     STATUS = [(1, 'родной'), (2, 'усыновлен'), (3, 'оформлена опека'),
               (4, 'оставшийся без попечения родителей/лишение родительских прав'), (5, 'сирота'), (6, 'инвалидность')]
-    LOCATION = [(1, 'в семье'), (2, 'больница'), (3, 'дом ребенка')]
+    LOCATION = [(1, 'в семье'), (2, 'больница'), (3, 'социальное учреждение')]
     EDUCATE = [(1, 'да'), (2, 'нет'), (3, 'подписала временный отказ'), (4, 'подписала полный отказ'),
                (5, 'ушла из родильного дома'), (6, 'собирается подписывать временный отказ'),
                (7, 'собирается подписывать полный отказ')]
@@ -346,9 +221,7 @@ class Child(models.Model):
     hiv_plus = models.IntegerField(verbose_name='Родился после установления ВИЧ-положительного статуса клиента',
                                    choices=YESNO, null=True, blank=True)
     center_aids = models.IntegerField(verbose_name='Учет в центре СПИД', choices=YESNO, null=True, blank=True)
-    center_prevention = models.IntegerField(verbose_name='Учет в лечебно-профилактическом учреждении района',
-                                            choices=YESNO, null=True, blank=True)
-    hiv_prevention = models.IntegerField(verbose_name='Получал ли профилактику ВИЧ', choices=HIV_PREVENTION, null=True,
+    hiv_prevention = models.IntegerField(verbose_name='Получал ли профилактику ВИЧ', choices=YES_NO_DONTKNOW, null=True,
                                          blank=True)
 
     class Meta:
@@ -370,23 +243,21 @@ class SocialLivingCondition(models.Model):
             (4, 'комната в общежитии'), (5, 'отсутствует')]
     SANITARY_CONDITION = [(1, 'хорошее'), (2, 'удовлетворительное'), (3, 'антисанитарное'),
                           (4, 'признаки аварийности жилого помещения')]
-    OWNERSHIP = [(1, 'договор по найму жилья'), (2, 'договор аренды'), (3, 'собственность клиента')]
+    OWNERSHIP = [(1, 'договор по найму жилья'), (2, 'собственность клиента')]
     PAYMENT = [(1, 'своевременно в полном объеме'), (2, 'незначительная задолженность'),
-               (3, 'значительная задолженность'), (4, 'начилие задолженности по алиментам/кредиту')]
+               (3, 'значительная задолженность')]
     client = models.OneToOneField(Client, on_delete=models.CASCADE)
     type_room = models.IntegerField(verbose_name='Вид жилого помещения', choices=TYPE, null=True,
                                     blank=True)
     sanitary_condition = models.IntegerField(
         verbose_name='Санитарно-гигиеническое и техническое состояние жилого помещения', choices=SANITARY_CONDITION,
         null=True, blank=True)
-    room_area = models.FloatField(verbose_name='Жилая площадь в расчете на человека (кв.м.)', null=True,
+    room_area = models.FloatField(verbose_name='Жилая площадь (кв.м.)', null=True,
                                   blank=True)
     ownership = models.IntegerField(verbose_name='Право собственности,владения и пользования', choices=OWNERSHIP,
                                     null=True, blank=True)
     payment = models.IntegerField(verbose_name='Оплата за жилье и коммунальные услуги', choices=PAYMENT, null=True,
                                   blank=True)
-    amount_debt = models.DecimalField(verbose_name='Сумма задолженности (в рублях)', max_digits=17, decimal_places=2,
-                                      null=True, blank=True)
 
     class Meta:
         verbose_name = 'Социально бытовые условия'
@@ -567,6 +438,20 @@ class ASocialBehavior(models.Model):
     FROM_WHOM = [(1, 'муж/партнёр'),
                  (2, 'другого родственника')]
 
+    TREATMENT_WAS_A = [
+        (1, 'да'),
+        (2, 'нет'),
+        (3, 'химическая защита')
+    ]
+
+    CRIMINAL_RECORD = [
+        (1, 'условная'),
+        (2, 'отсрочка приговора'),
+        (3, 'из мест лишения свободы'),
+        (4, 'под следствием'),
+        (5, 'нет'),
+    ]
+
     client = models.OneToOneField(Client, on_delete=models.CASCADE)
 
     drugUse = models.IntegerField("Употребление наркотиков",
@@ -591,6 +476,9 @@ class ASocialBehavior(models.Model):
                                                           choices=YESNO,
                                                           null=True,
                                                           blank=True)
+    wherePsyRehWasD = models.TextField("Где проходил реабилитацию(наркотики)?",
+                                       null=True,
+                                       blank=True)
     durationOfRemissionD = models.DecimalField("Длительность ремиссии (в годах)(наркотики)",
                                                max_digits=3,
                                                decimal_places=1,
@@ -607,13 +495,16 @@ class ASocialBehavior(models.Model):
                                             null=True,
                                             blank=True)
     theTreatmentWasA = models.IntegerField("Проходил ли лечение(алкоголь)",
-                                           choices=YESNO,
+                                           choices=TREATMENT_WAS_A,
                                            null=True,
                                            blank=True)
     psychologicalRehabilitationWasA = models.IntegerField("Проходил ли психологическую реабилитацию(алкоголь)",
                                                           choices=YESNO,
                                                           null=True,
                                                           blank=True)
+    wherePsyRehWasA = models.TextField("Где проходил реабилитацию(алкоголь)?",
+                                       null=True,
+                                       blank=True)
     durationOfRemissionA = models.DecimalField("Длительность ремиссии (в годах)(алкоголь)",
                                                max_digits=3,
                                                decimal_places=1,
@@ -622,8 +513,8 @@ class ASocialBehavior(models.Model):
     accountingInNarcologicalClinic = models.IntegerField("Учёт в наркологическом диспансере",
                                                          choices=YESNO, null=True, blank=True)
     criminalRecord = models.IntegerField("Наличие судимости",
-                                         choices=YESNO, null=True, blank=True)
-    accountingInODN_RUVD = models.IntegerField("Учёт в ОДН РУВД",
+                                         choices=CRIMINAL_RECORD, null=True, blank=True)
+    accountingInODN_RUVD = models.IntegerField("Состоит на учёте в ОДН РУВД",
                                                choices=YES_NO_DONTKNOW, null=True, blank=True)
     caseExaminedInKDN_ZP = models.IntegerField("Рассматривалось дело на КДН и ЗП",
                                                choices=YES_NO_DONTKNOW, null=True, blank=True)
@@ -662,10 +553,6 @@ class ChronicDisease(models.Model):
                      (2, 'инъекционный'),
                      (3, 'неизвестно')]
 
-    CHEMOPROPHYLAXIS = [(1, 'во время беременности'),
-                        (2, 'во время родов'),
-                        (3, 'после родов')]
-
     HIV_TREATMENT = [(1, 'да, регулярно'),
                      (2, 'да, не регулярно'),
                      (3, 'нет')]
@@ -675,13 +562,20 @@ class ChronicDisease(models.Model):
                             (3, 'подозревают'),
                             (4, 'планирует рассказать')]
 
+    VISIT_AIDS = [
+        (1, 'раз в 3 месяца'),
+        (2, 'раз в полгода'),
+        (3, 'раз в год'),
+        (4, 'нет')
+    ]
+
     client = models.OneToOneField(Client, on_delete=models.CASCADE)
 
     hepatitisC = models.IntegerField("Гепатит С",
                                      choices=DISEASE, null=True, blank=True)
     HIVStatus = models.IntegerField("ВИЧ-статус",
                                     choices=DISEASE, null=True, blank=True)
-    estimatedTimeOfInfection = models.DecimalField("Предположительное время инфицирования (в годах)",
+    estimatedTimeOfInfection = models.DecimalField("Когда узнал о диагнозе (в годах)",
                                                    max_digits=3,
                                                    decimal_places=1,
                                                    null=True,
@@ -695,15 +589,15 @@ class ChronicDisease(models.Model):
                                      null=True,
                                      blank=True)
     doesCenterVisitAIDS = models.IntegerField("Посещает ли центр СПИД",
-                                              choices=YESNO,
+                                              choices=VISIT_AIDS,
                                               null=True,
                                               blank=True)
     frequencyOfVisitsAIDSCenter = models.TextField("Как часто посещает центр СПИД",
                                                    max_length=20,
                                                    null=True,
                                                    blank=True)
-    receivedChemoprophylaxis = models.IntegerField("Получал химиопрофилактику",
-                                                   choices=CHEMOPROPHYLAXIS,
+    receivedChemoprophylaxis = models.IntegerField("Получал ли химиопрофилактику",
+                                                   choices=YESNO,
                                                    null=True,
                                                    blank=True)
     HIVGetTreatment = models.IntegerField("Получает ли лечение по ВИЧ",
@@ -739,14 +633,10 @@ class FamilyMembersInformation(models.Model):
                       (3, 'разведена'),
                       (4, 'вдова')]
 
-    LIVING_WITH_WHOM = [(1, 'одна'),
-                        (2, 'с детьми'),
-                        (3, 'со своими родителями'),
-                        (4, 'с родителями мужа/партнёра'),
-                        (5, 'с родственниками'),
-                        (6, 'с мужем'),
-                        (7, 'с партнёром'),
-                        (8, 'с друзьями')]
+    LIVING_WITH_WHOM = [(1, 'со своими родителями'),
+                        (2, 'с родителями партнёра'),
+                        (5, 'с семьёй'),
+                        (6, 'с родственниками')]
 
     client = models.OneToOneField(Client, on_delete=models.CASCADE)
 
@@ -785,23 +675,26 @@ class HusbandInformation(models.Model):
                              (2, "Ленинградская область"),
                              (3, "другой регион РФ"),
                              (4, "страна СНГ")]
-    EDUCATION = [(1, "полное среднее (11 классов)"),
-                 (2, "общее среднее (9 классов)"),
-                 (3, "неоконченное общее среднее"),
-                 (4, "начальная школа")]
-    PROFESSIONAL_EDUCATION = [(1, "высшее"),
-                              (2, "неоконченное высшее"),
-                              (3, "среднее специальное"),
-                              (4, "начальное профессиональное"),
-                              (5, "отсутствует"),
-                              (6, "обучается")]
-    SPECIAL_SOCIAL_STATUS = [(1, "инвалидность"),
-                             (2, "многодетная семья"),
-                             (3, "одинокая мать"),
-                             (4, "лицо из числа детей сирот и детей, оставшихся без попечения родителей")]
-    DISABILITY_GROUP = [(1, "I группа"),
-                        (2, "II группа"),
-                        (3, "III группа")]
+
+    EDUCATION = [(1, "высшее"),
+                 (2, "неоконченное высшее"),
+                 (3, "среднее специальное"),
+                 (4, "начальное профессиональное"),
+                 (5, "обучается"),
+                 (6, "полное среднее (11 классов)"),
+                 (7, "общее среднее (9 классов)"),
+                 (8, "неоконченное общее среднее"),
+                 (9, "начальная школа")]
+
+    CATEGORY_FAMILIES = [(1, "полная семья"),
+                         (2, "одинокий родитель"),
+                         (3, "многодетная семья"),
+                         (4, "разведённые"),
+                         (5, "беженцы/переселенцы"),
+                         (6, "несовершеннолетние родители"),
+                         (7, "замещающая семья"),
+                         (8, "семья с инвалидом"),
+                         (9, "другое")]
 
     FREQUENCY_OF_DRUGS_USE = [(1, "ежедневно"),
                               (2, "раз в два-три дня"),
@@ -812,7 +705,11 @@ class HusbandInformation(models.Model):
     ALCOHOL_DRINKS_TYPE = [(1, "слабоалкогольные"),
                            (2, "сильноалкогольные")]
 
-    husband = models.OneToOneField(FamilyMembersInformation, on_delete=models.CASCADE)
+    THE_TREATMENT_WAS_A = [(1, "да"),
+                           (2, "нет"),
+                           (3, "химическая защита")]
+
+    husband = models.ForeignKey(FamilyMembersInformation, on_delete=models.CASCADE)
 
     fullName = models.TextField("ФИО мужа/партнёра", null=True, blank=True)
     address = models.TextField("Адрес", null=True, blank=True)
@@ -838,16 +735,14 @@ class HusbandInformation(models.Model):
                                               choices=PLACE_OF_REGISTRATION, null=True, blank=True)
     education = models.IntegerField("Образование",
                                     choices=EDUCATION, null=True, blank=True)
-    professionalEducation = models.IntegerField("Профессиональное образование",
-                                                choices=PROFESSIONAL_EDUCATION, null=True, blank=True)
-    specialSocialStatus = models.IntegerField("Особый социальный статус",
-                                              choices=SPECIAL_SOCIAL_STATUS,
-                                              null=True,
-                                              blank=True)
-    disabilityGroup = models.IntegerField("Группа инвалидности",
-                                          choices=DISABILITY_GROUP,
-                                          null=True,
-                                          blank=True)
+    categoryFamilies = models.IntegerField("Категория семей",
+                                           choices=CATEGORY_FAMILIES,
+                                           null=True,
+                                           blank=True)
+    disability = models.IntegerField("Инвалидность",
+                                     choices=YESNO,
+                                     null=True,
+                                     blank=True)
     drugUse = models.IntegerField("Употребление наркотиков",
                                   choices=YESNO, null=True, blank=True)
     frequencyOfDrugsUse = models.IntegerField("Частота употребления наркотиков",
@@ -886,7 +781,7 @@ class HusbandInformation(models.Model):
                                             null=True,
                                             blank=True)
     theTreatmentWasA = models.IntegerField("Проходил ли лечение(алкоголь)",
-                                           choices=YESNO,
+                                           choices=THE_TREATMENT_WAS_A,
                                            null=True,
                                            blank=True)
     psychologicalRehabilitationWasA = models.IntegerField("Проходил ли психологическую реабилитацию(алкоголь)",

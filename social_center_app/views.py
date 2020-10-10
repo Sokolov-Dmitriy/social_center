@@ -58,17 +58,27 @@ class ClientView(APIView):
 class ClientInformationView(APIView):
     """Вся информация о клиенте"""
 
-    def get(self, request):
+    def get(self, request, pk=None):
         """
         Получение записи
 
         :param request: Запрос с id клиента
+        :param pk: id клиента
         :return: Вся информация о клиенте
         """
-        client_id = request.GET.get("client")
+        if pk is None:
+            client_id = request.GET.get("client")
+        else:
+            client_id = pk
         client = Client.objects.filter(pk=client_id)
-        serializer = ClientSerializers(client, many=True)
-        return Response(serializer.data)
+        if client.exists():
+            if pk is None:
+                serializer = ClientSerializers(client, many=True)
+            else:
+                serializer = ClientCRUDSerializers(client, many=True)
+            return Response(serializer.data)
+        else:
+            return Response(status=204)
 
     def post(self, request):
         """
@@ -77,7 +87,7 @@ class ClientInformationView(APIView):
         :param request: Запрос с новыми данными
         :return: id созданного клиента, в случае ошибки создания Bad Request
         """
-        client = ClientSerializers(data=request.data)
+        client = ClientCRUDSerializers(data=request.data)
         if client.is_valid():
             client.save()
             return Response({'id': client.data.get('id')})
@@ -93,7 +103,7 @@ class ClientInformationView(APIView):
         :return: Статус Created
         """
         client = get_object_or_404(Client.objects.all(), pk=pk)
-        serializer = ClientSerializers(instance=client, data=request.data, partial=True)
+        serializer = ClientCRUDSerializers(instance=client, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
         return Response(status=201)
@@ -108,73 +118,6 @@ class ClientInformationView(APIView):
         """
         client = get_object_or_404(Client.objects.all(), pk=pk)
         client.delete()
-        return Response(status=201)
-
-
-class GeneralInformationView(APIView):
-    """Общая информация по конкретному клиенту"""
-
-    def get(self, request, pk=None):
-        """
-        Получение записи
-
-        :param request: Запрос с id клиента
-        :param pk: id клиента
-        :return: Общая информация, в случае отсутствия записи No Content
-        """
-        if pk is None:
-            client = request.GET.get("client")
-        else:
-            client = pk
-        general_information = GeneralInformation.objects.filter(client=client)
-        if general_information.exists():
-            if pk is None:
-                serializer = GeneralInformationSerializers(general_information, many=True)
-            else:
-                serializer = GeneralInformationCRUDSerializers(general_information, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=204)
-
-    def post(self, request):
-        """
-        Создание записи
-
-        :param request: Запрос c новыми данными
-        :return: Статус Created, в случае ошибки создания Bad Request
-        """
-        general_information = GeneralInformationCRUDSerializers(data=request.data)
-        if general_information.is_valid():
-            client = get_object_or_404(Client, id=self.request.data.get('client'))
-            general_information.save(client=client)
-            return Response(status=201)
-        else:
-            return Response(status=400)
-
-    def put(self, request, pk):
-        """
-        Обновление записи
-
-        :param request: Запрос с обновленными данными
-        :param pk: id обновляемой записи
-        :return: Статус Created
-        """
-        general_information = get_object_or_404(GeneralInformation.objects.all(), pk=pk)
-        serializer = GeneralInformationCRUDSerializers(instance=general_information, data=request.data, partial=True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-        return Response(status=201)
-
-    def delete(self, request, pk):
-        """
-        Удаление записи
-
-        :param request: Запрос
-        :param pk: id удаляемой записи
-        :return: Статус Created
-        """
-        general_information = get_object_or_404(GeneralInformation.objects.all(), pk=pk)
-        general_information.delete()
         return Response(status=201)
 
 
@@ -1498,6 +1441,7 @@ class TypologicalGroupListView(APIView):
 
 class TypologicalGroupView(APIView):
     """Типологическая группа"""
+
     def get(self, request):
         """
         Получение записи
@@ -1558,6 +1502,7 @@ class TypologicalGroupView(APIView):
 
 class FieldsGroupView(APIView):
     """Список полей для определения Типологической группы"""
+
     def get(self, request):
         """
         Получения списка
@@ -1569,10 +1514,10 @@ class FieldsGroupView(APIView):
         test = request.GET.get("test")
         social_behavior = ASocialBehavior.objects.filter(client=client)
         boyko = TestBoyko.objects.filter(pk=test)
-        general_info = GeneralInformation.objects.filter(client=client)
+        general_info = Client.objects.filter(pk=client)
         chronic_disease = ChronicDisease.objects.filter(client=client)
         serializer_social_behavior = GroupASocialBehaviorSerializers(social_behavior, many=True)
-        serializer_general_info = GroupGeneralInformationSerializers(general_info, many=True)
+        serializer_general_info = GroupClientSerializers(general_info, many=True)
         serializer_chronic_disease = GroupChronicDiseaseSerializers(chronic_disease, many=True)
         serializer_boyko = GroupTestBoykoSerializers(boyko, many=True)
         return Response(
@@ -1581,19 +1526,6 @@ class FieldsGroupView(APIView):
              "boyko": serializer_boyko.data})
 
 
-# def get_model_fields(model):
-#     labels = {}
-#     choices = {}
-#     items = {}
-#     for field in model._meta.get_fields():
-#         if field.name != 'id':
-#             labels[field.name] = field.verbose_name
-#             items[field.name] = ''
-#         if field.choices is not None:
-#             choices[field.name] = dict(field.choices)
-#             # for item in field.choices:
-#         # choices[field.name] = field.choices
-#     return {'labels': labels, 'choices': choices, 'items': items}
 def get_model_fields(model):
     """
     Получение обозначений, выборов и значений полей
@@ -1617,7 +1549,7 @@ def get_model_fields(model):
     return {'labels': labels, 'choices': choices, 'items': items}
 
 
-MODEL = {'GeneralInformation': GeneralInformation, 'Client': Client, 'ASocialBehavior': ASocialBehavior,
+MODEL = {'Client': Client, 'ASocialBehavior': ASocialBehavior,
          'ChronicDisease': ChronicDisease, 'Child': Child,
          'FamilyMembersInformation': FamilyMembersInformation, 'HusbandInformation': HusbandInformation,
          'SocialLivingCondition': SocialLivingCondition, 'SocialEconomicCondition': SocialEconomicCondition,
@@ -2021,15 +1953,15 @@ def mySwitch(value):
             'general',
             'Сведения о клиенте(общее)'
         )
-    elif value == "1":
-        if (len(GeneralInformationSerializers(GeneralInformation.objects.all(), many=True).data) == 0):
-            return []
-        # return deleteIDClient(GeneralInformationSerializers(GeneralInformation.objects.all(), many=True))
-        return makeMarking(
-            deleteIDClient(GeneralInformationSerializers(GeneralInformation.objects.all(), many=True)),
-            'generalInformation',
-            'Общая информация'
-        )
+    # elif value == "1":
+    #     if (len(GeneralInformationSerializers(GeneralInformation.objects.all(), many=True).data) == 0):
+    #         return []
+    #     # return deleteIDClient(GeneralInformationSerializers(GeneralInformation.objects.all(), many=True))
+    #     return makeMarking(
+    #         deleteIDClient(GeneralInformationSerializers(GeneralInformation.objects.all(), many=True)),
+    #         'generalInformation',
+    #         'Общая информация'
+    #     )
     elif value == "2":
         if (len(ASocialBehaviorSerializers(ASocialBehavior.objects.all(), many=True).data) == 0):
             return []

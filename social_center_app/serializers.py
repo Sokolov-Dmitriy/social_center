@@ -45,13 +45,7 @@ class ChoiceField(serializers.ChoiceField):
         """
         return self._choices[obj]
 
-####################################
-####################################
-###                              ###
-###   ИЗМЕНЕНИЯ!!!!!             ###
-###   number изменен на contractNumber!!!!!
-####################################
-####################################
+
 class ClientListForMainWindow(serializers.ModelSerializer):
     """Информация о клиенте для главного окна"""
 
@@ -62,6 +56,27 @@ class ClientListForMainWindow(serializers.ModelSerializer):
 
 class ClientSerializers(MyModelSerializer):
     """Клиент"""
+    formOfReferral = ChoiceField(choices=Client.FORM_OF_REFERRAL)
+    sex = ChoiceField(choices=Client.SEX)
+    municipalDistrict = ChoiceField(choices=Client.MUNICIPAL_DISTRICT)
+    dependence = ChoiceField(choices=Client.DEPENDENCE)
+    stateOfDependence = ChoiceField(choices=Client.STATE_OF_DEPENDENCE)
+    workPlace = ChoiceField(choices=Client.WORK_PLACE)
+    avDoc = ChoiceField(choices=YESNO)
+    cityzenship = ChoiceField(choices=Client.CITYZENSHIP)
+    registration = ChoiceField(choices=Client.REGISTRATION)
+    placeOfRegistration = ChoiceField(choices=Client.PLACE_OF_REGISTRATION)
+    education = ChoiceField(choices=Client.EDUCATION)
+    familiesCategory = ChoiceField(choices=Client.FAMILIES_CATEGORY)
+    disability = ChoiceField(choices=YESNO)
+
+    class Meta:
+        model = Client
+        fields = '__all__'
+
+
+class ClientCRUDSerializers(serializers.ModelSerializer):
+    """Клиент без обозначений и вариантов полей"""
 
     class Meta:
         model = Client
@@ -94,8 +109,7 @@ class ChildSerializers(MyModelSerializer):
     hiv_status_child = ChoiceField(choices=Child.HIV)
     hiv_plus = ChoiceField(choices=YESNO)
     center_aids = ChoiceField(choices=YESNO)
-    center_prevention = ChoiceField(choices=YESNO)
-    hiv_prevention = ChoiceField(choices=Child.HIV_PREVENTION)
+    hiv_prevention = ChoiceField(choices=YES_NO_DONTKNOW)
 
     class Meta:
         model = Child
@@ -226,33 +240,6 @@ class FacilitiesCRUDSerializers(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class GeneralInformationSerializers(MyModelSerializer):
-    """Общая информация"""
-
-    sex = ChoiceField(choices=GeneralInformation.SEX)
-    workPlace = ChoiceField(choices=GeneralInformation.WORK_PLACE)
-    avDoc = ChoiceField(choices=YESNO)
-    cityzenship = ChoiceField(choices=GeneralInformation.CITYZENSHIP)
-    registration = ChoiceField(choices=GeneralInformation.REGISTRATION)
-    placeOfRegistration = ChoiceField(choices=GeneralInformation.PLACE_OF_REGISTRATION)
-    education = ChoiceField(choices=GeneralInformation.EDUCATION)
-    professionalEducation = ChoiceField(choices=GeneralInformation.PROFESSIONAL_EDUCATION)
-    specialSocialStatus = ChoiceField(choices=GeneralInformation.SPECIAL_SOCIAL_STATUS)
-    disabilityGroup = ChoiceField(choices=GeneralInformation.DISABILITY_GROUP)
-
-    class Meta:
-        model = GeneralInformation
-        fields = '__all__'
-
-
-class GeneralInformationCRUDSerializers(serializers.ModelSerializer):
-    """Общая информация без обозначений и вариантов полей"""
-
-    class Meta:
-        model = GeneralInformation
-        fields = '__all__'
-
-
 class ASocialBehaviorSerializers(MyModelSerializer):
     """Информация о противоправных действиях, правонарушениях, употреблении наркотиков, алкоголя"""
     drugUse = ChoiceField(choices=YESNO)
@@ -262,10 +249,10 @@ class ASocialBehaviorSerializers(MyModelSerializer):
     alcoholUse = ChoiceField(choices=YESNO)
     frequencyOfAlcoholUse = ChoiceField(choices=ASocialBehavior.FREQUENCY_OF_DRUGS_USE)
     alcoholDrinksType = ChoiceField(choices=ASocialBehavior.ALCOHOL_DRINKS_TYPE)
-    theTreatmentWasA = ChoiceField(choices=YESNO)
+    theTreatmentWasA = ChoiceField(choices=ASocialBehavior.TREATMENT_WAS_A)
     psychologicalRehabilitationWasA = ChoiceField(choices=YESNO)
     accountingInNarcologicalClinic = ChoiceField(choices=YESNO)
-    criminalRecord = ChoiceField(choices=YESNO)
+    criminalRecord = ChoiceField(choices=ASocialBehavior.CRIMINAL_RECORD)
     accountingInODN_RUVD = ChoiceField(choices=YES_NO_DONTKNOW)
     caseExaminedInKDN_ZP = ChoiceField(choices=YES_NO_DONTKNOW)
     commercialSexExperience = ChoiceField(choices=YESNO)
@@ -294,8 +281,8 @@ class ChronicDiseaseSerializers(MyModelSerializer):
     HIVStatus = ChoiceField(choices=ChronicDisease.DISEASE)
     estimatedRouteOfInfection = ChoiceField(choices=ChronicDisease.TYPE_INVASION)
     AIDSCenter = ChoiceField(choices=YESNO)
-    doesCenterVisitAIDS = ChoiceField(choices=YESNO)
-    receivedChemoprophylaxis = ChoiceField(choices=ChronicDisease.CHEMOPROPHYLAXIS)
+    doesCenterVisitAIDS = ChoiceField(choices=ChronicDisease.VISIT_AIDS)
+    receivedChemoprophylaxis = ChoiceField(choices=YESNO)
     HIVGetTreatment = ChoiceField(choices=ChronicDisease.HIV_TREATMENT)
     whoKnow = ChoiceField(choices=ChronicDisease.HIV_FAMILY_AWARENESS)
 
@@ -339,9 +326,8 @@ class HusbandInformationSerializers(MyModelSerializer):
     registration = ChoiceField(choices=HusbandInformation.REGISTRATION)
     placeOfRegistration = ChoiceField(choices=HusbandInformation.PLACE_OF_REGISTRATION)
     education = ChoiceField(choices=HusbandInformation.EDUCATION)
-    professionalEducation = ChoiceField(choices=HusbandInformation.PROFESSIONAL_EDUCATION)
-    specialSocialStatus = ChoiceField(choices=HusbandInformation.SPECIAL_SOCIAL_STATUS)
-    disabilityGroup = ChoiceField(choices=HusbandInformation.DISABILITY_GROUP)
+    categoryFamilies = ChoiceField(choices=HusbandInformation.CATEGORY_FAMILIES)
+    disability = ChoiceField(choices=YESNO)
     drugUse = ChoiceField(choices=YESNO)
     frequencyOfDrugsUse = ChoiceField(choices=HusbandInformation.FREQUENCY_OF_DRUGS_USE)
     theTreatmentWasD = ChoiceField(choices=YESNO)
@@ -349,7 +335,7 @@ class HusbandInformationSerializers(MyModelSerializer):
     alcoholUse = ChoiceField(choices=YESNO)
     frequencyOfAlcoholUse = ChoiceField(choices=HusbandInformation.FREQUENCY_OF_DRUGS_USE)
     alcoholDrinksType = ChoiceField(choices=HusbandInformation.ALCOHOL_DRINKS_TYPE)
-    theTreatmentWasA = ChoiceField(choices=YESNO)
+    theTreatmentWasA = ChoiceField(choices=HusbandInformation.THE_TREATMENT_WAS_A)
     psychologicalRehabilitationWasA = ChoiceField(choices=YESNO)
     accountingInNarcologicalClinic = ChoiceField(choices=YESNO)
     criminalRecord = ChoiceField(choices=YESNO)
@@ -619,20 +605,23 @@ class GroupASocialBehaviorSerializers(serializers.ModelSerializer):
 
 class GroupTestBoykoSerializers(serializers.ModelSerializer):
     """Поля Теста Бойко для определения типологической группы"""
+
     class Meta:
         model = TestBoyko
         fields = ('id', 'aggressiveness')
 
 
-class GroupGeneralInformationSerializers(serializers.ModelSerializer):
+class GroupClientSerializers(serializers.ModelSerializer):
     """Поля Общей информации о клиенте для определения типологической группы"""
+
     class Meta:
-        model = GeneralInformation
+        model = Client
         fields = ('id', 'age')
 
 
 class GroupChronicDiseaseSerializers(serializers.ModelSerializer):
     """Поля Информации о наличии хронического заболевания для определения типологической группы"""
+
     class Meta:
         model = ChronicDisease
         fields = ('id', 'hepatitisC', 'HIVStatus')
@@ -640,6 +629,7 @@ class GroupChronicDiseaseSerializers(serializers.ModelSerializer):
 
 class FamilyMemberSpecial(serializers.ModelSerializer):
     """Определенные поля для Общих сведений о членах семьи"""
+
     class Meta:
         model = FamilyMembersInformation
         fields = ('id', 'client')
@@ -648,6 +638,7 @@ class FamilyMemberSpecial(serializers.ModelSerializer):
 
 class ExpertForTable(serializers.ModelSerializer):
     """Имя и фамилия специалиста для отображения в общей таблице"""
+
     class Meta:
         model = User
         fields = ("id", "first_name", "last_name")
