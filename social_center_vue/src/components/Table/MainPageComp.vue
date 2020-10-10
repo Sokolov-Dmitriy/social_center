@@ -12,7 +12,7 @@
   import SelectionMenu from "./SelectionMenu";
   import SubMenu from "./SubMenu";
   import $ from "jquery";
-  import navBar from "../navBar";
+  import navBar from "../navBars/navBar";
 
   export default {
     name: "MainPageComp",

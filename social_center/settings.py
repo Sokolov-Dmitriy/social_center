@@ -163,19 +163,23 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
+#
 # if DEBUG:
 #     EMAIL_USE_TLS = True
-#     EMAIL_HOST = 'mx.sokolovds.com'
-#     EMAIL_PORT = 25
-#     EMAIL_HOST_USER = 'person'
-#     EMAIL_HOST_PASSWORD = 'BMr5RsngqY'
+#     EMAIL_HOST = 'smtp.yandex.ru'
+#     EMAIL_PORT = 465
+#     EMAIL_HOST_USER = 'sokolovds.com@yandex.ru'
+#     EMAIL_HOST_PASSWORD = 'sokolovDD2'
 
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': '#/confirmPassword/{uid}/{token}',
+    # 'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+    'SEND_CONFIRMATION_EMAIL': True,
 }
 
 # настройки разработки и продакшена
+
 try:
     from .local_settings import *
 except ImportError:

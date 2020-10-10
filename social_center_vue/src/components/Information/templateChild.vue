@@ -11,31 +11,31 @@
         </thead>
         <tbody v-for="(value,key) in label_first" class="tbody">
         <tr>
-          <td>{{label_first[key]}}</td>
+          <td class="td-left">{{label_first[key]}}</td>
           <td>{{first[key]}}</td>
         </tr>
         </tbody>
       </table>
     </div>
 
-  <div class="card">
-    <div class="card-header" v-html="'2.2. Информация о состоянии здоровья ребёнка'" v-if="!isHide"></div>
-    <table class="table table-hover" v-if="!isHide">
-      <thead class="thead noprint" v-if="end">
-      <tr>
-        <th scope="col">Поле</th>
-        <th scope="col">Значение</th>
-      </tr>
-      </thead>
-      <tbody v-for="(value,key) in label_second" class="tbody">
-      <tr>
-        <td>{{label_second[key]}}</td>
-        <td>{{second[key]}}</td>
-      </tr>
-      </tbody>
-    </table>
+    <div class="card">
+      <div class="card-header" v-html="'2.2. Информация о состоянии здоровья ребёнка'" v-if="!isHide"></div>
+      <table class="table table-hover" v-if="!isHide">
+        <thead class="thead noprint" v-if="end">
+        <tr>
+          <th scope="col">Поле</th>
+          <th scope="col">Значение</th>
+        </tr>
+        </thead>
+        <tbody v-for="(value,key) in label_second" class="tbody">
+        <tr>
+          <td class="td-left">{{label_second[key]}}</td>
+          <td>{{second[key]}}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -103,6 +103,11 @@
     color: #492727;
     text-align: center;
     border-color: #f5eed5;
+  }
+
+  .td-left {
+    text-align: left;
+    padding-left: 40px;
   }
 
   @media print {

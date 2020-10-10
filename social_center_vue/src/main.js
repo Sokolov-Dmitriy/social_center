@@ -10,11 +10,14 @@ import "font-awesome/css/font-awesome.min.css"
 import VueEasyCm from 'vue-easycm'
 import {store} from "./store";
 import LogOutFunc from "./logoutFunction"
+// import getToken from "./authorization/auth";
+
 
 Vue.use(BootstrapVue)
 Vue.use(BootstrapVueIcons)
 Vue.use(VueEasyCm)
 Vue.use(LogOutFunc)
+// Vue.use(getToken)
 
 Vue.config.productionTip = false
 /* eslint-disable no-new */

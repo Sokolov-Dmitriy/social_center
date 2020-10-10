@@ -2,7 +2,6 @@
   <div>
     <b-sidebar id="sidebar-border" title="Социальная диагностика" header-class="my-header" body-class="my-body"
                backdrop>
-
       <b-list-group>
         <b-list-group-item class="my-big-list-group-item">
           <header class="my-title">1. Сведения о клиенте</header>

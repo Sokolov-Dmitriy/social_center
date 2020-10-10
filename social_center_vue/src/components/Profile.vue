@@ -68,7 +68,7 @@
 </template>
 
 <script>
-  import navBar from "./navBar";
+  import navBar from "./navBars/navBar";
 
   export default {
     name: "Profile",

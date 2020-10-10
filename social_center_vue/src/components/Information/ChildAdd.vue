@@ -4,7 +4,7 @@
     <button class="btn btn-default" type="button" v-b-toggle.sidebar-border>
       <span class="fa fa-bars fa-2x" style="color:#492727;"></span>
     </button>
-    <b-link to="/info" class="my-link">Общие сведения</b-link>
+    <b-link to="/info" class="my-link">{{this.$store.state.fullName}}</b-link>
     <button class="btn btn-default-right" type="button" v-b-toggle.sidebar-test>
       <span class="fa fa-bars fa-2x" style="color:#492727;"></span>
     </button>
@@ -62,7 +62,7 @@
 
 <script>
   import sideBar from "../sideBar";
-  import navBar from "../navBar";
+  import navBar from "../navBars/navBar";
   import {ValidationObserver, ValidationProvider} from "vee-validate/dist/vee-validate.full";
   import sideBarTest from "../Test/sideBarTest";
   import NextBack from "./NextBack";
@@ -199,5 +199,26 @@
     color: #492727;
     font-size: 18px;
     padding: 3%;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .my-link {
+      font-size: 16px;
+      margin-left: 0;
+    }
+  }
+
+  @media only screen and (max-width: 650px) {
+    .my-link {
+      font-size: 14px;
+      margin-left: 0;
+    }
+  }
+
+  @media only screen and (max-width: 540px) {
+    .my-link {
+      font-size: 12px;
+      margin-left: 0;
+    }
   }
 </style>

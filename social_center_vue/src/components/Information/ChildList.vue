@@ -5,7 +5,7 @@
       <button class="btn btn-default" type="button" v-b-toggle.sidebar-border>
         <span class="fa fa-bars fa-2x" style="color:#492727;"></span>
       </button>
-      <b-link to="/info" class="my-link">Общие сведения</b-link>
+      <b-link to="/info" class="my-link">{{this.$store.state.fullName}}</b-link>
       <button class="btn btn-default-right" type="button" v-b-toggle.sidebar-test>
         <span class="fa fa-bars fa-2x" style="color:#492727;"></span>
       </button>
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-  import navBar from "../navBar";
+  import navBar from "../navBars/navBar";
   import sideBar from "../sideBar";
   import sideBarTest from "../Test/sideBarTest";
   import NextBack from "./NextBack";
@@ -159,6 +159,27 @@
       page-break-inside: avoid;
       border: none !important;
       margin-bottom: 20px !important;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    .my-link {
+      font-size: 16px;
+      margin-left: 0;
+    }
+  }
+
+  @media only screen and (max-width: 650px) {
+    .my-link {
+      font-size: 14px;
+      margin-left: 0;
+    }
+  }
+
+  @media only screen and (max-width: 540px) {
+    .my-link {
+      font-size: 12px;
+      margin-left: 0;
     }
   }
 </style>

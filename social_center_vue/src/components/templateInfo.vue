@@ -5,7 +5,7 @@
       <button class="btn btn-default" type="button" v-b-toggle.sidebar-border>
         <span class="fa fa-bars fa-2x" style="color:#492727;"></span>
       </button>
-      <b-link to="/info" class="my-link">Общие сведения</b-link>
+      <b-link to="/info" class="my-link">{{this.$store.state.fullName}}</b-link>
       <button class="btn btn-default-right" type="button" v-b-toggle.sidebar-test>
         <span class="fa fa-bars fa-2x" style="color:#492727;"></span>
       </button>
@@ -36,7 +36,7 @@
           </thead>
           <tbody v-for="(value,key) in labels" class="tbody">
           <tr v-if="!['id','client','child','husband','economic_condition','specialist'].includes(key) ">
-            <td>{{labels[key]}}</td>
+            <td class="td-left">{{labels[key]}}</td>
             <td>{{items[key]}}</td>
           </tr>
           </tbody>
@@ -51,7 +51,7 @@
 
 <script>
   import sideBar from "./sideBar";
-  import navBar from "./navBar";
+  import navBar from "./navBars/navBar";
   import navigation from "./Information/navigation";
   import sideBarTest from "./Test/sideBarTest";
   import templateChild from "./Information/templateChild";
@@ -106,6 +106,7 @@
               this.items = response.data[0].attributes;
               this.labels = response.data[0].attributes.labels;
               if (this.url === 'child') this.$refs.templateChild.slice(this.items, this.labels);
+              if (this.url === 'client') this.$store.commit('storeName', this.items.full_name);
             }
           },
           error: (response) => {
@@ -259,6 +260,11 @@
     margin-left: 20px;
   }
 
+  .td-left {
+    text-align: left;
+    padding-left: 40px;
+  }
+
   @media print {
     .noprint {
       display: none;
@@ -269,6 +275,27 @@
       page-break-inside: avoid;
       border: none !important;
       margin-bottom: 20px !important;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    .my-link {
+      font-size: 16px;
+      margin-left: 0;
+    }
+  }
+
+  @media only screen and (max-width: 650px) {
+    .my-link {
+      font-size: 14px;
+      margin-left: 0;
+    }
+  }
+
+  @media only screen and (max-width: 540px) {
+    .my-link {
+      font-size: 12px;
+      margin-left: 0;
     }
   }
 </style>
