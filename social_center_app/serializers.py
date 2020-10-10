@@ -45,13 +45,19 @@ class ChoiceField(serializers.ChoiceField):
         """
         return self._choices[obj]
 
-
+####################################
+####################################
+###                              ###
+###   ИЗМЕНЕНИЯ!!!!!             ###
+###   number изменен на contractNumber!!!!!
+####################################
+####################################
 class ClientListForMainWindow(serializers.ModelSerializer):
     """Информация о клиенте для главного окна"""
 
     class Meta:
         model = Client
-        fields = ("number", "code", "full_name")
+        fields = ("contractNumber", "code", "full_name")
 
 
 class ClientSerializers(MyModelSerializer):

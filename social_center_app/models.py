@@ -1,3 +1,4 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
@@ -6,41 +7,293 @@ from django.utils import timezone
 YESNO = [(1, 'да'), (2, 'нет')]
 YES_NO_DONTKNOW = [(1, 'да'), (2, 'нет'), (3, 'не знаю')]
 
+####################################
+####################################
+###                              ###
+###   ИЗМЕНЕНИЯ!!!!!             ###
+###                              ###
+####################################
+####################################
+
+
 
 class Client(models.Model):
     """Общие сведения о клиенте"""
-    number = models.IntegerField(verbose_name='№', null=True, blank=True)
-    code = models.TextField(verbose_name='Код', null=True, blank=True)
-    came = models.TextField(verbose_name='Пришли', null=True, blank=True)
-    dependence = models.TextField(verbose_name='Зависимость', null=True, blank=True)
-    number_vz = models.IntegerField(verbose_name='Количество вз', null=True, blank=True)
-    nl = models.TextField(verbose_name='Н/л', null=True, blank=True)
-    criminal_record = models.TextField(verbose_name='Наличие судимости', null=True, blank=True)
-    state_dependence = models.TextField(verbose_name='Состояние зависимости', null=True, blank=True)
-    employment = models.TextField(verbose_name='Трудовая занятость', null=True, blank=True)
-    hiv_status = models.TextField(verbose_name='ВИЧ-статус', null=True, blank=True)
-    vzr = models.TextField(verbose_name='взр', null=True, blank=True)
-    number_children = models.IntegerField(verbose_name='Количество детей', null=True,
-                                          blank=True)
-    undefined = models.TextField(verbose_name='Неопределен', null=True, blank=True)
-    in_window = models.TextField(verbose_name='В окне', null=True, blank=True)
-    full_name = models.TextField(verbose_name='ФИО клиента', null=True, blank=True)
-    boy = models.TextField(verbose_name='Мал.', null=True, blank=True)
-    girl = models.TextField(verbose_name='Дев.', null=True, blank=True)
-    man = models.TextField(verbose_name='Муж.', null=True, blank=True)
-    woman = models.TextField(verbose_name='Жен.', null=True, blank=True)
-    category = models.TextField(verbose_name='Категория', null=True, blank=True)
-    address_phone = models.TextField(verbose_name='Адрес, телефон', null=True, blank=True)
-    passport = models.TextField(verbose_name='Паспортные данные', null=True, blank=True)
-    production_date = models.DateField(verbose_name='Дата постановки', null=True, blank=True)
-    support = models.TextField(verbose_name='Какое сопровождение', null=True, blank=True)
-    children = models.TextField(verbose_name='Дети (ФИО)', null=True, blank=True)
-    mo = models.TextField(verbose_name='М/О', null=True, blank=True)
-    question = models.TextField(verbose_name='?', null=True, blank=True)
+    # ПЕРЕДЕЛАН ПОД!!!!!!!!!!!!! ЯВЛЯЕТСЯ РОДИТЕЛЬСКОЙ ТАБЛИЦЕЙ!!!!!!!!!!
+    #     1. Сведения о клиенте
+    #     ---------------------
+    #
+    #     1.1. Общая информация
+    FORM_OF_REFERRAL = [
+        (1, 'самообращени'),
+        (2, 'КДН и ЗП'),
+        (3, 'органы опеки и попечительства'),
+        (4, 'образовательные учреждения'),
+        (5, 'дом ребёнка'),
+        (6, 'родильный дом'),
+        (7, 'женская консультация'),
+        (8, 'детская поликлиника'),
+        (9, 'центр СПИД'),
+        (10, 'отдел полиции'),
+        (11, 'УФСИН'),
+        (12, 'перевод'),
+        (13, 'СО НКО')
+    ]
 
+    MUNICIPAL_DISTRICT = [
+        (1, 'Юго-Запад'),
+        (2, 'Южно-Приморский'),
+        (3, 'Сосновая Поляна'),
+        (4, 'Урицк'),
+        (5, 'Константиновское'),
+        (6, 'Горелово'),
+        (7, 'г.Красное Сел')
+    ]
+
+    DEPENDENCE = [
+        (1, 'алкогольная'),
+        (2, 'наркотическая'),
+        (3, 'созависимость')
+    ]
+    STATE_OF_DEPENDENCE = [
+        (1, 'активное потребление'),
+        (2, 'ремиссия')
+    ]
+
+    SEX = [(1, "мужской"), (2, "женский")]
+
+    WORK_PLACE = [(1, "постоянное"),
+                  (2, "временное"),
+                  (3, "эпизодическое"),
+                  (4, "не работает"),
+                  (5, "состоит в центре занятости населения в качестве безработного")]
+
+    CITYZENSHIP = [(1, "Россия"),
+                   (2, "страна СНГ")]
+
+    REGISTRATION = [(1, "постоянная"),
+                    (2, "временная")]
+
+    PLACE_OF_REGISTRATION = [(1, "Санкт-Петербург"),
+                             (2, "Ленинградская область"),
+                             (3, "другой регион РФ"),
+                             (4, "страна СНГ")]
+
+    EDUCATION = [(1, "высшее"),
+                 (2, "неоконченное высшее"),
+                 (3, "среднее специальное"),
+                 (4, "начальное профессиональное"),
+                 (5, "обучается"),
+                 (6, "полное среднее (11 классов)"),
+                 (7, "общее среднее (9 классов)"),
+                 (8, "неоконченное общее среднее"),
+                 (9, "начальная школа")]
+
+    FAMILIES_CATEGORY = [
+        (1,'полная семья'),
+        (2,'одинокий родитель'),
+        (3,'многодетная семья'),
+        (4,'разведённые'),
+        (5,'беженцы / переселенцы'),
+        (6,'несовершеннолетние родители'),
+        (7,'замещающая семья'),
+        (8,'семья с инвалидом'),
+        (9,'другое')
+    ]
+
+    dateOfInterview = models.DateField("Дата проведения интервью", null=True, blank=True)
+    code = models.TextField(verbose_name='Код клиента', null=True, blank=True)
+    formOfReferral = models.IntegerField("Форма обращения",
+                                         choices=FORM_OF_REFERRAL, null=True, blank=True)
+    dateOfCertified = models.DateField("Дата постановки на учет", null=True, blank=True)
+    contractNumber = models.IntegerField(verbose_name='Номер договора', null=True, blank=True)
+    full_name = models.TextField(verbose_name='ФИО клиента', null=True, blank=True)
+    sex = models.IntegerField("Пол",
+                              choices=SEX, null=True, blank=True)
+    dod = models.DateField("Дата рождения", null=True, blank=True)
+    age = models.IntegerField("Возраст", null=True, blank=True)
+    passSeries = models.IntegerField("Серия паспорта", null=True, blank=True,
+                                     validators=[
+                                         MaxValueValidator(9999),
+                                         MinValueValidator(1000)
+                                     ])
+    passNumber = models.IntegerField("Номер паспорта", null=True, blank=True,
+                                     validators=[
+                                         MaxValueValidator(999999),
+                                         MinValueValidator(100000)
+                                     ])
+    passFromWhomIssue = models.TextField(verbose_name='Выдан', null=True, blank=True)
+    passDateIssue = models.DateField("Дата выдачи", null=True, blank=True)
+    addressCity = models.TextField(verbose_name='Населенный пункт', null=True, blank=True)
+    addressStreet = models.TextField(verbose_name='Улица', null=True, blank=True)
+    addressHouseNum = models.TextField(verbose_name='Дом', null=True, blank=True)
+    addressApNum = models.TextField(verbose_name='Номер квартиры', null=True, blank=True)
+    addressIndex = models.IntegerField("Почтовый индекс", null=True, blank=True,
+                                       validators=[
+                                           MaxValueValidator(999999),
+                                           MinValueValidator(100000)
+                                       ])
+    municipalDistrict = models.IntegerField("Муниципальный округ",
+                                            choices=MUNICIPAL_DISTRICT, null=True, blank=True)
+    phoneNumber = models.IntegerField(verbose_name='Номер телефона', null=True, blank=True)
+    dependence = models.IntegerField("Зависимость",
+                                     choices=DEPENDENCE, null=True, blank=True)
+    stateOfDependence = models.IntegerField("Состояние зависимости",
+                                            choices=STATE_OF_DEPENDENCE, null=True, blank=True)
+    adultsCount = models.IntegerField("Кол-во взрослых", null=True, blank=True,
+                                      validators=[
+                                          MinValueValidator(0)
+                                      ])
+    minorsCount = models.IntegerField("Кол-во несовершеннолетних", null=True, blank=True,
+                                      validators=[
+                                          MinValueValidator(0)
+                                      ])
+    workPlace = models.IntegerField("Место работы",
+                                    choices=WORK_PLACE, null=True, blank=True)
+    aboutWork = models.TextField("Где, кем работает (при наличии работы)",
+                                 null=True,
+                                 blank=True)
+    aboutNoWork = models.TextField("Причина, по которой не работает",
+                                   null=True,
+                                   blank=True)
+    avDoc = models.IntegerField("Наличие документов",
+                                choices=YESNO, null=True, blank=True)
+    cityzenship = models.IntegerField("Гражданство",
+                                      choices=CITYZENSHIP, null=True, blank=True)
+    registration = models.IntegerField("Регистрация",
+                                       choices=REGISTRATION, null=True, blank=True)
+    placeOfRegistration = models.IntegerField("Место регистрации",
+                                              choices=PLACE_OF_REGISTRATION, null=True, blank=True)
+    education = models.IntegerField("Образование",
+                                    choices=EDUCATION, null=True, blank=True)
+    familiesCategory = models.IntegerField("Категория семей",
+                                    choices=FAMILIES_CATEGORY, null=True, blank=True)
+    disability = models.IntegerField("Инвалидность",
+                                          choices=YESNO, null=True,
+                                          blank=True)
     class Meta:
         verbose_name = 'Клиент'
         verbose_name_plural = 'Клиенты'
+
+
+
+
+
+
+
+    # number = models.IntegerField(verbose_name='№', null=True, blank=True)
+    # code = models.TextField(verbose_name='Код', null=True, blank=True)
+    # came = models.TextField(verbose_name='Пришли', null=True, blank=True)
+    # dependence = models.TextField(verbose_name='Зависимость', null=True, blank=True)
+    # number_vz = models.IntegerField(verbose_name='Количество вз', null=True, blank=True)
+    # nl = models.TextField(verbose_name='Н/л', null=True, blank=True)
+    # criminal_record = models.TextField(verbose_name='Наличие судимости', null=True, blank=True)
+    # state_dependence = models.TextField(verbose_name='Состояние зависимости', null=True, blank=True)
+    # employment = models.TextField(verbose_name='Трудовая занятость', null=True, blank=True)
+    # hiv_status = models.TextField(verbose_name='ВИЧ-статус', null=True, blank=True)
+    # vzr = models.TextField(verbose_name='взр', null=True, blank=True)
+    # number_children = models.IntegerField(verbose_name='Количество детей', null=True,
+    #                                       blank=True)
+    # undefined = models.TextField(verbose_name='Неопределен', null=True, blank=True)
+    # in_window = models.TextField(verbose_name='В окне', null=True, blank=True)
+    # full_name = models.TextField(verbose_name='ФИО клиента', null=True, blank=True)
+    # boy = models.TextField(verbose_name='Мал.', null=True, blank=True)
+    # girl = models.TextField(verbose_name='Дев.', null=True, blank=True)
+    # man = models.TextField(verbose_name='Муж.', null=True, blank=True)
+    # woman = models.TextField(verbose_name='Жен.', null=True, blank=True)
+    # category = models.TextField(verbose_name='Категория', null=True, blank=True)
+    # address_phone = models.TextField(verbose_name='Адрес, телефон', null=True, blank=True)
+    # passport = models.TextField(verbose_name='Паспортные данные', null=True, blank=True)
+    # production_date = models.DateField(verbose_name='Дата постановки', null=True, blank=True)
+    # support = models.TextField(verbose_name='Какое сопровождение', null=True, blank=True)
+    # children = models.TextField(verbose_name='Дети (ФИО)', null=True, blank=True)
+    # mo = models.TextField(verbose_name='М/О', null=True, blank=True)
+    # question = models.TextField(verbose_name='?', null=True, blank=True)
+    #
+    # class Meta:
+    #     verbose_name = 'Клиент'
+    #     verbose_name_plural = 'Клиенты'
+
+
+# class GeneralInformation(models.Model):
+#     """
+#     Социальная диагностика
+#     ======================
+#
+#     1. Сведения о клиенте
+#     ---------------------
+#
+#     1.1. Общая информация
+#     """
+#     SEX = [(1, "мужской"), (2, "женский")]
+#     WORK_PLACE = [(1, "постоянное"),
+#                   (2, "временное"),
+#                   (3, "эпизодическое"),
+#                   (4, "не работает"),
+#                   (5, "состоит в центре занятости населения в качестве безработного")]
+#
+#     CITYZENSHIP = [(1, "Россия"),
+#                    (2, "страна СНГ")]
+#     REGISTRATION = [(1, "постоянная"),
+#                     (2, "временная")]
+#     PLACE_OF_REGISTRATION = [(1, "Санкт-Петербург"),
+#                              (2, "Ленинградская область"),
+#                              (3, "другой регион РФ"),
+#                              (4, "страна СНГ")]
+#     EDUCATION = [(1, "полное среднее (11 классов)"),
+#                  (2, "общее среднее (9 классов)"),
+#                  (3, "неоконченное общее среднее"),
+#                  (4, "начальная школа")]
+#     PROFESSIONAL_EDUCATION = [(1, "высшее"),
+#                               (2, "неоконченное высшее"),
+#                               (3, "среднее специальное"),
+#                               (4, "начальное профессиональное"),
+#                               (5, "отсутствует"),
+#                               (6, "обучается")]
+#     SPECIAL_SOCIAL_STATUS = [(1, "инвалидность"),
+#                              (2, "многодетная семья"),
+#                              (3, "одинокая мать"),
+#                              (4, "лицо из числа детей сирот и детей, оставшихся без попечения родителей")]
+#     DISABILITY_GROUP = [(1, "I группа"),
+#                         (2, "II группа"),
+#                         (3, "III группа")]
+#
+#     client = models.OneToOneField(Client, on_delete=models.CASCADE)
+#
+#     sex = models.IntegerField("Пол",
+#                               choices=SEX, null=True, blank=True)
+#     dod = models.DateField("Дата рождения", null=True, blank=True)
+#     age = models.IntegerField("Возраст", null=True, blank=True)
+#     workPlace = models.IntegerField("Место работы",
+#                                     choices=WORK_PLACE, null=True, blank=True)
+#     aboutWork = models.TextField("Где, кем работает (при наличии работы)",
+#                                  null=True,
+#                                  blank=True)
+#     aboutNoWork = models.TextField("Причина, по которой не работает",
+#                                    null=True,
+#                                    blank=True)
+#     avDoc = models.IntegerField("Наличие документов",
+#                                 choices=YESNO, null=True, blank=True)
+#     cityzenship = models.IntegerField("Гражданство",
+#                                       choices=CITYZENSHIP, null=True, blank=True)
+#     registration = models.IntegerField("Регистрация",
+#                                        choices=REGISTRATION, null=True, blank=True)
+#     placeOfRegistration = models.IntegerField("Место регистрации",
+#                                               choices=PLACE_OF_REGISTRATION, null=True, blank=True)
+#     education = models.IntegerField("Образование",
+#                                     choices=EDUCATION, null=True, blank=True)
+#     professionalEducation = models.IntegerField("Профессиональное образование",
+#                                                 choices=PROFESSIONAL_EDUCATION, null=True, blank=True)
+#     specialSocialStatus = models.IntegerField("Особый социальный статус",
+#                                               choices=SPECIAL_SOCIAL_STATUS, null=True,
+#                                               blank=True)
+#     disabilityGroup = models.IntegerField("Группа инвалидности",
+#                                           choices=DISABILITY_GROUP, null=True,
+#                                           blank=True)
+#
+#     class Meta:
+#         verbose_name = 'Общая информация'
+#         verbose_name_plural = 'Общая информация'
 
 
 class Child(models.Model):
@@ -291,87 +544,6 @@ class Facilities(models.Model):
     class Meta:
         verbose_name = 'Льготы и меры социальной поддержки,предусмотренные для определенных категорий'
         verbose_name_plural = 'Льготы и меры социальной поддержки,предусмотренные для определенных категорий'
-
-
-class GeneralInformation(models.Model):
-    """
-    Социальная диагностика
-    ======================
-
-    1. Сведения о клиенте
-    ---------------------
-
-    1.1. Общая информация
-    """
-    SEX = [(1, "мужской"), (2, "женский")]
-    WORK_PLACE = [(1, "постоянное"),
-                  (2, "временное"),
-                  (3, "эпизодическое"),
-                  (4, "не работает"),
-                  (5, "состоит в центре занятости населения в качестве безработного")]
-
-    CITYZENSHIP = [(1, "Россия"),
-                   (2, "страна СНГ")]
-    REGISTRATION = [(1, "постоянная"),
-                    (2, "временная")]
-    PLACE_OF_REGISTRATION = [(1, "Санкт-Петербург"),
-                             (2, "Ленинградская область"),
-                             (3, "другой регион РФ"),
-                             (4, "страна СНГ")]
-    EDUCATION = [(1, "полное среднее (11 классов)"),
-                 (2, "общее среднее (9 классов)"),
-                 (3, "неоконченное общее среднее"),
-                 (4, "начальная школа")]
-    PROFESSIONAL_EDUCATION = [(1, "высшее"),
-                              (2, "неоконченное высшее"),
-                              (3, "среднее специальное"),
-                              (4, "начальное профессиональное"),
-                              (5, "отсутствует"),
-                              (6, "обучается")]
-    SPECIAL_SOCIAL_STATUS = [(1, "инвалидность"),
-                             (2, "многодетная семья"),
-                             (3, "одинокая мать"),
-                             (4, "лицо из числа детей сирот и детей, оставшихся без попечения родителей")]
-    DISABILITY_GROUP = [(1, "I группа"),
-                        (2, "II группа"),
-                        (3, "III группа")]
-
-    client = models.OneToOneField(Client, on_delete=models.CASCADE)
-
-    sex = models.IntegerField("Пол",
-                              choices=SEX, null=True, blank=True)
-    dod = models.DateField("Дата рождения", null=True, blank=True)
-    age = models.IntegerField("Возраст", null=True, blank=True)
-    workPlace = models.IntegerField("Место работы",
-                                    choices=WORK_PLACE, null=True, blank=True)
-    aboutWork = models.TextField("Где, кем работает (при наличии работы)",
-                                 null=True,
-                                 blank=True)
-    aboutNoWork = models.TextField("Причина, по которой не работает",
-                                   null=True,
-                                   blank=True)
-    avDoc = models.IntegerField("Наличие документов",
-                                choices=YESNO, null=True, blank=True)
-    cityzenship = models.IntegerField("Гражданство",
-                                      choices=CITYZENSHIP, null=True, blank=True)
-    registration = models.IntegerField("Регистрация",
-                                       choices=REGISTRATION, null=True, blank=True)
-    placeOfRegistration = models.IntegerField("Место регистрации",
-                                              choices=PLACE_OF_REGISTRATION, null=True, blank=True)
-    education = models.IntegerField("Образование",
-                                    choices=EDUCATION, null=True, blank=True)
-    professionalEducation = models.IntegerField("Профессиональное образование",
-                                                choices=PROFESSIONAL_EDUCATION, null=True, blank=True)
-    specialSocialStatus = models.IntegerField("Особый социальный статус",
-                                              choices=SPECIAL_SOCIAL_STATUS, null=True,
-                                              blank=True)
-    disabilityGroup = models.IntegerField("Группа инвалидности",
-                                          choices=DISABILITY_GROUP, null=True,
-                                          blank=True)
-
-    class Meta:
-        verbose_name = 'Общая информация'
-        verbose_name_plural = 'Общая информация'
 
 
 class ASocialBehavior(models.Model):

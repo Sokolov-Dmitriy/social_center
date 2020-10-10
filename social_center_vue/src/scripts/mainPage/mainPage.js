@@ -13,7 +13,7 @@ let parseReq = (response) => {
   for (let data of JSON.parse(response).data) {
     arrayClient.push({
       id: data.id,
-      number: data.attributes.number,
+      number: data.attributes.contractNumber,
       code: data.attributes.code,
       full_name: data.attributes.full_name,
     })
