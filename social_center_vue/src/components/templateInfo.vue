@@ -25,8 +25,7 @@
       <template-child v-bind:no_data="no_data" v-bind:is-hide="isHide" ref="templateChild"
                       v-if="url==='child'"></template-child>
       <div class="card" v-if="url!=='child'">
-        <div class="card-header" v-if="url==='client' ">{{items.full_name}}</div>
-        <div class="card-header" v-else v-html="header"></div>
+        <div class="card-header" v-html="header"></div>
         <table class="table table-hover" v-if="!isHide">
           <thead class="thead noprint">
           <tr>
@@ -114,8 +113,7 @@
             else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
           }
         });
-        if (this.url !== "client")
-          this.getForPutRequest();
+        this.getForPutRequest();
       },
       deleteRequest() {
         $.ajax({

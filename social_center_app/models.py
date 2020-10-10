@@ -100,7 +100,7 @@ class Client(models.Model):
     formOfReferral = models.IntegerField("Форма обращения",
                                          choices=FORM_OF_REFERRAL, null=True, blank=True)
     dateOfCertified = models.DateField("Дата постановки на учет", null=True, blank=True)
-    contractNumber = models.IntegerField(verbose_name='Номер договора', null=True, blank=True)
+    contractNumber = models.TextField(verbose_name='Номер договора', null=True, blank=True)
     full_name = models.TextField(verbose_name='ФИО клиента', null=True, blank=True)
     sex = models.IntegerField("Пол",
                               choices=SEX, null=True, blank=True)
@@ -129,7 +129,7 @@ class Client(models.Model):
                                        ])
     municipalDistrict = models.IntegerField("Муниципальный округ",
                                             choices=MUNICIPAL_DISTRICT, null=True, blank=True)
-    phoneNumber = models.IntegerField(verbose_name='Номер телефона', null=True, blank=True)
+    phoneNumber = models.TextField(verbose_name='Номер телефона', max_length=15, null=True, blank=True)
     dependence = models.IntegerField("Зависимость",
                                      choices=DEPENDENCE, null=True, blank=True)
     stateOfDependence = models.IntegerField("Состояние зависимости",
