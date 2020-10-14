@@ -69,6 +69,7 @@ class ClientSerializers(MyModelSerializer):
     education = ChoiceField(choices=Client.EDUCATION)
     familiesCategory = ChoiceField(choices=Client.FAMILIES_CATEGORY)
     disability = ChoiceField(choices=YESNO)
+    escort = ChoiceField(choices=Client.ESCORT)
 
     class Meta:
         model = Client
@@ -316,6 +317,14 @@ class FamilyMembersInformationCRUDSerializers(serializers.ModelSerializer):
     class Meta:
         model = FamilyMembersInformation
         fields = '__all__'
+
+
+class HusbandListSerializers(serializers.ModelSerializer):
+    """Список мужей/партнеров"""
+
+    class Meta:
+        model = HusbandInformation
+        fields = ('fullName', 'age')
 
 
 class HusbandInformationSerializers(MyModelSerializer):

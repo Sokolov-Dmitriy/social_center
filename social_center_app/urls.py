@@ -15,6 +15,7 @@ urlpatterns = [
     path('child/<int:pk>', ChildView.as_view()),
     path('familyMembers/', FamilyMembersInformationView.as_view()),
     path('familyMembers/<int:pk>', FamilyMembersInformationView.as_view()),
+    path('husbands/', HusbandListView.as_view()),
     path('husbandInformation/', HusbandInformationView.as_view()),
     path('husbandInformation/<int:pk>', HusbandInformationView.as_view()),
     path('socialLiving/', SocialLivingConditionView.as_view()),

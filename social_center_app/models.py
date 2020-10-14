@@ -95,6 +95,12 @@ class Client(models.Model):
         (9, 'другое')
     ]
 
+    ESCORT = [
+        (1, "интенсивное"),
+        (2, "поддерживающее"),
+        (3, "мониторинг")
+    ]
+
     dateOfInterview = models.DateField("Дата проведения интервью", null=True, blank=True)
     code = models.TextField(verbose_name='Код клиента', null=True, blank=True)
     formOfReferral = models.IntegerField("Форма обращения",
@@ -106,27 +112,15 @@ class Client(models.Model):
                               choices=SEX, null=True, blank=True)
     dod = models.DateField("Дата рождения", null=True, blank=True)
     age = models.IntegerField("Возраст", null=True, blank=True)
-    passSeries = models.IntegerField("Серия паспорта", null=True, blank=True,
-                                     validators=[
-                                         MaxValueValidator(9999),
-                                         MinValueValidator(1000)
-                                     ])
-    passNumber = models.IntegerField("Номер паспорта", null=True, blank=True,
-                                     validators=[
-                                         MaxValueValidator(999999),
-                                         MinValueValidator(100000)
-                                     ])
+    passSeries = models.IntegerField("Серия паспорта", null=True, blank=True)
+    passNumber = models.IntegerField("Номер паспорта", null=True, blank=True)
     passFromWhomIssue = models.TextField(verbose_name='Выдан', null=True, blank=True)
     passDateIssue = models.DateField("Дата выдачи", null=True, blank=True)
     addressCity = models.TextField(verbose_name='Населенный пункт', null=True, blank=True)
     addressStreet = models.TextField(verbose_name='Улица', null=True, blank=True)
     addressHouseNum = models.TextField(verbose_name='Дом', null=True, blank=True)
     addressApNum = models.TextField(verbose_name='Номер квартиры', null=True, blank=True)
-    addressIndex = models.IntegerField("Почтовый индекс", null=True, blank=True,
-                                       validators=[
-                                           MaxValueValidator(999999),
-                                           MinValueValidator(100000)
-                                       ])
+    addressIndex = models.IntegerField("Почтовый индекс", null=True, blank=True)
     municipalDistrict = models.IntegerField("Муниципальный округ",
                                             choices=MUNICIPAL_DISTRICT, null=True, blank=True)
     phoneNumber = models.TextField(verbose_name='Номер телефона', max_length=15, null=True, blank=True)
@@ -165,6 +159,7 @@ class Client(models.Model):
     disability = models.IntegerField("Инвалидность",
                                      choices=YESNO, null=True,
                                      blank=True)
+    escort = models.IntegerField("Какое сопровождение", choices=ESCORT, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Клиент'

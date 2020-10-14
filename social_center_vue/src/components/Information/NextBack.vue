@@ -13,13 +13,13 @@
   export default {
     name: "NextBack",
     props: {
-      url: ''
+      url: '',
+      id: ''
     },
     data() {
       return {
         urls: [
           {url: 'client', component: 'clientView'},
-          {url: 'generalInformation', component: 'generalInfo'},
           {url: 'socialBehavior', component: 'socialBehavior'},
           {url: 'chronicDisease', component: 'chronicDisease'},
           {url: 'childList', component: 'childList'},
@@ -44,10 +44,15 @@
     },
     methods: {
       nextUrl() {
+        if (this.id) {
+          this.$router.push({name: 'husbandList', params: {id: this.id}});
+          return;
+        }
+
         for (var url in this.urls) {
           if (this.url === this.urls[url].url) {
             if (this.urls.length - 1 !== parseInt(url))
-              this.$router.push({name: this.urls[parseInt(url) + 1].component});
+               this.$router.push({name: this.urls[parseInt(url) + 1].component});
           }
         }
         for (var suburl in this.suburls) {
@@ -60,6 +65,8 @@
 
         if (this.url === 'husbandInformation') this.$router.push({name: 'socialLivingCondition'});
         if (this.url === 'child' || this.url === 'childAdd') this.$router.push({name: 'familyMembers'});
+        if (this.url==='husbandList') this.$router.push({name: 'socialLivingCondition'});
+        if (this.url==='husbandAdd') this.$router.push({name: 'socialLivingCondition'});
 
         for (var testurl in this.testurls) {
           if (this.url === this.testurls[testurl].url) {
@@ -86,8 +93,10 @@
           }
         }
 
-        if (this.url === 'husbandInformation') this.$router.push({name: 'familyMembers'});
+        if (this.url === 'husbandInformation') this.$router.push({name: 'husbandList'});
         if (this.url === 'child' || this.url === 'childAdd') this.$router.push({name: 'childList'});
+        if (this.url==='husbandList') this.$router.push({name: 'familyMembers'});
+        if (this.url==='husbandAdd') this.$router.push({name: 'husbandList'});
 
         for (var testurl in this.testurls) {
           if (this.url === this.testurls[testurl].url) {

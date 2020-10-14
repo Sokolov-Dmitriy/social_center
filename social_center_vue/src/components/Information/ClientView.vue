@@ -1,6 +1,7 @@
 <template>
   <div>
-    <template-info v-bind:url="'client'" v-bind:header="'1. Сведения о клиенте'" v-bind:identifier="id" ref="template" @addInfo="addInfo"
+    <template-info v-bind:url="'client'" v-bind:header="'1.1 Общая информация'" v-bind:identifier="id" ref="template"
+                   @addInfo="addInfo"
                    v-bind:identifier_field="'client'" @postInfo="postInfo"></template-info>
     <div class="container" v-if="add">
       <validation-observer ref="observer" v-slot="{ handleSubmit }">
@@ -20,20 +21,32 @@
             </validation-provider>
 
             <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                 v-else-if="['dateOfInterview','dateOfCertified','dod','passDateIssue'].includes(key)">
+                                 v-else-if="['dateOfInterview','dateOfCertified','passDateIssue'].includes(key)">
               <b-form-input v-model="items[key]" :value="items[key]" type="date"
                             :state="getValidationState(validationContext)"/>
             </validation-provider>
 
             <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                 v-else-if="['passSeries','passNumber','addressIndex','adultsCount','minorsCount'].includes(key)">
-              <b-form-input v-model="items[key]" :value="items[key]" type="number" min="0"
+                                 v-else-if="'dod'===key">
+              <b-form-input v-model="items[key]" :value="items[key]" type="date" @change="getAge(items[key])"
                             :state="getValidationState(validationContext)"/>
             </validation-provider>
 
             <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                 v-else-if="key==='age'">
-              <b-form-input v-model="items[key]=getAge.toString()" :value="items[key]=getAge.toString()" type="number"
+                                 v-else-if="['age','adultsCount','minorsCount'].includes(key)">
+              <b-form-input v-model="items[key]" :value="items[key]" type="number" min="0"
+                            :state="getValidationState(validationContext)"/>
+            </validation-provider>
+
+            <validation-provider :rules="{required: false,length:6}" v-slot="validationContext"
+                                 v-else-if="['passNumber','addressIndex'].includes(key)">
+              <b-form-input v-model="items[key]" :value="items[key]" type="number"
+                            :state="getValidationState(validationContext)"/>
+            </validation-provider>
+
+            <validation-provider :rules="{required: false,length:4}" v-slot="validationContext"
+                                 v-else-if="'passSeries'===key">
+              <b-form-input v-model="items[key]" :value="items[key]" type="number"
                             :state="getValidationState(validationContext)"/>
             </validation-provider>
 
@@ -122,15 +135,24 @@
       getValidationState({dirty, validated, valid = null}) {
         return dirty || validated ? valid : null;
       },
-    },
-    computed: {
-      getAge() {
-        var date = new Date(this.items['dod']);
+      getAge(dod) {
+        var date = new Date(dod);
         var ageDifMs = Date.now() - date.getTime();
         var ageDate = new Date(ageDifMs);
-        return Math.abs(ageDate.getUTCFullYear() - 1970);
+        this.items['age'] = Math.abs(ageDate.getUTCFullYear() - 1970);
       }
-    }
+    },
+    // computed: {
+    //   getAge() {
+    //     if (this.items['dod'] !== null) {
+    //       var date = new Date(this.items['dod']);
+    //       var ageDifMs = Date.now() - date.getTime();
+    //       var ageDate = new Date(ageDifMs);
+    //       return Math.abs(ageDate.getUTCFullYear() - 1970);
+    //     }
+    //     return "";
+    //   }
+    // }
   }
 </script>
 

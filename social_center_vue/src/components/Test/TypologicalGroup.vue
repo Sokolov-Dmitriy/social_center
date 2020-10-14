@@ -176,9 +176,7 @@
           type: "GET",
           data: {client: sessionStorage.getItem('id'), test: this.test_id},
           success: (response) => {
-            // console.log(response.data);
-            // && response.data.general_info[0].age !== null && response.data.chronic_disease[0].hepatitisC !== null && response.data.boyko[0].aggressiveness !== null && response.data.social_behavior[0].caseExaminedInKDN_ZP !== null
-            if (response.data.social_behavior[0] && response.data.boyko[0] && response.data.chronic_disease[0] && response.data.general_info[0]) {
+            if (response.data.social_behavior[0] && response.data.boyko[0] && response.data.chronic_disease[0]) {
               if (response.data.social_behavior[0].caseExaminedInKDN_ZP === 1 && response.data.boyko[0].aggressiveness === 1)
                 this.array['group'] = 1;
               else if (response.data.social_behavior[0].caseExaminedInKDN_ZP === 2 && response.data.boyko[0].aggressiveness === 0) {
@@ -216,7 +214,7 @@
               }
               this.no_data = true;
               alert("Одна или несколько таблиц,содержащих критерии определения типологической группы, отсутствуют: 'Информация о наличии хронического заболевания (Гепатит С,ВИЧ-статус)'," +
-                " 'Общая информация (Возраст)', 'Информация о противоправных действиях, правонарушениях, употреблении наркотиков, алкоголя (Рассматрировалось дело на КДН и ЗП)'.")
+                " 'Информация о противоправных действиях, правонарушениях, употреблении наркотиков, алкоголя (Рассматрировалось дело на КДН и ЗП)'.")
             }
           },
           error: (response) => {

@@ -35,7 +35,7 @@
             <validation-provider :rules="{required: false}" v-slot="validationContext"
                                  v-else-if="key === 'dod'">
               <b-form-input type="date" v-model="items[key]" :value="items[key]"
-                            :state="getValidationState(validationContext)"/>
+                            :state="getValidationState(validationContext)" @change="getAge(items[key])"/>
             </validation-provider>
 
             <validation-provider :rules="{required: false}" v-slot="validationContext"
@@ -84,8 +84,6 @@
       }
     },
     created() {
-      if (this.$route.params.id !== undefined)
-        sessionStorage.setItem('id_husband', this.$route.params.id);
       this.id = sessionStorage.getItem('id_husband');
     },
     methods: {
@@ -111,9 +109,7 @@
       },
       save() {
         this.items['husband'] = parseInt(sessionStorage.getItem('id_husband'));
-        if (this.$refs.template.edit !== '')
-          this.$refs.template.putRequest(this.items);
-        else this.$refs.template.postRequest(this.items);
+        this.$refs.template.putRequest(this.items);
       },
       postInfo() {
         this.add = false;
@@ -125,6 +121,12 @@
       getValidationState({dirty, validated, valid = null}) {
         return dirty || validated ? valid : null;
       },
+       getAge(dod) {
+        var date = new Date(dod);
+        var ageDifMs = Date.now() - date.getTime();
+        var ageDate = new Date(ageDifMs);
+        this.items['age'] = Math.abs(ageDate.getUTCFullYear() - 1970);
+      }
     }
   }
 </script>

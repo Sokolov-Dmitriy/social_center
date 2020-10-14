@@ -24,7 +24,7 @@
               <validation-provider :rules="{required: false}" v-slot="validationContext"
                                    v-else-if="key==='birthdate'">
                 <b-form-input v-model="items[key]"
-                              :state="getValidationState(validationContext)" type="date"/>
+                              :state="getValidationState(validationContext)" type="date" @change="getAge(items[key])"/>
               </validation-provider>
 
               <validation-provider :rules="{required: false}" v-slot="validationContext"
@@ -78,7 +78,7 @@
       addInfo() {
         this.add = true;
         $.ajax({
-          url: this.$store.state.baseUrl+"api/fields/",
+          url: this.$store.state.baseUrl + "api/fields/",
           type: "GET",
           data: {model: 'Child'},
           success: (response) => {
@@ -108,6 +108,12 @@
       getValidationState({dirty, validated, valid = null}) {
         return dirty || validated ? valid : null;
       },
+      getAge(dod) {
+        var date = new Date(dod);
+        var ageDifMs = Date.now() - date.getTime();
+        var ageDate = new Date(ageDifMs);
+        this.items['age'] = Math.abs(ageDate.getUTCFullYear() - 1970);
+      }
     }
   }
 </script>

@@ -405,6 +405,22 @@ class FamilyMembersInformationView(APIView):
         return Response(status=201)
 
 
+class HusbandListView(APIView):
+    """Список мужей/партнеров клиента"""
+
+    def get(self, request):
+        """
+        Получение записи
+
+        :param request: Запрос с id Сведений о членах семьи
+        :return: Список мужей/партнеров клиента
+        """
+        husband = request.GET.get("husband")
+        husband_list = HusbandInformation.objects.filter(husband=husband)
+        serializer = HusbandListSerializers(husband_list, many=True)
+        return Response(serializer.data)
+
+
 class HusbandInformationView(APIView):
     """Информация о муже/партнёре"""
 

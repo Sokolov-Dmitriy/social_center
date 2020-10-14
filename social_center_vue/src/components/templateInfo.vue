@@ -11,7 +11,8 @@
       </button>
       <side-bar-test></side-bar-test>
       <side-bar></side-bar>
-      <next-back v-bind:url="url"></next-back>
+      <next-back v-if="url==='familyMembers' && !no_data" v-bind:url="url" v-bind:id="id"></next-back>
+      <next-back v-else v-bind:url="url"></next-back>
     </div>
 
 
@@ -129,6 +130,7 @@
             // alert("Удаление прошло успешно.");
             if (this.url === 'client') this.$router.push({name: 'mainwindow'});
             else if (this.url === 'child') this.$router.push({name: 'childList'});
+            else if (this.url === 'husbandInformation') this.$router.push({name: 'husbandList'});
           },
           error: (response) => {
             if (response.status === 401) this.logOut();

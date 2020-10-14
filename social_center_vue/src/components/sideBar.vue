@@ -6,7 +6,7 @@
         <b-list-group-item class="my-big-list-group-item">
           <header class="my-title">1. Сведения о клиенте</header>
           <b-list-group class="my-link-group">
-            <b-list-group-item class="my-link" to="/generalInfo">1.1 Общая информация</b-list-group-item>
+            <b-list-group-item class="my-link" to="/info">1.1 Общая информация</b-list-group-item>
             <b-list-group-item class="my-link" to="/socialBehavior">1.2 Информация о противоправных действиях,
               правонарушениях,
               употреблении наркотиков, алкоголя

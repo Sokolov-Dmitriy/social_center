@@ -5,7 +5,6 @@ import MainWindow from "../components/MainPage/MainWindow";
 import Profile from "../components/Profile";
 import Client from "../components/Client";
 import ClientView from "../components/Information/ClientView";
-import GeneralInfo from "../components/Information/GeneralInfo";
 import ASocialBehavior from "../components/Information/ASocialBehavior";
 import ChronicDisease from "../components/Information/ChronicDisease";
 import ChildList from "../components/Information/ChildList";
@@ -39,6 +38,8 @@ import MainPageComp from "../components/Table/MainPageComp";
 import Users from "../components/Users";
 import EnterEmail from "../components/Reset/EnterEmail";
 import ConfirmPassword from "../components/Reset/ConfirmPassword";
+import HusbandList from "../components/Information/HusbandList";
+import HusbandAdd from "../components/Information/HusbandAdd";
 
 Vue.use(Router)
 
@@ -68,11 +69,6 @@ export const router = new Router({
       path: '/info',
       name: 'clientView',
       component: ClientView,
-    },
-    {
-      path: '/generalInfo',
-      name: 'generalInfo',
-      component: GeneralInfo
     },
     {
       path: '/socialBehavior',
@@ -234,6 +230,16 @@ export const router = new Router({
       name: 'confirmPassword',
       component: ConfirmPassword,
     },
+    {
+      path: '/husbandList',
+      name: 'husbandList',
+      component: HusbandList
+    },
+    {
+      path: '/husbandAdd',
+      name: 'husbandAdd',
+      component: HusbandAdd
+    }
   ],
 });
 router.beforeEach((to, from, next) => {
