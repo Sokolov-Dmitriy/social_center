@@ -180,10 +180,10 @@ DJOSER = {
 
 # настройки разработки и продакшена
 
-# try:
-#     from .local_settings import *
-# except ImportError:
-#     from .prod_settings import *
+try:
+    from .local_settings import *
+except ImportError:
+    from .prod_settings import *
 
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
