@@ -24,7 +24,7 @@
                             :state="getValidationState(validationContext)"/>
             </validation-provider>
             <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                 v-if="key==='kindOfDrug'">
+                                 v-if="['kindOfDrug','wherePsyRehWasD','wherePsyRehWasA'].includes(key)">
               <b-textarea v-model="items[key]" :value="items[key]"
                           :state="getValidationState(validationContext)"/>
             </validation-provider>
@@ -68,6 +68,7 @@
           type: "GET",
           data: {model: 'ASocialBehavior'},
           success: (response) => {
+            // console.log(response.data)
             this.labels = response.data.labels;
             this.choices = response.data.choices;
             if (this.$refs.template.edit !== '')
