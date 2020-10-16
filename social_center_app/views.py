@@ -1927,6 +1927,41 @@ def expertOpinion(serializer):
 def deleteIDForClient(serializer):
     newArray = []
     array = getInformation(serializer)
+    for direct in array[1]:
+        copy = direct.copy()
+        direct.clear()
+        passArray = ''
+        for key in array[0].keys():
+
+            # print(key + ' ')
+            if key == 'passSeries' or key == 'passNumber':
+
+                if copy.get(key)==None:
+                    print(copy.get(key))
+                    passArray=passArray
+                else:
+                    passArray = passArray+" "+str(copy.get(key))
+                direct.update({'passSeries':passArray})
+            else:
+                direct.update({key: copy.get(key)})
+
+        # direct.pop('passNumber')
+        direct.update({'id': copy.get('id')})
+        # print(copy.get('client'))
+    array[0].pop('passNumber')
+    array[0].update({'passSeries':"Серия,номер"})
+    # array[0].pop("id")
+    # array[0].pop("client")
+    # newArray.append(array[0].values())
+    # newArray.append({})
+    # for value in array[1]:
+    #     buf = value.get("client")
+    #     value.pop("id")
+    #     value.pop("client")
+    #     newArray[1].update({buf: value.values()})
+
+    # newArray = []
+    # array = getInformation(serializer)
     array[0].pop("id")
     array[0].pop("full_name")
     newArray.append(array[0].values())
@@ -1936,6 +1971,8 @@ def deleteIDForClient(serializer):
         value.pop("id")
         value.pop("full_name")
         newArray[1].update({buf: value.values()})
+
+    # print(newArray)
     return newArray
 
 
@@ -1966,8 +2003,8 @@ def mySwitch(value):
             return []
         return makeMarking(
             deleteIDForClient(ClientSerializers(Client.objects.all(), many=True)),
-            'general',
-            'Сведения о клиенте(общее)'
+            'generalInformation',
+            'Общая информация'
         )
     # elif value == "1":
     #     if (len(GeneralInformationSerializers(GeneralInformation.objects.all(), many=True).data) == 0):
@@ -1978,7 +2015,7 @@ def mySwitch(value):
     #         'generalInformation',
     #         'Общая информация'
     #     )
-    elif value == "2":
+    elif value == "1":
         if (len(ASocialBehaviorSerializers(ASocialBehavior.objects.all(), many=True).data) == 0):
             return []
         # return deleteIDClient(ASocialBehaviorSerializers(ASocialBehavior.objects.all(), many=True))
@@ -1987,7 +2024,7 @@ def mySwitch(value):
             'alcoholDrugsClient',
             'Информация о противоправных действиях, правонарушениях, употреблении наркотиков, алкоголя'
         )
-    elif value == "3":
+    elif value == "2":
         if (len(ChronicDiseaseSerializers(ChronicDisease.objects.all(), many=True).data) == 0):
             return []
         # return deleteIDClient(ChronicDiseaseSerializers(ChronicDisease.objects.all(), many=True))
@@ -1996,11 +2033,11 @@ def mySwitch(value):
             'chronicDisease',
             'Информация о наличии хронического заболевания'
         )
-    elif value == "4":
+    elif value == "3":
         if (len(ChildSerializers(Child.objects.all(), many=True).data) == 0):
             return []
         return deleteExcessDataFromChild(ChildSerializers(Child.objects.all(), many=True))
-    elif value == "5":
+    elif value == "4":
         if (len(FamilyMembersInformationSerializers(FamilyMembersInformation.objects.all(), many=True).data) == 0):
             return []
         # return deleteIDClient(FamilyMembersInformationSerializers(FamilyMembersInformation.objects.all(), many=True))
@@ -2009,7 +2046,7 @@ def mySwitch(value):
             'generalInformationFamily',
             'Общие сведения о членах семьи'
         )
-    elif value == "6":
+    elif value == "5":
         if (len(HusbandInformationSerializers(HusbandInformation.objects.all(), many=True).data) == 0):
             return []
         # return deleteIDClient(
@@ -2019,7 +2056,7 @@ def mySwitch(value):
             'husbendInformation',
             'Информация о муже/партнёре'
         )
-    elif value == "7":
+    elif value == "6":
         if (len(SocialLivingConditionSerializers(SocialLivingCondition.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
@@ -2028,7 +2065,7 @@ def mySwitch(value):
             'Социально-бытовые условия'
         )
         # return deleteIDClient(SocialLivingConditionSerializers(SocialLivingCondition.objects.all(), many=True))
-    elif value == "8":
+    elif value == "7":
         if (len(SocialEconomicConditionSerializers(SocialEconomicCondition.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
@@ -2036,7 +2073,7 @@ def mySwitch(value):
             'socialEconomConditions',
             'Социально-экономические условия проживания'
         )
-    elif value == "9":
+    elif value == "8":
         if (len(ExpertOpinionSerializers(ExpertOpinion.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
@@ -2045,7 +2082,7 @@ def mySwitch(value):
             'Заключение специалиста'
         )
         # return deleteIDClient(expertOpinion(ExpertOpinionSerializers(ExpertOpinion.objects.all(), many=True)))
-    elif value == "10":
+    elif value == "9":
         if (len(TestBoykoSerializers(TestBoyko.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
@@ -2057,7 +2094,7 @@ def mySwitch(value):
         )
         # return testAndRes(0, TestBoykoSerializers(TestBoyko.objects.all(), many=True),
         # InterpretationBoykoSerializers(InterpretationBoyko.objects.all(), many=True))
-    elif value == "11":
+    elif value == "10":
         if (len(TestGAGESerializers(TestGAGE.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
@@ -2068,7 +2105,7 @@ def mySwitch(value):
         )
         # return testAndRes(0, TestGAGESerializers(TestGAGE.objects.all(), many=True),
         #                   InterpretationGAGESerializers(InterpretationGAGE.objects.all(), many=True))
-    elif value == "12":
+    elif value == "11":
         if (len(TestSOCRATESSerializers(TestSOCRATES.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
@@ -2079,7 +2116,7 @@ def mySwitch(value):
         )
         # return testAndRes(0, TestSOCRATESSerializers(TestSOCRATES.objects.all(), many=True),
         #                   InterpretationSOCRATESSerializers(InterpretationSOCRATES.objects.all(), many=True))
-    elif value == "13":
+    elif value == "12":
         if (len(TestBoykoSerializers(TestBoyko.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
@@ -2090,7 +2127,7 @@ def mySwitch(value):
         )
         # return testAndRes(1, TestBoykoSerializers(TestBoyko.objects.all(), many=True),
         #                   InterpretationBoykoSerializers(InterpretationBoyko.objects.all(), many=True))
-    elif value == "14":
+    elif value == "13":
         if (len(TestGAGESerializers(TestGAGE.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
@@ -2101,7 +2138,7 @@ def mySwitch(value):
         )
         # return testAndRes(1, TestGAGESerializers(TestGAGE.objects.all(), many=True),
         #                   InterpretationGAGESerializers(InterpretationGAGE.objects.all(), many=True))
-    elif value == "15":
+    elif value == "14":
         if (len(TestSOCRATESSerializers(TestSOCRATES.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
@@ -2116,9 +2153,133 @@ def mySwitch(value):
         return -1
 
 
+class Table:
+    __size = 0
+    __id_array = None
+    __parent_id = None
+    __labels = None
+    __serializer = None
+    __parent_table = None
+    __table_body = None
+
+    def __init__(self, **kwargs):
+        self.serializer = kwargs.get("serializer")
+        self.parent_table = kwargs.get("parent_table")
+
+    #############################################
+    #############################################
+    ###||||||||||||||||||||||||||||||||||||||
+    #############################################
+    #############################################
+    def __set_labels(self, labels):
+        if labels is not None:
+            print("__set_labels")
+            self.__labels = labels
+
+    def __get_labels(self):
+        print("__get_labels")
+        return self.__labels
+
+    def __set_serializer(self, serializer):
+        if serializer is not None and len(serializer.data) > 0:
+            print("__set_serializer")
+            self.__serializer = serializer
+            self.labels = serializer.data[0].get('labels')
+
+    def __get_serializer(self):
+        print("__get_serializer")
+        return self.__serializer
+
+    def __set_parent_table(self, parent_table):
+        if parent_table is not None:
+            print("__set_parent_table")
+            self.__parent_table = parent_table
+
+    def __get_parent_table(self):
+        print("__get_parent_table")
+        return self.__parent_table
+
+    ############################
+    ############################
+    ### дописать функционал, чтобы при установки списка id, дописывались новые данные в список(все null)
+    def __set_id_array(self, id_array):
+        if id_array is not None:
+            print("__set_id_array")
+            self.__id_array = id_array
+
+    def __get_id_array(self):
+        print("__get_id_array")
+        return self.__id_array
+
+    labels = property(__get_labels, __set_labels)
+    serializer = property(__get_serializer, __set_serializer)
+    id_array = property(__get_id_array, __set_id_array)
+    parent_table = property(__get_parent_table, __set_parent_table)
+
+    def __get_body(self):
+        if self.serializer is not None:
+            # print(self.serializer)
+            for value in self.serializer.data:
+                print(value)
+
+    def __get_id_array(self):
+        self.__id_array = self.__get_and_delete_special_field(self.serializer.data, ["id"])
+
+    def __get_special_fields(self, list, fields):
+        if list is not None:
+            array = []
+            for value in list:
+                buf_array = []
+                for field in fields:
+                    buf_array.append(value.get(field))
+                array.append(buf_array)
+            return array
+        else:
+            return None
+
+    def __delete_special_fields(self, list, fields):
+        if list is not None:
+            for value in list:
+                for field in fields:
+                    value.pop(field)
+
+    def __get_and_delete_special_field(self, list, fields):
+        if list is not None:
+            array = []
+            for value in list:
+                buf_array = []
+                for field in fields:
+                    buf_array.append(value.get(field))
+                    value.pop(field)
+                array.append(buf_array)
+            return array
+        else:
+            return None
+
+    def start(self):
+        self.labels.pop("id")
+
+        for i in self.__get_special_fields(self.serializer.data, self.labels):
+            print(i)
+        # print(self.__get_special_fields(self.serializer.data,self.labels))
+        # self.__get_body()
+        # self.__get_id_array()
+        # print(self.__id_array)
+    # def __comparison(self):
+
+    # def __parse_labels_from_serializer(self):
+    #     return
+
+
 class GetTable(APIView):
 
     def get(self, request):
+        # print(ChronicDiseaseSerializers(ChronicDisease.objects.all(), many=True).data)
+
+        # table = Table(serializer=ClientSerializers(Client.objects.all(), many=True))
+        # table.start()
+        #
+        # return Response([])
 
         dataArray = getIDFN(ClientSerializers(Client.objects.all(), many=True))
         dataArray.append({
@@ -2184,3 +2345,4 @@ class TestsAnswers(APIView):
             })
             num = num + 1
         return Response(dict)
+

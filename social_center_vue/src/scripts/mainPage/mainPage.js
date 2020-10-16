@@ -10,6 +10,7 @@ let arrayClient = [];
  * @returns {[]}
  */
 let parseReq = (response) => {
+  arrayClient=[];
   for (let data of JSON.parse(response).data) {
     arrayClient.push({
       id: data.id,
