@@ -16,7 +16,7 @@
 
     <div class="container">
       <div class="card">
-        <div class="card-header">Список мужей/партнеров</div>
+        <div class="card-header">Сведения о партнёре (муже/жене)</div>
         <table class="table table-hover">
           <thead class="thead">
           <tr>
