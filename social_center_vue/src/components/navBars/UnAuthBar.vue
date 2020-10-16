@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light " style="background-color: #D2B48C;padding: 30px;">
-    <span class="navbar-brand"><font style="color: #FFF8DC;">КСЦОН</font> Красносельского района</span>
+    <span class="navbar-brand"><font style="color: #FFF8DC;">КЦСОН</font> Красносельского района</span>
     <span class="navbar-brand" style="color: #0b2e13"></span>
   </nav>
 </template>

@@ -78,7 +78,15 @@ export default {
   },
   methods: {
     addHusband() {
-      this.$router.push({name: 'husbandAdd'})
+      ////////////////////////////////
+      /////////////////////////////
+      ////////ВРЕМЕННООООООООО1
+      /////////////////////////////////
+      if(this.husbands.length>=1){
+        alert("По техническим причинам в данные момент нельзя добавить более одного партнера. \nВ ближайшее время проблема будет решена.")
+      } else {
+        this.$router.push({name: 'husbandAdd'})
+      }
     },
     toInfo(value) {
       this.$router.push({name: 'husbandInformation', params: {id: value}})
