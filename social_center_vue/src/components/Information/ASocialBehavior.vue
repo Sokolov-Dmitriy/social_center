@@ -1,7 +1,8 @@
 <template>
   <div>
-    <template-info v-bind:url="'socialBehavior'" v-bind:header="'1.2 Информация о противоправных действиях, правонарушениях,\n'+
-'употреблении наркотиков, алкоголя'" v-bind:identifier="id" v-bind:identifier_field="'client'" ref="template"
+    <template-info v-bind:url="'socialBehavior'" v-bind:header="'1. Сведения о клиенте'"
+                   v-bind:subtitle="'1.2 Информация о противоправных действиях, правонарушениях, употреблении наркотиков, алкоголя'"
+                   v-bind:identifier="id" v-bind:identifier_field="'client'" ref="template"
                    @addInfo="addInfo" @postInfo="postInfo"></template-info>
     <div class="container" v-if="add">
       <validation-observer ref="observer" v-slot="{ handleSubmit }">

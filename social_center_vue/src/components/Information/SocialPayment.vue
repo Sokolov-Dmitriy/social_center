@@ -1,6 +1,8 @@
 <template>
   <div>
-    <template-info v-bind:url="'socialPayment'" v-bind:header="'Социальные выплаты'"
+    <template-info v-bind:url="'socialPayment'"
+                   v-bind:header="'4.2 Социально-экономические условия проживания'"
+                   v-bind:subtitle="'Социальные выплаты'"
                    v-bind:identifier="id" v-bind:identifier_field="'economic_condition'" ref="template"
                    @addInfo="addInfo"
                    @postInfo="postInfo"></template-info>

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <template-info v-bind:url="'chronicDisease'" v-bind:header="'1.3 Информация о наличии хронического заболевания'"
+    <template-info v-bind:url="'chronicDisease'" v-bind:header="'1. Сведения о клиенте'"
+                   v-bind:subtitle="'1.3 Информация о наличии хронического заболевания'"
                    v-bind:identifier="id" v-bind:identifier_field="'client'" ref="template" @addInfo="addInfo"
                    @postInfo="postInfo"></template-info>
     <div class="container" v-if="add">

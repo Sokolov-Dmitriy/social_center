@@ -1,6 +1,7 @@
 <template>
   <div>
-    <template-info v-bind:url="'socialEconomic'" v-bind:header="'4.2 Социально-экономические условия проживания'"
+    <template-info v-bind:url="'socialEconomic'" v-bind:header="'4. Сведения о социально-бытовом и социально-экономическом положении'"
+                   v-bind:subtitle="'4.2 Социально-экономические условия проживания'"
                    v-bind:identifier="id" v-bind:identifier_field="'client'" ref="template" @addInfo="addInfo"
                    @postInfo="postInfo"></template-info>
     <div class="container" v-if="add">

@@ -1,6 +1,8 @@
 <template>
   <div>
-    <template-info v-bind:url="'client'" v-bind:header="'1.1 Общая информация'" v-bind:identifier="id" ref="template"
+    <template-info v-bind:url="'client'" v-bind:header="'1. Сведения о клиенте'"
+                   v-bind:subtitle="'1.1. Общая информация'"
+                   v-bind:identifier="id" ref="template"
                    @addInfo="addInfo"
                    v-bind:identifier_field="'client'" @postInfo="postInfo"></template-info>
     <div class="container" v-if="add">

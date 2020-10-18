@@ -1,6 +1,8 @@
 <template>
   <div>
-    <template-info v-bind:url="'sourceIncome'" v-bind:header="'Источники дохода'"
+    <template-info v-bind:url="'sourceIncome'"
+                   v-bind:header="'4.2 Социально-экономические условия проживания'"
+                   v-bind:subtitle="'Источники дохода'"
                    v-bind:identifier="id" v-bind:identifier_field="'economic_condition'" ref="template"
                    @addInfo="addInfo"
                    @postInfo="postInfo"></template-info>

@@ -27,6 +27,7 @@
                       v-if="url==='child'"></template-child>
       <div class="card" v-if="url!=='child'">
         <div class="card-header" v-html="header"></div>
+        <div v-if="url!=='expertOpinion'" class="my-block">{{subtitle}}</div>
         <table class="table table-hover" v-if="!isHide">
           <thead class="thead noprint">
           <tr>
@@ -70,6 +71,7 @@
     props: {
       url: '',
       header: '',
+      subtitle: '',
       identifier: '',
       identifier_field: ''
     },
@@ -263,6 +265,13 @@
   .td-left {
     text-align: left;
     padding-left: 40px;
+  }
+
+  .my-block {
+    text-align: center;
+    color: #492727;
+    font-size: 18px;
+    padding: 20px;
   }
 
   @media print {

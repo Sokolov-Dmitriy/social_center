@@ -1,6 +1,8 @@
 <template>
   <div>
-    <template-info v-bind:url="'childAllowance'" v-bind:header="'Детские пособия и компенсационные выплаты'"
+    <template-info v-bind:url="'childAllowance'"
+                   v-bind:header="'4.2 Социально-экономические условия проживания'"
+                   v-bind:subtitle="'Детские пособия и компенсационные выплаты'"
                    v-bind:identifier="id" v-bind:identifier_field="'economic_condition'" ref="template"
                    @addInfo="addInfo"
                    @postInfo="postInfo"></template-info>

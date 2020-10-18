@@ -1,12 +1,12 @@
 <template>
   <div>
     <template-info v-bind:url="'child'" v-bind:identifier="id" ref="template" @addInfo="addInfo"
-                   v-bind:header="'2.1 Общая информация<br>2.2 Информация о состоянии здоровья ребенка'"
                    v-bind:identifier_field="'child'"
                    @postInfo="postInfo"></template-info>
     <div class="container" v-if="add">
       <validation-observer ref="observer" v-slot="{ handleSubmit }">
         <b-form @submit.stop.prevent="handleSubmit(save)" @reset="notSave" class="my-form">
+          <div class="my-block">2.1 Общая информация</div>
           <div v-for="(value,key) in labels" :key="key">
             <div v-if="key==='health'" class="my-block">2.2 Информация о состоянии здоровья ребёнка</div>
             <b-form-group label-cols-sm="3" :label="labels[key]" label-align-sm="right"

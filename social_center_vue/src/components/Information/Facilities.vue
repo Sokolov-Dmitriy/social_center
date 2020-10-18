@@ -1,7 +1,8 @@
 <template>
   <div>
     <template-info v-bind:url="'facilities'"
-                   v-bind:header="'Льготы и меры социальной поддержки, предусмотренные для определённых категорий'"
+                   v-bind:header="'4.2 Социально-экономические условия проживания'"
+                   v-bind:subtitle="'Льготы и меры социальной поддержки, предусмотренные для определённых категорий'"
                    v-bind:identifier="id" v-bind:identifier_field="'economic_condition'" ref="template"
                    @addInfo="addInfo"
                    @postInfo="postInfo"></template-info>

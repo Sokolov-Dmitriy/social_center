@@ -1,7 +1,8 @@
 <template>
   <div>
     <div class="card">
-      <div class="card-header" v-html="'2.1. Общая информация'"></div>
+      <div class="card-header" v-html="'2. Сведения о детях'"></div>
+      <div v-if="!isHide" class="my-block">2.1. Общая информация</div>
       <table class="table table-hover" v-if="!isHide">
         <thead class="thead noprint" v-if="end">
         <tr>
@@ -19,7 +20,8 @@
     </div>
 
     <div class="card">
-      <div class="card-header" v-html="'2.2. Информация о состоянии здоровья ребёнка'" v-if="!isHide"></div>
+      <div v-if="!isHide" class="card-header" v-html="'2. Сведения о детях'"></div>
+      <div v-if="!isHide" class="my-block">2.2. Информация о состоянии здоровья ребёнка</div>
       <table class="table table-hover" v-if="!isHide">
         <thead class="thead noprint" v-if="end">
         <tr>
@@ -108,6 +110,13 @@
   .td-left {
     text-align: left;
     padding-left: 40px;
+  }
+
+  .my-block {
+    text-align: center;
+    color: #492727;
+    font-size: 18px;
+    padding: 20px;
   }
 
   @media print {
