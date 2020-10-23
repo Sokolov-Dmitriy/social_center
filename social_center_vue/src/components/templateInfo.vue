@@ -43,8 +43,8 @@
           </tbody>
         </table>
         <navigation v-if="!no_data && !isHide" v-bind:url="url" v-bind:id="id" class="noprint"></navigation>
-        <button class="btn btn-default" type="button" v-if="no_data && !isHide" @click="addInfo">ДОБАВИТЬ <span
-          class="fa fa-plus-circle fa-2x"/></button>
+<!--        <button class="btn btn-default" type="button" v-if="no_data && !isHide" @click="addInfo">ДОБАВИТЬ <span-->
+<!--          class="fa fa-plus-circle fa-2x"/></button>-->
       </div>
     </div>
   </div>
@@ -101,8 +101,10 @@
           type: "GET",
           data: map,
           success: (response) => {
-            if (response === undefined)
+            if (response === undefined) {
               this.no_data = true;
+              this.addInfo();
+            }
             else {
               this.id = response.data[0].id;
               this.items = response.data[0].attributes;
@@ -128,8 +130,9 @@
             this.edit = '';
             this.isHide = false;
             this.no_data = true;
-            this.$emit('postInfo');
-            // alert("Удаление прошло успешно.");
+            // this.$emit('postInfo');
+            if (!['client','child','husbandInformation'].includes(this.url))
+              this.addInfo();
             if (this.url === 'client') this.$router.push({name: 'mainwindow'});
             else if (this.url === 'child') this.$router.push({name: 'childList'});
             else if (this.url === 'husbandInformation') this.$router.push({name: 'husbandList'});
