@@ -32,7 +32,7 @@
 
 
           </b-form-group>
-          <button class="btn btn-default" type="reset">Отмена</button>
+          <button v-if="!$refs.template.no_data" class="btn btn-default" type="reset">Отмена</button>
           <button class="btn btn-default" type="submit">Добавить</button>
         </b-form>
       </validation-observer>
