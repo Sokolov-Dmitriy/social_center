@@ -21,7 +21,7 @@
             </validation-provider>
 
             <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                 v-else-if="['fullName','address'].includes(key)">
+                                  v-else-if="['IPPSNumber','contractNumber','fullName','address'].includes(key)">
               <b-form-input type="text" v-model="items[key]" :value="items[key]"
                             :state="getValidationState(validationContext)"/>
             </validation-provider>
@@ -32,6 +32,12 @@
               <b-form-input type="tel" v-model="items[key]" :value="items[key]"
                             :state="getValidationState(validationContext)"/>
             </validation-provider>
+
+            <validation-provider :rules="{required: false}" v-slot="validationContext"
+                                   v-else-if="['DateOfCreationIPSO','ContractPeriod'].includes(key)">
+                <b-form-input type="date" v-model="items[key]" :value="items[key]"
+                              :state="getValidationState(validationContext)"/>
+              </validation-provider>
 
             <validation-provider :rules="{required: false}" v-slot="validationContext"
                                  v-else-if="key === 'dod'">
@@ -85,6 +91,8 @@
       }
     },
     created() {
+      if (this.$route.params.id !== undefined)
+        sessionStorage.setItem('id_husband', this.$route.params.id);
       this.id = sessionStorage.getItem('id_husband');
     },
     methods: {
@@ -109,7 +117,6 @@
         })
       },
       save() {
-        this.items['husband'] = parseInt(sessionStorage.getItem('id_husband'));
         this.$refs.template.putRequest(this.items);
       },
       postInfo() {

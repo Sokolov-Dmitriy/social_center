@@ -22,6 +22,11 @@
               </validation-provider>
 
               <validation-provider :rules="{required: false}" v-slot="validationContext"
+                                     v-else-if="['DateOfCreationIPSO','ContractPeriod'].includes(key)">
+                  <b-form-input v-model="items[key]" :state="getValidationState(validationContext)" type="date"/>
+                </validation-provider>
+
+              <validation-provider :rules="{required: false}" v-slot="validationContext"
                                    v-else-if="key==='birthdate'">
                 <b-form-input v-model="items[key]"
                               :state="getValidationState(validationContext)" type="date" @change="getAge(items[key])"/>

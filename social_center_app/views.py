@@ -412,11 +412,11 @@ class HusbandListView(APIView):
         """
         Получение записи
 
-        :param request: Запрос с id Сведений о членах семьи
+        :param request: Запрос с id Клиента
         :return: Список мужей/партнеров клиента
         """
-        husband = request.GET.get("husband")
-        husband_list = HusbandInformation.objects.filter(husband=husband)
+        client = request.GET.get("client")
+        husband_list = HusbandInformation.objects.filter(client=client)
         serializer = HusbandListSerializers(husband_list, many=True)
         return Response(serializer.data)
 
@@ -428,7 +428,7 @@ class HusbandInformationView(APIView):
         """
         Получение записи
 
-        :param request: Запрос с id Сведений о членах семьи
+        :param request: Запрос с id мужа/партнёра
         :param pk: id Сведений о членах семьи
         :return: Информация о муже/партнёре, в случае отсутствия записи No Content
         """
@@ -436,7 +436,7 @@ class HusbandInformationView(APIView):
             husband = request.GET.get("husband")
         else:
             husband = pk
-        husband_information = HusbandInformation.objects.filter(husband=husband)
+        husband_information = HusbandInformation.objects.filter(pk=husband)
         if husband_information.exists():
             if pk is None:
                 serializer = HusbandInformationSerializers(husband_information, many=True)
@@ -455,8 +455,8 @@ class HusbandInformationView(APIView):
         """
         husband_information = HusbandInformationCRUDSerializers(data=request.data)
         if husband_information.is_valid():
-            husband = get_object_or_404(FamilyMembersInformation, id=self.request.data.get('husband'))
-            husband_information.save(husband=husband)
+            client = get_object_or_404(Client, id=self.request.data.get('client'))
+            husband_information.save(client=client)
             return Response(status=201)
         else:
             return Response(status=400)

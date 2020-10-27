@@ -30,7 +30,7 @@
               </validation-provider>
 
               <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                   v-else-if="['fullName','address'].includes(key)">
+                                   v-else-if="['IPPSNumber','contractNumber','fullName','address'].includes(key)">
                 <b-form-input type="text" v-model="items[key]" :value="items[key]"
                               :state="getValidationState(validationContext)"/>
               </validation-provider>
@@ -40,6 +40,12 @@
                 v-slot="validationContext"
                 v-else-if="key === 'telephoneNumber'">
                 <b-form-input type="tel" v-model="items[key]" :value="items[key]"
+                              :state="getValidationState(validationContext)"/>
+              </validation-provider>
+
+              <validation-provider :rules="{required: false}" v-slot="validationContext"
+                                   v-else-if="['DateOfCreationIPSO','ContractPeriod'].includes(key)">
+                <b-form-input type="date" v-model="items[key]" :value="items[key]"
                               :state="getValidationState(validationContext)"/>
               </validation-provider>
 
@@ -117,7 +123,7 @@ export default {
   },
   methods: {
     save() {
-      this.items['husband'] = parseInt(sessionStorage.getItem('id_husband'));
+      this.items['client'] = parseInt(sessionStorage.getItem('id'));
       $.ajax({
         url: this.$store.state.baseUrl + "api/husbandInformation/",
         type: "POST",

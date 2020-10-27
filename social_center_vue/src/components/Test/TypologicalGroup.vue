@@ -109,16 +109,16 @@
               this.test_id = response.data[0].relationships.test.data.id;
               if (type === 'put') this.update('put');
               else {
-                if (this.items.group === 'Группа 1') {
+                if (this.items.group.indexOf('Группа 1') + 1) {
                   this.text = this.texts[0];
                   this.header = this.items.group;
-                } else if (this.items.group === 'Группа 2') {
+                } else if (this.items.group.indexOf('Группа 2') + 1) {
                   this.text = this.texts[1];
                   this.header = this.items.group;
-                  if (this.items.subgroup === 'Группа 2.1') {
+                  if (this.items.subgroup.indexOf('Группа 2.1') + 1) {
                     this.text = this.texts[2];
                     this.header = this.items.subgroup;
-                  } else if (this.items.subgroup === 'Группа 2.2') {
+                  } else if (this.items.subgroup.indexOf('Группа 2.2') + 1) {
                     this.text = this.texts[3];
                     this.header = this.items.subgroup;
                   }

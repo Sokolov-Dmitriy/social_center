@@ -57,8 +57,10 @@ class ClientListForMainWindow(serializers.ModelSerializer):
 class ClientSerializers(MyModelSerializer):
     """Клиент"""
     formOfReferral = ChoiceField(choices=Client.FORM_OF_REFERRAL)
+    placementSocialSupport = ChoiceField(choices=Client.PLACEMENT_SOCIAL_SUPPORT)
     sex = ChoiceField(choices=Client.SEX)
-    municipalDistrict = ChoiceField(choices=Client.MUNICIPAL_DISTRICT)
+    registrationMunicipalDistrict = ChoiceField(choices=Client.MUNICIPAL_DISTRICT)
+    actualMunicipalDistrict = ChoiceField(choices=Client.MUNICIPAL_DISTRICT)
     dependence = ChoiceField(choices=Client.DEPENDENCE)
     stateOfDependence = ChoiceField(choices=Client.STATE_OF_DEPENDENCE)
     workPlace = ChoiceField(choices=Client.WORK_PLACE)
@@ -95,6 +97,7 @@ class ChildListSerializers(serializers.ModelSerializer):
 
 class ChildSerializers(MyModelSerializer):
     """Ребенок"""
+    placementSocialSupport = ChoiceField(choices=Child.PLACEMENT_SOCIAL_SUPPORT)
     sex = ChoiceField(choices=Child.SEX)
     status = ChoiceField(choices=Child.STATUS)
     location = ChoiceField(choices=Child.LOCATION)
@@ -105,12 +108,13 @@ class ChildSerializers(MyModelSerializer):
     reason_refusal = ChoiceField(choices=Child.REASON)
 
     health = ChoiceField(choices=YESNO)
-    withdrawal_symptoms = ChoiceField(choices=YESNO)
-    with_mother = ChoiceField(choices=YESNO)
+    withdrawal_symptoms = ChoiceField(choices=YES_NO_DONTKNOW)
+    with_mother = ChoiceField(choices=YES_NO_DONTKNOW)
     hiv_status_child = ChoiceField(choices=Child.HIV)
     hiv_plus = ChoiceField(choices=YESNO)
     center_aids = ChoiceField(choices=YESNO)
     hiv_prevention = ChoiceField(choices=YES_NO_DONTKNOW)
+    dependence = ChoiceField(choices=Child.DEPENDENCE)
 
     class Meta:
         model = Child
@@ -304,7 +308,6 @@ class FamilyMembersInformationSerializers(MyModelSerializer):
     """Сведения о членах семьи"""
     maritalStatus = ChoiceField(choices=FamilyMembersInformation.MARITAL_STATUS)
     withWhomLiving = ChoiceField(choices=FamilyMembersInformation.LIVING_WITH_WHOM)
-    regularPartner = ChoiceField(choices=YESNO)
 
     class Meta:
         model = FamilyMembersInformation
@@ -329,6 +332,7 @@ class HusbandListSerializers(serializers.ModelSerializer):
 
 class HusbandInformationSerializers(MyModelSerializer):
     """Информация о муже/партнёре"""
+    placementSocialSupport = ChoiceField(choices=HusbandInformation.PLACEMENT_SOCIAL_SUPPORT)
     workPlace = ChoiceField(choices=HusbandInformation.WORK_PLACE)
     avDoc = ChoiceField(choices=YESNO)
     cityzenship = ChoiceField(choices=HusbandInformation.CITYZENSHIP)

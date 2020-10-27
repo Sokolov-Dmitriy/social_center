@@ -20,7 +20,7 @@
               </b-form-select>
             </validation-provider>
             <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                 v-else-if="['frequencyOfVisitsAIDSCenter','reasonForNotGettingTreatment'].includes(key)">
+                                 v-else-if="'reasonForNotGettingTreatment'===key">
               <b-textarea v-model="items[key]" :value="items[key]"
                           :state="getValidationState(validationContext)"/>
             </validation-provider>

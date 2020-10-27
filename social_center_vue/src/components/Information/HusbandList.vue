@@ -31,7 +31,7 @@
           </tr>
           </tbody>
         </table>
-        <button class="btn btn-default noprint" type="button" @click="addHusband">ДОБАВИТЬ МУЖА/ПАРТНЕРА <span
+        <button class="btn btn-default noprint" type="button" @click="addHusband">ДОБАВИТЬ ПАРТНЕРА (МУЖА/ЖЕНУ) <span
           class="fa fa-plus-circle fa-2x"/></button>
       </div>
     </div>
@@ -59,14 +59,10 @@ export default {
     }
   },
   created() {
-    if (this.$route.params.id !== undefined)
-      sessionStorage.setItem('id_husband', this.$route.params.id);
-    this.id = sessionStorage.getItem('id_husband');
-
     $.ajax({
       url: this.$store.state.baseUrl + "api/husbands/",
       type: "GET",
-      data: {husband: sessionStorage.getItem("id_husband")},
+      data: {client: sessionStorage.getItem("id")},
       success: (response) => {
         this.husbands = response.data
       },

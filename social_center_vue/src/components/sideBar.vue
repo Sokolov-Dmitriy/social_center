@@ -16,7 +16,17 @@
           </b-list-group>
         </b-list-group-item>
         <b-list-group-item class="my-title-one" to="/childList">2. Сведения о детях</b-list-group-item>
-        <b-list-group-item class="my-title-one" to="/familyMembers">3. Сведения о членах семьи</b-list-group-item>
+
+        <b-list-group-item class="my-big-list-group-item">
+          <header class="my-title">3. Сведения о членах семьи</header>
+          <b-list-group class="my-link-group">
+            <b-list-group-item class="my-link" to="/familyMembers">3.1 Общие сведения</b-list-group-item>
+            <b-list-group-item class="my-link" to="/husbandList">3.2 Информация о муже/партнёре
+            </b-list-group-item>
+          </b-list-group>
+        </b-list-group-item>
+
+
         <b-list-group-item class="my-big-list-group-item">
           <header class="my-title">4. Сведения о социально-бытовом и социально-экономическом положении</header>
           <b-list-group class="my-link-group">
@@ -25,6 +35,8 @@
             </b-list-group-item>
           </b-list-group>
         </b-list-group-item>
+
+
         <b-list-group-item class="my-title-one margin" to="/expertOpinion">5. Заключение специалиста</b-list-group-item>
       </b-list-group>
     </b-sidebar>

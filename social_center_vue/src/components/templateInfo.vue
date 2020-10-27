@@ -5,14 +5,13 @@
       <button class="btn btn-default" type="button" v-b-toggle.sidebar-border>
         <span class="fa fa-bars fa-2x" style="color:#492727;"></span>
       </button>
-      <b-link to="/info" class="my-link">{{this.$store.state.fullName}}</b-link>
+      <b-link to="/info" class="my-link">{{ this.$store.state.fullName }}</b-link>
       <button class="btn btn-default-right" type="button" v-b-toggle.sidebar-test>
         <span class="fa fa-bars fa-2x" style="color:#492727;"></span>
       </button>
       <side-bar-test></side-bar-test>
       <side-bar></side-bar>
-      <next-back v-if="url==='familyMembers' && !no_data" v-bind:url="url" v-bind:id="id"></next-back>
-      <next-back v-else v-bind:url="url"></next-back>
+      <next-back v-bind:url="url"></next-back>
     </div>
 
 
@@ -27,287 +26,280 @@
                       v-if="url==='child'"></template-child>
       <div class="card" v-if="url!=='child'">
         <div class="card-header" v-html="header"></div>
-        <div v-if="url!=='expertOpinion'" class="my-block">{{subtitle}}</div>
+        <div v-if="url!=='expertOpinion'" class="my-block">{{ subtitle }}</div>
         <table class="table table-hover" v-if="!isHide">
-          <thead class="thead noprint">
-          <tr>
-            <th scope="col">Поле</th>
-            <th scope="col">Значение</th>
-          </tr>
-          </thead>
+<!--          <thead class="thead noprint">-->
+<!--          <tr>-->
+<!--            <th scope="col"><br></th>-->
+<!--            <th scope="col"><br></th>-->
+<!--          </tr>-->
+<!--          </thead>-->
           <tbody v-for="(value,key) in labels" class="tbody">
           <tr v-if="!['id','client','child','husband','economic_condition','specialist'].includes(key) ">
-            <td class="td-left">{{labels[key]}}</td>
-            <td>{{items[key]}}</td>
+            <td class="td-left">{{ labels[key] }}</td>
+            <td>{{ items[key] }}</td>
           </tr>
           </tbody>
         </table>
         <navigation v-if="!no_data && !isHide" v-bind:url="url" v-bind:id="id" class="noprint"></navigation>
-<!--        <button class="btn btn-default" type="button" v-if="no_data && !isHide" @click="addInfo">ДОБАВИТЬ <span-->
-<!--          class="fa fa-plus-circle fa-2x"/></button>-->
+        <!--        <button class="btn btn-default" type="button" v-if="no_data && !isHide" @click="addInfo">ДОБАВИТЬ <span-->
+        <!--          class="fa fa-plus-circle fa-2x"/></button>-->
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import sideBar from "./sideBar";
-  import navBar from "./navBars/navBar";
-  import navigation from "./Information/navigation";
-  import sideBarTest from "./Test/sideBarTest";
-  import templateChild from "./Information/templateChild";
-  import NextBack from "./Information/NextBack";
+import sideBar from "./sideBar";
+import navBar from "./navBars/navBar";
+import navigation from "./Information/navigation";
+import sideBarTest from "./Test/sideBarTest";
+import templateChild from "./Information/templateChild";
+import NextBack from "./Information/NextBack";
 
-  export default {
-    name: "templateInfo",
-    components: {
-      NextBack,
-      sideBar,
-      navBar,
-      navigation,
-      sideBarTest,
-      templateChild
-    },
-    props: {
-      url: '',
-      header: '',
-      subtitle: '',
-      identifier: '',
-      identifier_field: ''
-    },
-    data() {
-      return {
-        items: '',
-        labels: '',
-        no_data: false,
-        isHide: false,
-        id: '',
-        edit: '',
-      }
-    },
-    created() {
-      this.getRequest();
-    },
-    methods: {
-      addInfo() {
-        this.$emit('addInfo');
-        this.isHide = true;
-      },
-      getRequest() {
-        var map = {};
-        map[this.identifier_field] = this.identifier;
-        $.ajax({
-          url: this.$store.state.baseUrl + "api/" + this.url + '/',
-          type: "GET",
-          data: map,
-          success: (response) => {
-            if (response === undefined) {
-              this.no_data = true;
-              this.addInfo();
-            }
-            else {
-              this.id = response.data[0].id;
-              this.items = response.data[0].attributes;
-              this.labels = response.data[0].attributes.labels;
-              if (this.url === 'child') this.$refs.templateChild.slice(this.items, this.labels);
-              if (this.url === 'client') this.$store.commit('storeName', this.items.full_name);
-            }
-          },
-          error: (response) => {
-            if (response.status === 401) this.logOut();
-            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
-          }
-        });
-        this.getForPutRequest();
-      },
-      deleteRequest() {
-        $.ajax({
-          url: this.$store.state.baseUrl + "api/" + this.url + '/' + this.id,
-          type: "DELETE",
-          success: (response) => {
-            this.items = '';
-            this.labels = '';
-            this.edit = '';
-            this.isHide = false;
-            this.no_data = true;
-            // this.$emit('postInfo');
-            if (!['client','child','husbandInformation'].includes(this.url))
-              this.addInfo();
-            if (this.url === 'client') this.$router.push({name: 'mainwindow'});
-            else if (this.url === 'child') this.$router.push({name: 'childList'});
-            else if (this.url === 'husbandInformation') this.$router.push({name: 'husbandList'});
-          },
-          error: (response) => {
-            if (response.status === 401) this.logOut();
-            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
-          }
-        })
-      },
-      postRequest(items) {
-        $.ajax({
-          url: this.$store.state.baseUrl + "api/" + this.url + '/',
-          type: "POST",
-          data: items,
-          success: (response) => {
-            // alert("Данные добавлены.");
-            this.$emit('postInfo');
-            this.isHide = false;
-            this.no_data = false;
-            this.getRequest();
-          },
-          error: (response) => {
-            if (response.status === 401) this.logOut();
-            else alert("Не удалось загрузить данные на сервер.\nПовторите попытку позже.")
-          }
-        });
-      },
-      getForPutRequest() {
-        $.ajax({
-          url: this.$store.state.baseUrl + "api/" + this.url + '/' + this.identifier,
-          type: "GET",
-          success: (response) => {
-            if (response !== undefined)
-              this.edit = response.data[0].attributes;
-          },
-          error: (response) => {
-            if (response.status === 401) this.logOut();
-            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
-          }
-        });
-      },
-      putRequest(items) {
-        $.ajax({
-          url: this.$store.state.baseUrl + "api/" + this.url + '/' + this.id,
-          type: "PUT",
-          data: items,
-          success: (response) => {
-            // alert("Изменение прошло успешно");
-            this.$emit('postInfo');
-            this.isHide = false;
-            this.no_data = false;
-            this.getRequest();
-          },
-          error: (response) => {
-            if (response.status === 401) this.logOut();
-            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
-          }
-        });
-      },
+export default {
+  name: "templateInfo",
+  components: {
+    NextBack,
+    sideBar,
+    navBar,
+    navigation,
+    sideBarTest,
+    templateChild
+  },
+  props: {
+    url: '',
+    header: '',
+    subtitle: '',
+    identifier: '',
+    identifier_field: ''
+  },
+  data() {
+    return {
+      items: '',
+      labels: '',
+      no_data: false,
+      isHide: false,
+      id: '',
+      edit: '',
     }
+  },
+  created() {
+    this.getRequest();
+  },
+  methods: {
+    addInfo() {
+      this.$emit('addInfo');
+      this.isHide = true;
+    },
+    getRequest() {
+      var map = {};
+      map[this.identifier_field] = this.identifier;
+      $.ajax({
+        url: this.$store.state.baseUrl + "api/" + this.url + '/',
+        type: "GET",
+        data: map,
+        success: (response) => {
+          if (response === undefined) {
+            this.no_data = true;
+            this.addInfo();
+          } else {
+            this.id = response.data[0].id;
+            this.items = response.data[0].attributes;
+            this.labels = response.data[0].attributes.labels;
+            if (this.url === 'child') this.$refs.templateChild.slice(this.items, this.labels);
+            if (this.url === 'client') this.$store.commit('storeName', this.items.full_name);
+          }
+        },
+        error: (response) => {
+          if (response.status === 401) this.logOut();
+          else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+        }
+      });
+      this.getForPutRequest();
+    },
+    deleteRequest() {
+      $.ajax({
+        url: this.$store.state.baseUrl + "api/" + this.url + '/' + this.id,
+        type: "DELETE",
+        success: (response) => {
+          this.items = '';
+          this.labels = '';
+          this.edit = '';
+          this.isHide = false;
+          this.no_data = true;
+          // this.$emit('postInfo');
+          if (!['client', 'child', 'husbandInformation'].includes(this.url))
+            this.addInfo();
+          if (this.url === 'client') this.$router.push({name: 'mainwindow'});
+          else if (this.url === 'child') this.$router.push({name: 'childList'});
+          else if (this.url === 'husbandInformation') this.$router.push({name: 'husbandList'});
+        },
+        error: (response) => {
+          if (response.status === 401) this.logOut();
+          else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+        }
+      })
+    },
+    postRequest(items) {
+      $.ajax({
+        url: this.$store.state.baseUrl + "api/" + this.url + '/',
+        type: "POST",
+        data: items,
+        success: (response) => {
+          // alert("Данные добавлены.");
+          this.$emit('postInfo');
+          this.isHide = false;
+          this.no_data = false;
+          this.getRequest();
+        },
+        error: (response) => {
+          if (response.status === 401) this.logOut();
+          else alert("Не удалось загрузить данные на сервер.\nПовторите попытку позже.")
+        }
+      });
+    },
+    getForPutRequest() {
+      $.ajax({
+        url: this.$store.state.baseUrl + "api/" + this.url + '/' + this.identifier,
+        type: "GET",
+        success: (response) => {
+          if (response !== undefined)
+            this.edit = response.data[0].attributes;
+        },
+        error: (response) => {
+          if (response.status === 401) this.logOut();
+          else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+        }
+      });
+    },
+    putRequest(items) {
+      $.ajax({
+        url: this.$store.state.baseUrl + "api/" + this.url + '/' + this.id,
+        type: "PUT",
+        data: items,
+        success: (response) => {
+          // alert("Изменение прошло успешно");
+          this.$emit('postInfo');
+          this.isHide = false;
+          this.no_data = false;
+          this.getRequest();
+        },
+        error: (response) => {
+          if (response.status === 401) this.logOut();
+          else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+        }
+      });
+    },
   }
+}
 </script>
 
 <style scoped>
-  .container {
-    margin-top: 2%;
-    text-align: center;
-  }
+.container {
+  margin-top: 2%;
+  text-align: center;
+}
 
-  .card-header {
-    display: block;
-    font-size: 30px;
-    font-weight: 700;
-    padding: 30px 0;
-    /*margin-bottom: 20px;*/
-    color: #492727;
-    background-color: #D2B48C;
-    /*border-color: #D2B48C*/
-  }
+.card-header {
+  display: block;
+  font-size: 30px;
+  font-weight: 700;
+  padding: 30px 0;
+  color: #492727;
+  background-color: #D2B48C;
+}
 
-  .card {
-    background-color: #f5eed5;
-    /*margin-bottom: 5%;*/
-  }
+.card {
+  background-color: #f5eed5;
+}
 
-  .thead {
-    background-color: #D2B48C;
-    color: #492727;
-  }
+.thead {
+  background-color: #D2B48C;
+  color: #492727;
+}
 
-  .table {
-    /*width: 100%;*/
-    table-layout: fixed;
-    /*margin: auto;*/
+.table {
+  table-layout: fixed;
+}
+
+.tbody {
+  color: #492727;
+  text-align: center;
+  border-color: #f5eed5;
+}
+
+.btn-default {
+  color: #492727;
+  font-size: 16px;
+}
+
+.btn-default:hover {
+  background-color: #E6DFC6;
+  color: black;
+}
+
+.btn-default-right {
+  float: right;
+  color: #492727;
+  font-size: 16px;
+}
+
+.btn-default-right:hover {
+  background-color: #E6DFC6;
+  color: black;
+}
+
+.my-link {
+  background-color: #FFF8DC;
+  color: #492727;
+  font-size: 20px;
+  margin-left: 20px;
+}
+
+.td-left {
+  text-align: left;
+  padding-left: 40px;
+}
+
+.my-block {
+  text-align: center;
+  color: #492727;
+  font-size: 18px;
+  padding: 20px;
+}
+
+@media print {
+  .noprint {
+    display: none;
   }
 
   .tbody {
-    color: #492727;
-    text-align: center;
-    border-color: #f5eed5;
-    /*width: 100%;*/
+    page-break-after: auto;
+    page-break-inside: avoid;
+    border: none !important;
+    margin-bottom: 20px !important;
   }
+}
 
-  .btn-default {
-    color: #492727;
-    font-size: 16px;
-  }
-
-  .btn-default:hover {
-    background-color: #E6DFC6;
-    color: black;
-  }
-
-  .btn-default-right {
-    float: right;
-    color: #492727;
-    font-size: 16px;
-  }
-
-  .btn-default-right:hover {
-    background-color: #E6DFC6;
-    color: black;
-  }
-
+@media only screen and (max-width: 768px) {
   .my-link {
-    background-color: #FFF8DC;
-    color: #492727;
-    font-size: 20px;
-    margin-left: 20px;
+    font-size: 16px;
+    margin-left: 0;
   }
+}
 
-  .td-left {
-    text-align: left;
-    padding-left: 40px;
+@media only screen and (max-width: 650px) {
+  .my-link {
+    font-size: 14px;
+    margin-left: 0;
   }
+}
 
-  .my-block {
-    text-align: center;
-    color: #492727;
-    font-size: 18px;
-    padding: 20px;
+@media only screen and (max-width: 540px) {
+  .my-link {
+    font-size: 12px;
+    margin-left: 0;
   }
-
-  @media print {
-    .noprint {
-      display: none;
-    }
-
-    .tbody {
-      page-break-after: auto;
-      page-break-inside: avoid;
-      border: none !important;
-      margin-bottom: 20px !important;
-    }
-  }
-
-  @media only screen and (max-width: 768px) {
-    .my-link {
-      font-size: 16px;
-      margin-left: 0;
-    }
-  }
-
-  @media only screen and (max-width: 650px) {
-    .my-link {
-      font-size: 14px;
-      margin-left: 0;
-    }
-  }
-
-  @media only screen and (max-width: 540px) {
-    .my-link {
-      font-size: 12px;
-      margin-left: 0;
-    }
-  }
+}
 </style>

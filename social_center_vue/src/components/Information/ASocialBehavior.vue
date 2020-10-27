@@ -7,11 +7,20 @@
     <div class="container" v-if="add">
       <validation-observer ref="observer" v-slot="{ handleSubmit }">
         <b-form @submit.stop.prevent="handleSubmit(save)" @reset="notSave" class="my-form">
-          <b-form-group label-cols-sm="3" :label="labels[key]" label-align-sm="right"
-                        v-for="(value,key) in labels" :key="key" class="my-form-group">
-            <!--            v-if="key!=='client'"-->
+          <b-form-group v-if="labels!=={}" label-cols-sm="3" label-align-sm="right"
+                        v-for="(value,key) in labels" :key="key" :label="value" class="my-form-group">
             <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                 v-if="choices[key]">
+                                 v-if="'caseExaminedInKDN_ZP'===key">
+              <b-form-select :value="items[key]" :options="choices[key]" v-model="items[key]"
+                             :state="getValidationState(validationContext)" @change="getKDN_ZP(items[key])">
+                <template v-slot:first>
+                  <b-form-select-option :value="null"></b-form-select-option>
+                </template>
+              </b-form-select>
+            </validation-provider>
+
+            <validation-provider :rules="{required: false}" v-slot="validationContext"
+                                 v-else-if="choices[key]">
               <b-form-select :value="items[key]" :options="choices[key]" v-model="items[key]"
                              :state="getValidationState(validationContext)">
                 <template v-slot:first>
@@ -20,14 +29,25 @@
               </b-form-select>
             </validation-provider>
             <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                 v-if="['durationOfUse','durationOfRemissionD','durationOfRemissionA'].includes(key)">
+                                 v-else-if="['durationOfUse','durationOfRemissionD','durationOfRemissionA'].includes(key)">
               <b-form-input type="number" v-model="items[key]" :value="items[key]" step="0.5" min="0.0" max="99.0"
                             :state="getValidationState(validationContext)"/>
             </validation-provider>
             <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                 v-if="['kindOfDrug','wherePsyRehWasD','wherePsyRehWasA'].includes(key)">
+                                 v-else-if="['kindOfDrug','wherePsyRehWasD','wherePsyRehWasA'].includes(key)">
               <b-textarea v-model="items[key]" :value="items[key]"
                           :state="getValidationState(validationContext)"/>
+            </validation-provider>
+
+            <validation-provider :rules="{required: false}" v-slot="validationContext"
+                                 v-else-if="['dateOfResolutionIPR','DateOfTerminationIPR'].includes(key)">
+              <b-form-input type="date" v-model="items[key]" :value="items[key]"
+                            :state="getValidationState(validationContext)"/>
+            </validation-provider>
+
+            <validation-provider :rules="{required: false}" v-slot="validationContext" v-else>
+              <b-form-input type="text" v-model="items[key]" :value="items[key]"
+                            :state="getValidationState(validationContext)"/>
             </validation-provider>
 
           </b-form-group>
@@ -40,91 +60,111 @@
 </template>
 
 <script>
-  import templateInfo from "../templateInfo";
-  import {ValidationObserver, ValidationProvider} from "vee-validate/dist/vee-validate.full";
+import templateInfo from "../templateInfo";
+import {ValidationObserver, ValidationProvider} from "vee-validate/dist/vee-validate.full";
 
-  export default {
-    name: "ASocialBehavior",
-    components: {
-      templateInfo,
-      ValidationProvider,
-      ValidationObserver,
+export default {
+  name: "ASocialBehavior",
+  components: {
+    templateInfo,
+    ValidationProvider,
+    ValidationObserver,
+  },
+  data() {
+    return {
+      add: false,
+      labels: {},
+      save_labels: '',
+      choices: '',
+      id: ''
+    }
+  },
+  created() {
+    this.id = sessionStorage.getItem('id');
+  },
+  methods: {
+    addInfo() {
+
+      $.ajax({
+        url: this.$store.state.baseUrl + "api/fields/",
+        type: "GET",
+        data: {model: 'ASocialBehavior'},
+        success: (response) => {
+          this.save_labels = response.data.labels; //все поля
+          this.choices = response.data.choices;
+          if (this.$refs.template.edit !== '')
+            this.items = this.$refs.template.edit;
+          else
+            this.items = response.data.items;
+          this.startLabels();
+          this.add = true;
+        },
+        error: (response) => {
+          if (response.status === 401) this.logOut();
+          else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+        }
+      })
     },
-    data() {
-      return {
-        add: false,
-        labels: '',
-        choices: '',
-        id: ''
+    save() {
+      this.items['client'] = parseInt(sessionStorage.getItem('id'));
+      if (this.$refs.template.edit !== '')
+        this.$refs.template.putRequest(this.items);
+      else this.$refs.template.postRequest(this.items);
+    },
+    postInfo() {
+      this.add = false;
+    },
+    notSave() {
+      this.add = false;
+      this.$refs.template.isHide = false;
+    },
+    getValidationState({dirty, validated, valid = null}) {
+      return dirty || validated ? valid : null;
+    },
+    startLabels() {
+      if (this.items['caseExaminedInKDN_ZP'] !== 1) {
+        for (var item in this.save_labels)
+          if (!['dateOfResolutionIPR', 'resolutionNumber', 'DateOfTerminationIPR', 'terminationNumber'].includes(item))
+            this.labels[item] = this.save_labels[item];
+      } else this.labels = JSON.parse(JSON.stringify(this.save_labels));
+    },
+    deleteFields() {
+      var array = ['dateOfResolutionIPR', 'resolutionNumber', 'DateOfTerminationIPR', 'terminationNumber'];
+      for (var item in array) {
+        delete this.labels[array[item]];
+        this.items[array[item]] = null;
       }
     },
-    created() {
-      this.id = sessionStorage.getItem('id');
-    },
-    methods: {
-      addInfo() {
-        this.add = true;
-        $.ajax({
-          url: this.$store.state.baseUrl+"api/fields/",
-          type: "GET",
-          data: {model: 'ASocialBehavior'},
-          success: (response) => {
-            // console.log(response.data)
-            this.labels = response.data.labels;
-            this.choices = response.data.choices;
-            if (this.$refs.template.edit !== '')
-              this.items = this.$refs.template.edit;
-            else
-              this.items = response.data.items;
-          },
-          error: (response) => {
-            if (response.status === 401) this.logOut();
-            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
-          }
-        })
-      },
-      save() {
-        this.items['client'] = parseInt(sessionStorage.getItem('id'));
-        if (this.$refs.template.edit !== '')
-          this.$refs.template.putRequest(this.items);
-        else this.$refs.template.postRequest(this.items);
-      },
-      postInfo() {
-        this.add = false;
-      },
-      notSave() {
-        this.add = false;
-        this.$refs.template.isHide = false;
-      },
-      getValidationState({dirty, validated, valid = null}) {
-        return dirty || validated ? valid : null;
-      },
+    getKDN_ZP(value) {
+      if (value === 1) this.labels = JSON.parse(JSON.stringify(this.save_labels));
+      else this.deleteFields();
     }
   }
+}
 </script>
 
 <style scoped>
-  .btn-default {
-    background-color: #D2B48C;
-    color: #492727;
-    margin: 10px;
-  }
+.btn-default {
+  background-color: #D2B48C;
+  color: #492727;
+  margin: 10px;
+}
 
-  .btn-default:hover {
-    background-color: #452424;
-    color: #D2B48C;
-  }
+.btn-default:hover {
+  background-color: #452424;
+  color: #D2B48C;
+}
 
-  .container {
-    text-align: center;
-  }
+.container {
+  text-align: center;
+}
 
-  .my-form {
-    background-color: #f5eed5;
-  }
+.my-form {
+  background-color: #f5eed5;
+}
 
-  .my-form-group {
-    color: #492727;
-    margin-right: 3%;
-  }
+.my-form-group {
+  color: #492727;
+  margin-right: 3%;
+}
 </style>

@@ -47,7 +47,8 @@ class Client(models.Model):
     DEPENDENCE = [
         (1, 'алкогольная'),
         (2, 'наркотическая'),
-        (3, 'созависимость')
+        (3, 'опыт употребления'),
+        (4, 'созависимость')
     ]
     STATE_OF_DEPENDENCE = [
         (1, 'активное потребление'),
@@ -101,11 +102,19 @@ class Client(models.Model):
         (3, "мониторинг")
     ]
 
+    PLACEMENT_SOCIAL_SUPPORT = [
+        (1, "консилиум"),
+        (2, "приказ")
+    ]
+
     dateOfInterview = models.DateField("Дата проведения интервью", null=True, blank=True)
     code = models.TextField(verbose_name='Код клиента', null=True, blank=True)
-    formOfReferral = models.IntegerField("Форма обращения",
-                                         choices=FORM_OF_REFERRAL, null=True, blank=True)
-    dateOfCertified = models.DateField("Дата постановки на учет", null=True, blank=True)
+    formOfReferral = models.IntegerField("Форма обращения", choices=FORM_OF_REFERRAL, null=True, blank=True)
+    placementSocialSupport = models.IntegerField("Постановка на социальное сопровождение",
+                                                 choices=PLACEMENT_SOCIAL_SUPPORT, null=True, blank=True)
+    DateOfCreationIPSO = models.DateField("Дата разработки ИППСУ", null=True, blank=True)
+    IPPSNumber = models.TextField(verbose_name='Номер ИППСУ', null=True, blank=True)
+    ContractPeriod = models.DateField("Срок действия договора", null=True, blank=True)
     contractNumber = models.TextField(verbose_name='Номер договора', null=True, blank=True)
     full_name = models.TextField(verbose_name='ФИО клиента', null=True, blank=True)
     sex = models.IntegerField("Пол",
@@ -116,13 +125,20 @@ class Client(models.Model):
     passNumber = models.IntegerField("Номер паспорта", null=True, blank=True)
     passFromWhomIssue = models.TextField(verbose_name='Выдан', null=True, blank=True)
     passDateIssue = models.DateField("Дата выдачи", null=True, blank=True)
-    addressCity = models.TextField(verbose_name='Населенный пункт', null=True, blank=True)
-    addressStreet = models.TextField(verbose_name='Улица', null=True, blank=True)
-    addressHouseNum = models.TextField(verbose_name='Дом', null=True, blank=True)
-    addressApNum = models.TextField(verbose_name='Номер квартиры', null=True, blank=True)
-    addressIndex = models.IntegerField("Почтовый индекс", null=True, blank=True)
-    municipalDistrict = models.IntegerField("Муниципальный округ",
-                                            choices=MUNICIPAL_DISTRICT, null=True, blank=True)
+    registrationAddressCity = models.TextField(verbose_name='Населенный пункт (АР)', null=True, blank=True)
+    registrationAddressStreet = models.TextField(verbose_name='Улица (АР)', null=True, blank=True)
+    registrationAddressHouseNum = models.TextField(verbose_name='Дом (АР)', null=True, blank=True)
+    registrationAddressApNum = models.TextField(verbose_name='Номер квартиры (АР)', null=True, blank=True)
+    registrationAddressIndex = models.IntegerField("Почтовый индекс (АР)", null=True, blank=True)
+    registrationMunicipalDistrict = models.IntegerField("Муниципальный округ (АР)",
+                                                        choices=MUNICIPAL_DISTRICT, null=True, blank=True)
+    actualAddressCity = models.TextField(verbose_name='Населенный пункт (АФП)', null=True, blank=True)
+    actualAddressStreet = models.TextField(verbose_name='Улица (АФП)', null=True, blank=True)
+    actualAddressHouseNum = models.TextField(verbose_name='Дом (АФП)', null=True, blank=True)
+    actualAddressApNum = models.TextField(verbose_name='Номер квартиры (АФП)', null=True, blank=True)
+    actualAddressIndex = models.IntegerField("Почтовый индекс (АФП)", null=True, blank=True)
+    actualMunicipalDistrict = models.IntegerField("Муниципальный округ (АФП)",
+                                                  choices=MUNICIPAL_DISTRICT, null=True, blank=True)
     phoneNumber = models.TextField(verbose_name='Номер телефона', max_length=15, null=True, blank=True)
     dependence = models.IntegerField("Зависимость",
                                      choices=DEPENDENCE, null=True, blank=True)
@@ -187,7 +203,28 @@ class Child(models.Model):
     REASON = [(1, 'отсутствие жилья'), (2, 'употребление наркотиков'), (3, 'низкая материальная обеспеченность'),
               (4, 'физическое или психическое заболевание'), (5, 'отсутствие семейной поддержки'),
               (6, 'нежелательная беременность')]
+
+    DEPENDENCE = [
+        (1, 'алкогольная'),
+        (2, 'наркотическая'),
+        (3, 'опыт употребления'),
+        (4, 'созависимость')
+    ]
+
+    PLACEMENT_SOCIAL_SUPPORT = [
+        (1, "консилиум"),
+        (2, "приказ")
+    ]
+
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
+
+    placementSocialSupport = models.IntegerField("Постановка на социальное сопровождение",
+                                                 choices=PLACEMENT_SOCIAL_SUPPORT, null=True, blank=True)
+    DateOfCreationIPSO = models.DateField("Дата разработки ИППСУ", null=True, blank=True)
+    IPPSNumber = models.TextField(verbose_name='Номер ИППСУ', null=True, blank=True)
+    ContractPeriod = models.DateField("Срок действия договора", null=True, blank=True)
+    contractNumber = models.TextField(verbose_name='Номер договора', null=True, blank=True)
+
     full_name = models.TextField(verbose_name='ФИО', null=True, blank=True)
     sex = models.IntegerField(verbose_name='Пол', choices=SEX, null=True, blank=True)
     birthdate = models.DateField(verbose_name='Дата рождения', null=True, blank=True)
@@ -208,16 +245,18 @@ class Child(models.Model):
     HIV_PREVENTION = [(1, 'во время родов'), (2, 'после родов'), (3, 'не знает')]
 
     health = models.IntegerField(verbose_name='Ребенок родился здоровым', choices=YESNO, null=True, blank=True)
-    withdrawal_symptoms = models.IntegerField(verbose_name='В абстинентном синдроме', choices=YESNO, null=True,
+    withdrawal_symptoms = models.IntegerField(verbose_name='В абстинентном синдроме', choices=YES_NO_DONTKNOW,
+                                              null=True,
                                               blank=True)
     with_mother = models.IntegerField(verbose_name='Ребенок выписан из родильного отделения вместе с матерью',
-                                      choices=YESNO, null=True, blank=True)
+                                      choices=YES_NO_DONTKNOW, null=True, blank=True)
     hiv_status_child = models.IntegerField(verbose_name='ВИЧ-статус ребенка', choices=HIV, null=True, blank=True)
     hiv_plus = models.IntegerField(verbose_name='Родился после установления ВИЧ-положительного статуса клиента',
                                    choices=YESNO, null=True, blank=True)
     center_aids = models.IntegerField(verbose_name='Учет в центре СПИД', choices=YESNO, null=True, blank=True)
     hiv_prevention = models.IntegerField(verbose_name='Получал ли профилактику ВИЧ', choices=YES_NO_DONTKNOW, null=True,
                                          blank=True)
+    dependence = models.IntegerField("Зависимость", choices=DEPENDENCE, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Ребенок'
@@ -238,7 +277,7 @@ class SocialLivingCondition(models.Model):
             (4, 'комната в общежитии'), (5, 'отсутствует')]
     SANITARY_CONDITION = [(1, 'хорошее'), (2, 'удовлетворительное'), (3, 'антисанитарное'),
                           (4, 'признаки аварийности жилого помещения')]
-    OWNERSHIP = [(1, 'договор по найму жилья'), (2, 'собственность клиента')]
+    OWNERSHIP = [(1, 'договор по найму жилья'), (2, 'собственность клиента'), (3, 'собственность родственников')]
     PAYMENT = [(1, 'своевременно в полном объеме'), (2, 'незначительная задолженность'),
                (3, 'значительная задолженность')]
     client = models.OneToOneField(Client, on_delete=models.CASCADE)
@@ -513,6 +552,12 @@ class ASocialBehavior(models.Model):
                                                choices=YES_NO_DONTKNOW, null=True, blank=True)
     caseExaminedInKDN_ZP = models.IntegerField("Рассматривалось дело на КДН и ЗП",
                                                choices=YES_NO_DONTKNOW, null=True, blank=True)
+
+    dateOfResolutionIPR = models.DateField("Дата постановления ИПР", null=True, blank=True)
+    resolutionNumber = models.TextField("Номер постановления", null=True, blank=True)
+    DateOfTerminationIPR = models.DateField("Дата прекращения ИПР", null=True, blank=True)
+    terminationNumber = models.TextField("Номер прекращения", null=True, blank=True)
+
     commercialSexExperience = models.IntegerField("Опыт коммерческого секса",
                                                   choices=YESNO, null=True, blank=True)
     physicalAbuseExperience = models.IntegerField("Опыт физического насилия",
@@ -587,10 +632,6 @@ class ChronicDisease(models.Model):
                                               choices=VISIT_AIDS,
                                               null=True,
                                               blank=True)
-    frequencyOfVisitsAIDSCenter = models.TextField("Как часто посещает центр СПИД",
-                                                   max_length=20,
-                                                   null=True,
-                                                   blank=True)
     receivedChemoprophylaxis = models.IntegerField("Получал ли химиопрофилактику",
                                                    choices=YESNO,
                                                    null=True,
@@ -600,7 +641,6 @@ class ChronicDisease(models.Model):
                                           null=True,
                                           blank=True)
     reasonForNotGettingTreatment = models.TextField("Причина, по которой не получает лечение ВИЧ",
-                                                    max_length=50,
                                                     null=True,
                                                     blank=True)
     whoKnow = models.IntegerField("Кто из членов семьи знает о ВИЧ-статусе клиента",
@@ -623,21 +663,22 @@ class FamilyMembersInformation(models.Model):
 
     3.1 Общие сведения
     """
-    MARITAL_STATUS = [(1, 'не замужем'),
-                      (2, 'замужем'),
-                      (3, 'разведена'),
-                      (4, 'вдова')]
+    MARITAL_STATUS = [(1, 'не замужем/не женат'),
+                      (2, 'сожительство'),
+                      (3, 'замужем/женат'),
+                      (4, 'в разводе'),
+                      (5, 'вдова/вдовец')]
 
-    LIVING_WITH_WHOM = [(1, 'со своими родителями'),
-                        (2, 'с родителями партнёра'),
-                        (5, 'с семьёй'),
-                        (6, 'с родственниками')]
+    LIVING_WITH_WHOM = [(1, 'одна/один'),
+                        (2, 'со своими родителями'),
+                        (3, 'с родителями партнёра (мужа/жены)'),
+                        (4, 'с семьёй (партнёр и дети)'),
+                        (5, 'с родственниками')]
 
     client = models.OneToOneField(Client, on_delete=models.CASCADE)
 
     maritalStatus = models.IntegerField("Семейное положение", choices=MARITAL_STATUS, null=True, blank=True)
     withWhomLiving = models.IntegerField("С кем проживает", choices=LIVING_WITH_WHOM, null=True, blank=True)
-    regularPartner = models.IntegerField("Постоянный партнёр", choices=YESNO, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Сведения о членах семьи'
@@ -704,9 +745,20 @@ class HusbandInformation(models.Model):
                            (2, "нет"),
                            (3, "химическая защита")]
 
-    husband = models.ForeignKey(FamilyMembersInformation, on_delete=models.CASCADE)
+    PLACEMENT_SOCIAL_SUPPORT = [
+        (1, "консилиум"),
+        (2, "приказ")
+    ]
 
-    fullName = models.TextField("ФИО мужа/партнёра", null=True, blank=True)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+
+    placementSocialSupport = models.IntegerField("Постановка на социальное сопровождение",
+                                                 choices=PLACEMENT_SOCIAL_SUPPORT, null=True, blank=True)
+    DateOfCreationIPSO = models.DateField("Дата разработки ИППСУ", null=True, blank=True)
+    IPPSNumber = models.TextField(verbose_name='Номер ИППСУ', null=True, blank=True)
+    ContractPeriod = models.DateField("Срок действия договора", null=True, blank=True)
+    contractNumber = models.TextField(verbose_name='Номер договора', null=True, blank=True)
+    fullName = models.TextField("ФИО партнёра (мужа/жены)", null=True, blank=True)
     address = models.TextField("Адрес", null=True, blank=True)
     telephoneNumber = models.TextField("Телефон",
                                        max_length=15, null=True, blank=True)
@@ -916,7 +968,7 @@ class TestBoyko(models.Model):
         (1, 'есть семья и желание её сохранить, хотя имеются кратковременные трудности в отношениях'),
         (2, 'конфликты с родственниками, членами семьи, не приводящие к потере контакта с семьей'),
         (3, 'частые конфликты с членами семьи и близкими, приводящие к долгой разлуке, потере семьи'),
-        (4, 'семьи нет, отсутствует желание иметь и сохранять семью')
+        (4, 'нет семьи; отсутствует желание иметь и сохранять семью')
     ]
     CHILD_PARENT = [
         (0, 'поддерживает престарелых родителей/несовершеннолетних детей финансово и психологически'),
@@ -924,10 +976,9 @@ class TestBoyko(models.Model):
             ' близким людям'),
         (2, 'отношение к родителям/детям противоречивое: то заботится, то как будто «забывает» о '
             'своей ответственности'),
-        (3, 'формальное отношение к родителям/детям, нет эмоциональной привязанности к ним, недостаточно заботится о '
-            'детях, например, недоплачивает алименты, временами не приносит зарплату, тратит деньги на свои нужды, даже'
-            ' если дети нуждаются в необходимом'),
-        (4, 'не заботится о членах семьи, детях даже на минимальном уровне')
+        (3, 'формальное отношение к родителям/детям, нет эмоциональной привязанности к ним, тратит деньги '
+            'только на свои нужды'),
+        (4, 'нет семьи; не заботится о членах семьи, детях даже на минимальном уровне')
     ]
     LEISURE = [
         (0, 'в свободное время занимается разнообразными социально-приемлемыми интересами и деятельностью'),
@@ -1112,7 +1163,8 @@ class TestGAGE(models.Model):
     HOW_USE = [
         (1, 'Курил, нюхал, глотал'),
         (2, 'Внутримышечные инъекции'),
-        (3, 'Внутривенные инъекции')
+        (3, 'Внутривенные инъекции'),
+        (3, 'Всё выше перечисленное')
     ]
     POOR_HEALTH = [
         (0, 'Нет'),
@@ -1121,7 +1173,8 @@ class TestGAGE(models.Model):
     ]
     COMPANY = [
         (1, 'В компании'),
-        (2, 'В одиночку')
+        (2, 'В одиночку'),
+        (2, 'В компании и в одиночку')
     ]
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     alcohol = models.IntegerField(verbose_name='1. Злоупотребляли ли Вы алкоголем?', choices=GAGE_YESNO)
@@ -1183,9 +1236,9 @@ class TestGAGE(models.Model):
     irritation = models.IntegerField(verbose_name='4.2. Вас раздражает, если люди критикуют Вас за употребление'
                                                   ' алкоголя (употребление наркотиков)?', choices=GAGE_YESNO, null=True,
                                      blank=True)
-    fault = models.IntegerField(verbose_name='4.3. Вы испытывали когда-нибудь чувство вины по поводу того,'
-                                             ' что слишком много или долго употребляли алкоголь (наркотики)?',
-                                choices=GAGE_YESNO, null=True, blank=True)
+    fault = models.IntegerField(
+        verbose_name='4.3. Вы испытывали когда-нибудь чувство вины по поводу употребления алкоголя (наркотиков)?',
+        choices=GAGE_YESNO, null=True, blank=True)
     tone = models.IntegerField(verbose_name='4.4. Вы когда-нибудь употребляли алкоголь (наркотические вещества)'
                                             ' для поднятия тонуса утром или с похмелья?', choices=GAGE_YESNO, null=True,
                                blank=True)
@@ -1345,12 +1398,13 @@ class TypologicalGroup(models.Model):
     """Типологическая группа"""
     GROUP = [
         (0, 'Клиент не может быть относен к типологической группе потребителей ПАВ'),
-        (1, 'Группа 1'),
-        (2, 'Группа 2')
+        (1, 'Группа 1 «Женщины, активно употребляющие ПАВ, противопоставляющие себя социуму»'),
+        (2, 'Группа 2 «Женщины, употребляющие ПАВ с более развитым коммуникативным потенциалом»')
     ]
     SUBGROUP = [
-        (1, 'Группа 2.1'),
-        (2, 'Группа 2.2')
+        (1, 'Группа 2.1 «Молодые женщины с социально-бытовыми проблемами в период неактивного употребления ПАВ»'),
+        (2, 'Группа 2.2 «Женщины с длительным стажем употребления ПАВ и сопутствующими '
+            'социально-медицинскими проблемами»')
     ]
     test = models.OneToOneField(TestBoyko, on_delete=models.CASCADE)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
