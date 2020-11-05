@@ -107,75 +107,69 @@ class Client(models.Model):
         (2, "приказ")
     ]
 
-    dateOfInterview = models.DateField("Дата проведения интервью", null=True, blank=True)
-    code = models.TextField(verbose_name='Код клиента', null=True, blank=True)
-    formOfReferral = models.IntegerField("Форма обращения", choices=FORM_OF_REFERRAL, null=True, blank=True)
+    dateOfInterview = models.DateField("Дата проведения интервью", null=True, blank=True, default=None)
+    code = models.TextField(verbose_name='Код клиента', null=True, blank=True, default=None)
+    formOfReferral = models.IntegerField("Форма обращения", choices=FORM_OF_REFERRAL, null=True, blank=True, default=None)
     placementSocialSupport = models.IntegerField("Постановка на социальное сопровождение",
-                                                 choices=PLACEMENT_SOCIAL_SUPPORT, null=True, blank=True)
-    DateOfCreationIPSO = models.DateField("Дата разработки ИППСУ", null=True, blank=True)
-    IPPSNumber = models.TextField(verbose_name='Номер ИППСУ', null=True, blank=True)
-    ContractPeriod = models.DateField("Срок действия договора", null=True, blank=True)
-    contractNumber = models.TextField(verbose_name='Номер договора', null=True, blank=True)
-    full_name = models.TextField(verbose_name='ФИО клиента', null=True, blank=True)
+                                                 choices=PLACEMENT_SOCIAL_SUPPORT, null=True, blank=True, default=None)
+    DateOfCreationIPSO = models.DateField("Дата разработки ИППСУ", null=True, blank=True, default=None)
+    IPPSNumber = models.TextField(verbose_name='Номер ИППСУ', null=True, blank=True, default=None)
+    ContractPeriod = models.DateField("Срок действия договора", null=True, blank=True, default=None)
+    contractNumber = models.TextField(verbose_name='Номер договора', null=True, blank=True, default=None)
+    full_name = models.TextField(verbose_name='ФИО клиента', null=True, blank=True, default=None)
     sex = models.IntegerField("Пол",
-                              choices=SEX, null=True, blank=True)
-    dod = models.DateField("Дата рождения", null=True, blank=True)
-    age = models.IntegerField("Возраст", null=True, blank=True)
-    passSeries = models.IntegerField("Серия паспорта", null=True, blank=True)
-    passNumber = models.IntegerField("Номер паспорта", null=True, blank=True)
-    passFromWhomIssue = models.TextField(verbose_name='Выдан', null=True, blank=True)
-    passDateIssue = models.DateField("Дата выдачи", null=True, blank=True)
-    registrationAddressCity = models.TextField(verbose_name='Населенный пункт (АР)', null=True, blank=True)
-    registrationAddressStreet = models.TextField(verbose_name='Улица (АР)', null=True, blank=True)
-    registrationAddressHouseNum = models.TextField(verbose_name='Дом (АР)', null=True, blank=True)
-    registrationAddressApNum = models.TextField(verbose_name='Номер квартиры (АР)', null=True, blank=True)
-    registrationAddressIndex = models.IntegerField("Почтовый индекс (АР)", null=True, blank=True)
+                              choices=SEX, null=True, blank=True, default=None)
+    dod = models.DateField("Дата рождения", null=True, blank=True, default=None)
+    age = models.IntegerField("Возраст", null=True, blank=True, default=None)
+    passSeries = models.IntegerField("Серия паспорта", null=True, blank=True, default=None)
+    passNumber = models.IntegerField("Номер паспорта", null=True, blank=True, default=None)
+    passFromWhomIssue = models.TextField(verbose_name='Выдан', null=True, blank=True, default=None)
+    passDateIssue = models.DateField("Дата выдачи", null=True, blank=True, default=None)
+    registrationAddressCity = models.TextField(verbose_name='Населенный пункт (АР)', null=True, blank=True, default=None)
+    registrationAddressStreet = models.TextField(verbose_name='Улица (АР)', null=True, blank=True, default=None)
+    registrationAddressHouseNum = models.TextField(verbose_name='Дом (АР)', null=True, blank=True, default=None)
+    registrationAddressApNum = models.TextField(verbose_name='Номер квартиры (АР)', null=True, blank=True, default=None)
+    registrationAddressIndex = models.IntegerField("Почтовый индекс (АР)", null=True, blank=True, default=None)
     registrationMunicipalDistrict = models.IntegerField("Муниципальный округ (АР)",
-                                                        choices=MUNICIPAL_DISTRICT, null=True, blank=True)
-    actualAddressCity = models.TextField(verbose_name='Населенный пункт (АФП)', null=True, blank=True)
-    actualAddressStreet = models.TextField(verbose_name='Улица (АФП)', null=True, blank=True)
-    actualAddressHouseNum = models.TextField(verbose_name='Дом (АФП)', null=True, blank=True)
-    actualAddressApNum = models.TextField(verbose_name='Номер квартиры (АФП)', null=True, blank=True)
-    actualAddressIndex = models.IntegerField("Почтовый индекс (АФП)", null=True, blank=True)
+                                                        choices=MUNICIPAL_DISTRICT, null=True, blank=True, default=None)
+    actualAddressCity = models.TextField(verbose_name='Населенный пункт (АФП)', null=True, blank=True, default=None)
+    actualAddressStreet = models.TextField(verbose_name='Улица (АФП)', null=True, blank=True, default=None)
+    actualAddressHouseNum = models.TextField(verbose_name='Дом (АФП)', null=True, blank=True, default=None)
+    actualAddressApNum = models.TextField(verbose_name='Номер квартиры (АФП)', null=True, blank=True, default=None)
+    actualAddressIndex = models.IntegerField("Почтовый индекс (АФП)", null=True, blank=True, default=None)
     actualMunicipalDistrict = models.IntegerField("Муниципальный округ (АФП)",
-                                                  choices=MUNICIPAL_DISTRICT, null=True, blank=True)
-    phoneNumber = models.TextField(verbose_name='Номер телефона', max_length=15, null=True, blank=True)
+                                                  choices=MUNICIPAL_DISTRICT, null=True, blank=True, default=None)
+    phoneNumber = models.TextField(verbose_name='Номер телефона', max_length=15, null=True, blank=True, default=None)
     dependence = models.IntegerField("Зависимость",
-                                     choices=DEPENDENCE, null=True, blank=True)
+                                     choices=DEPENDENCE, null=True, blank=True, default=None)
     stateOfDependence = models.IntegerField("Состояние зависимости",
-                                            choices=STATE_OF_DEPENDENCE, null=True, blank=True)
-    adultsCount = models.IntegerField("Кол-во взрослых", null=True, blank=True,
-                                      validators=[
-                                          MinValueValidator(0)
-                                      ])
-    minorsCount = models.IntegerField("Кол-во несовершеннолетних", null=True, blank=True,
-                                      validators=[
-                                          MinValueValidator(0)
-                                      ])
+                                            choices=STATE_OF_DEPENDENCE, null=True, blank=True, default=None)
+    adultsCount = models.IntegerField("Кол-во взрослых", null=True, blank=True, default=None)
+    minorsCount = models.IntegerField("Кол-во несовершеннолетних", null=True, blank=True, default=None)
     workPlace = models.IntegerField("Место работы",
-                                    choices=WORK_PLACE, null=True, blank=True)
+                                    choices=WORK_PLACE, null=True, blank=True, default=None)
     aboutWork = models.TextField("Где, кем работает (при наличии работы)",
                                  null=True,
-                                 blank=True)
+                                 blank=True, default=None)
     aboutNoWork = models.TextField("Причина, по которой не работает",
                                    null=True,
-                                   blank=True)
+                                   blank=True, default=None)
     avDoc = models.IntegerField("Наличие документов",
-                                choices=YESNO, null=True, blank=True)
+                                choices=YESNO, null=True, blank=True, default=None)
     cityzenship = models.IntegerField("Гражданство",
-                                      choices=CITYZENSHIP, null=True, blank=True)
+                                      choices=CITYZENSHIP, null=True, blank=True, default=None)
     registration = models.IntegerField("Регистрация",
-                                       choices=REGISTRATION, null=True, blank=True)
+                                       choices=REGISTRATION, null=True, blank=True, default=None)
     placeOfRegistration = models.IntegerField("Место регистрации",
-                                              choices=PLACE_OF_REGISTRATION, null=True, blank=True)
+                                              choices=PLACE_OF_REGISTRATION, null=True, blank=True, default=None)
     education = models.IntegerField("Образование",
-                                    choices=EDUCATION, null=True, blank=True)
+                                    choices=EDUCATION, null=True, blank=True, default=None)
     familiesCategory = models.IntegerField("Категория семей",
-                                           choices=FAMILIES_CATEGORY, null=True, blank=True)
+                                           choices=FAMILIES_CATEGORY, null=True, blank=True, default=None)
     disability = models.IntegerField("Инвалидность",
                                      choices=YESNO, null=True,
-                                     blank=True)
-    escort = models.IntegerField("Какое сопровождение", choices=ESCORT, null=True, blank=True)
+                                     blank=True, default=None)
+    escort = models.IntegerField("Какое сопровождение", choices=ESCORT, null=True, blank=True, default=None)
 
     class Meta:
         verbose_name = 'Клиент'
@@ -753,97 +747,97 @@ class HusbandInformation(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
 
     placementSocialSupport = models.IntegerField("Постановка на социальное сопровождение",
-                                                 choices=PLACEMENT_SOCIAL_SUPPORT, null=True, blank=True)
-    DateOfCreationIPSO = models.DateField("Дата разработки ИППСУ", null=True, blank=True)
-    IPPSNumber = models.TextField(verbose_name='Номер ИППСУ', null=True, blank=True)
-    ContractPeriod = models.DateField("Срок действия договора", null=True, blank=True)
-    contractNumber = models.TextField(verbose_name='Номер договора', null=True, blank=True)
-    fullName = models.TextField("ФИО партнёра (мужа/жены)", null=True, blank=True)
-    address = models.TextField("Адрес", null=True, blank=True)
+                                                 choices=PLACEMENT_SOCIAL_SUPPORT, null=True, blank=True, default=None)
+    DateOfCreationIPSO = models.DateField("Дата разработки ИППСУ", null=True, blank=True, default=None)
+    IPPSNumber = models.TextField(verbose_name='Номер ИППСУ', null=True, blank=True, default=None)
+    ContractPeriod = models.DateField("Срок действия договора", null=True, blank=True, default=None)
+    contractNumber = models.TextField(verbose_name='Номер договора', null=True, blank=True, default=None)
+    fullName = models.TextField("ФИО партнёра (мужа/жены)", null=True, blank=True, default=None)
+    address = models.TextField("Адрес", null=True, blank=True, default=None)
     telephoneNumber = models.TextField("Телефон",
-                                       max_length=15, null=True, blank=True)
-    dod = models.DateField("Дата рождения", null=True, blank=True)
-    age = models.IntegerField("Возраст", null=True, blank=True)
+                                       max_length=15, null=True, blank=True, default=None)
+    dod = models.DateField("Дата рождения", null=True, blank=True, default=None)
+    age = models.IntegerField("Возраст", null=True, blank=True, default=None)
     workPlace = models.IntegerField("Место работы",
-                                    choices=WORK_PLACE, null=True, blank=True)
+                                    choices=WORK_PLACE, null=True, blank=True, default=None)
     aboutWork = models.TextField("Где, кем работает (при наличии работы)",
                                  null=True,
-                                 blank=True)
+                                 blank=True, default=None)
     aboutNoWork = models.TextField("Причина, по которой не работает",
                                    null=True,
-                                   blank=True)
+                                   blank=True, default=None)
     avDoc = models.IntegerField("Наличие документов",
-                                choices=YESNO, null=True, blank=True)
+                                choices=YESNO, null=True, blank=True, default=None)
     cityzenship = models.IntegerField("Гражданство",
-                                      choices=CITYZENSHIP, null=True, blank=True)
+                                      choices=CITYZENSHIP, null=True, blank=True, default=None)
     registration = models.IntegerField("Регистрация",
-                                       choices=REGISTRATION, null=True, blank=True)
+                                       choices=REGISTRATION, null=True, blank=True, default=None)
     placeOfRegistration = models.IntegerField("Место регистрации",
-                                              choices=PLACE_OF_REGISTRATION, null=True, blank=True)
+                                              choices=PLACE_OF_REGISTRATION, null=True, blank=True, default=None)
     education = models.IntegerField("Образование",
-                                    choices=EDUCATION, null=True, blank=True)
+                                    choices=EDUCATION, null=True, blank=True, default=None)
     categoryFamilies = models.IntegerField("Категория семей",
                                            choices=CATEGORY_FAMILIES,
                                            null=True,
-                                           blank=True)
+                                           blank=True, default=None)
     disability = models.IntegerField("Инвалидность",
                                      choices=YESNO,
                                      null=True,
-                                     blank=True)
+                                     blank=True, default=None)
     drugUse = models.IntegerField("Употребление наркотиков",
-                                  choices=YESNO, null=True, blank=True)
+                                  choices=YESNO, null=True, blank=True, default=None)
     frequencyOfDrugsUse = models.IntegerField("Частота употребления наркотиков",
                                               choices=FREQUENCY_OF_DRUGS_USE,
                                               null=True,
-                                              blank=True)
+                                              blank=True, default=None)
     durationOfUse = models.DecimalField("Длительность употребления (в годах)",
                                         max_digits=3,
                                         decimal_places=1,
                                         null=True,
-                                        blank=True)
+                                        blank=True, default=None)
     kindOfDrug = models.TextField("Вид наркотика",
                                   null=True,
-                                  blank=True)
+                                  blank=True, default=None)
     theTreatmentWasD = models.IntegerField("Проходил ли лечение(наркотики)",
                                            choices=YESNO,
                                            null=True,
-                                           blank=True)
+                                           blank=True, default=None)
     psychologicalRehabilitationWasD = models.IntegerField("Проходил ли психологическую реабилитацию(наркотики)",
                                                           choices=YESNO,
                                                           null=True,
-                                                          blank=True)
+                                                          blank=True, default=None)
     durationOfRemissionD = models.DecimalField("Длительность ремиссии (в годах)(наркотики)",
                                                max_digits=3,
                                                decimal_places=1,
                                                null=True,
-                                               blank=True)
+                                               blank=True, default=None)
     alcoholUse = models.IntegerField("Употребление алкоголя",
-                                     choices=YESNO, null=True, blank=True)
+                                     choices=YESNO, null=True, blank=True, default=None)
     frequencyOfAlcoholUse = models.IntegerField("Частота употрбления алкоголя",
                                                 choices=FREQUENCY_OF_DRUGS_USE,
                                                 null=True,
-                                                blank=True)
+                                                blank=True, default=None)
     alcoholDrinksType = models.IntegerField("Вид алкогольных напитков",
                                             choices=ALCOHOL_DRINKS_TYPE,
                                             null=True,
-                                            blank=True)
+                                            blank=True, default=None)
     theTreatmentWasA = models.IntegerField("Проходил ли лечение(алкоголь)",
                                            choices=THE_TREATMENT_WAS_A,
                                            null=True,
-                                           blank=True)
+                                           blank=True, default=None)
     psychologicalRehabilitationWasA = models.IntegerField("Проходил ли психологическую реабилитацию(алкоголь)",
                                                           choices=YESNO,
                                                           null=True,
-                                                          blank=True)
+                                                          blank=True, default=None)
     durationOfRemissionA = models.DecimalField("Длительность ремиссии (в годах)(алкоголь)",
                                                max_digits=3,
                                                decimal_places=1,
                                                null=True,
-                                               blank=True)
+                                               blank=True, default=None)
     accountingInNarcologicalClinic = models.IntegerField("Учёт в наркологическом диспансере",
-                                                         choices=YESNO, null=True, blank=True)
+                                                         choices=YESNO, null=True, blank=True, default=None)
     criminalRecord = models.IntegerField("Наличие судимости",
-                                         choices=YESNO, null=True, blank=True)
+                                         choices=YESNO, null=True, blank=True, default=None)
 
     class Meta:
         verbose_name = 'Информация о муже/партнёре'
