@@ -2051,8 +2051,13 @@ def mySwitch(value):
             return []
         # return deleteIDClient(
         #     husbendSpecial(HusbandInformationSerializers(HusbandInformation.objects.all(), many=True)))
+        # return makeMarking(
+        #     deleteIDClient(husbendSpecial(HusbandInformationSerializers(HusbandInformation.objects.all(), many=True))),
+        #     'husbendInformation',
+        #     'Информация о муже/партнёре'
+        # )
         return makeMarking(
-            deleteIDClient(husbendSpecial(HusbandInformationSerializers(HusbandInformation.objects.all(), many=True))),
+            deleteIDClient(HusbandInformationSerializers(HusbandInformation.objects.all(), many=True)),
             'husbendInformation',
             'Информация о муже/партнёре'
         )

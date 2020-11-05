@@ -46,7 +46,7 @@
                 <validation-provider :rules="{required: false}" v-slot="validationContext"
                                      v-else-if="key==='age'">
                   <b-form-input v-model="items[key]"
-                                :state="getValidationState(validationContext)" type="number" min="1"/>
+                                :state="getValidationState(validationContext)" type="number" min="0"/>
                 </validation-provider>
 
                 <validation-provider :rules="{required: false}" v-slot="validationContext"

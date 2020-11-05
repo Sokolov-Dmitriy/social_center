@@ -7,8 +7,8 @@ export const store = new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
     fullName: '',
-    // baseUrl: 'https://sokolovds.com/',
-    baseUrl: 'http://127.0.0.1:8000/',
+    baseUrl: 'https://sokolovds.com/',
+    // baseUrl: 'http://127.0.0.1:8000/',
     logIn:'auth/token/login/',
     clientsList:'api/clients/',
   },
