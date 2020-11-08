@@ -7,67 +7,72 @@
     <div class="container" v-if="add">
       <validation-observer ref="observer" v-slot="{ handleSubmit }">
         <b-form @submit.stop.prevent="handleSubmit(save)" @reset="notSave" class="my-form">
-          <b-form-group label-cols-sm="3" :label="labels[key]" label-align-sm="right"
-                        v-for="(value,key) in labels" :key="key" class="my-form-group">
+          <div v-for="(value,key) in labels" :key="key">
+            <div v-if="'registrationAddressCity'===key" class="my-little-block">Адрес регистрации</div>
+            <div v-if="'actualAddressCity'===key" class="my-little-block">Адрес фактического проживания</div>
+            <div v-if="'telephoneNumber'===key" class="my-little-block"></div>
+            <b-form-group label-cols-sm="3" :label="labels[key]" label-align-sm="right" class="my-form-group">
 
-            <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                 v-if="choices[key]">
-              <b-form-select :value="items[key]" :options="choices[key]" v-model="items[key]"
-                             :state="getValidationState(validationContext)">
-                <template v-slot:first>
-                  <b-form-select-option :value="null"></b-form-select-option>
-                </template>
-              </b-form-select>
-            </validation-provider>
+              <validation-provider :rules="{required: false}" v-slot="validationContext"
+                                   v-if="choices[key]">
+                <b-form-select :value="items[key]" :options="choices[key]" v-model="items[key]"
+                               :state="getValidationState(validationContext)">
+                  <template v-slot:first>
+                    <b-form-select-option :value="null"></b-form-select-option>
+                  </template>
+                </b-form-select>
+              </validation-provider>
 
-            <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                 v-else-if="['aboutWork','aboutNoWork','kindOfDrug'].includes(key)">
-              <b-textarea v-model="items[key]" :value="items[key]" :state="getValidationState(validationContext)"/>
-            </validation-provider>
+              <validation-provider :rules="{required: false}" v-slot="validationContext"
+                                   v-else-if="['aboutWork','aboutNoWork','kindOfDrug'].includes(key)">
+                <b-textarea v-model="items[key]" :value="items[key]" :state="getValidationState(validationContext)"/>
+              </validation-provider>
 
-            <validation-provider :rules="{required: false,length:6}" v-slot="validationContext"
-                                 v-else-if="['registrationAddressIndex','actualAddressIndex'].includes(key)">
-              <b-form-input v-model="items[key]" :value="items[key]" type="number"
-                            :state="getValidationState(validationContext)"/>
-            </validation-provider>
+              <validation-provider :rules="{required: false,length:6}" v-slot="validationContext"
+                                   v-else-if="['registrationAddressIndex','actualAddressIndex'].includes(key)">
+                <b-form-input v-model="items[key]" :value="items[key]" type="number"
+                              :state="getValidationState(validationContext)"/>
+              </validation-provider>
 
-            <validation-provider :rules="{required: false,regex:/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/ }"
-                                 v-slot="validationContext"
-                                 v-else-if="key === 'telephoneNumber'">
-              <b-form-input type="tel" v-model="items[key]" :value="items[key]"
-                            :state="getValidationState(validationContext)"/>
-            </validation-provider>
+              <validation-provider
+                :rules="{required: false,regex:/^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/ }"
+                v-slot="validationContext"
+                v-else-if="key === 'telephoneNumber'">
+                <b-form-input type="tel" v-model="items[key]" :value="items[key]"
+                              :state="getValidationState(validationContext)"/>
+              </validation-provider>
 
-            <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                 v-else-if="['DateOfCreationIPSO','ContractPeriod'].includes(key)">
-              <b-form-input type="date" v-model="items[key]" :value="items[key]"
-                            :state="getValidationState(validationContext)"/>
-            </validation-provider>
+              <validation-provider :rules="{required: false}" v-slot="validationContext"
+                                   v-else-if="['DateOfCreationIPSO','ContractPeriod'].includes(key)">
+                <b-form-input type="date" v-model="items[key]" :value="items[key]"
+                              :state="getValidationState(validationContext)"/>
+              </validation-provider>
 
-            <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                 v-else-if="key === 'dod'">
-              <b-form-input type="date" v-model="items[key]" :value="items[key]"
-                            :state="getValidationState(validationContext)" @change="getAge(items[key])"/>
-            </validation-provider>
+              <validation-provider :rules="{required: false}" v-slot="validationContext"
+                                   v-else-if="key === 'dod'">
+                <b-form-input type="date" v-model="items[key]" :value="items[key]"
+                              :state="getValidationState(validationContext)" @change="getAge(items[key])"/>
+              </validation-provider>
 
-            <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                 v-else-if="key === 'age'">
-              <b-form-input type="number" v-model="items[key]" :value="items[key]" min="0"
-                            :state="getValidationState(validationContext)"/>
-            </validation-provider>
+              <validation-provider :rules="{required: false}" v-slot="validationContext"
+                                   v-else-if="key === 'age'">
+                <b-form-input type="number" v-model="items[key]" :value="items[key]" min="0"
+                              :state="getValidationState(validationContext)"/>
+              </validation-provider>
 
-            <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                 v-else-if="['durationOfUse','durationOfRemissionD','durationOfRemissionA'].includes(key)">
-              <b-form-input type="number" v-model="items[key]" :value="items[key]" step="0.5" min="0.0" max="99.0"
-                            :state="getValidationState(validationContext)"/>
-            </validation-provider>
+              <validation-provider :rules="{required: false}" v-slot="validationContext"
+                                   v-else-if="['durationOfUse','durationOfRemissionD','durationOfRemissionA'].includes(key)">
+                <b-form-input type="number" v-model="items[key]" :value="items[key]" step="0.5" min="0.0" max="99.0"
+                              :state="getValidationState(validationContext)"/>
+              </validation-provider>
 
-            <validation-provider :rules="{required: false}" v-slot="validationContext" v-else>
-              <b-form-input type="text" v-model="items[key]" :value="items[key]"
-                            :state="getValidationState(validationContext)"/>
-            </validation-provider>
+              <validation-provider :rules="{required: false}" v-slot="validationContext" v-else>
+                <b-form-input type="text" v-model="items[key]" :value="items[key]"
+                              :state="getValidationState(validationContext)"/>
+              </validation-provider>
 
-          </b-form-group>
+            </b-form-group>
+          </div>
           <button class="btn btn-default" type="reset">Отмена</button>
           <button class="btn btn-default" type="submit">Добавить</button>
         </b-form>
@@ -172,5 +177,12 @@ export default {
 .my-form-group {
   color: #492727;
   margin-right: 3%;
+}
+
+.my-little-block {
+  text-align: center;
+  color: #492727;
+  font-size: 16px;
+  padding: 2%;
 }
 </style>
