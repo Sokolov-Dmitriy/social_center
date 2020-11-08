@@ -1796,13 +1796,24 @@ def mySwitch(value):
         )
         # return deleteIDClient(SocialLivingConditionSerializers(SocialLivingCondition.objects.all(), many=True))
     elif value == "7":
+        # if (len(SocialEconomicConditionSerializers(SocialEconomicCondition.objects.all(), many=True).data) == 0):
+        #     return []
+        # return makeMarking(
+        #     socialEconomCon(),
+        #     'socialEconomConditions',
+        #     'Социально-экономические условия проживания'
+        # )
         if (len(SocialEconomicConditionSerializers(SocialEconomicCondition.objects.all(), many=True).data) == 0):
             return []
         return makeMarking(
-            socialEconomCon(),
+            deleteIDClient(SocialEconomicConditionSerializers(SocialEconomicCondition.objects.all(), many=True)),
             'socialEconomConditions',
             'Социально-экономические условия проживания'
         )
+
+
+
+
     elif value == "8":
         if (len(ExpertOpinionSerializers(ExpertOpinion.objects.all(), many=True).data) == 0):
             return []
