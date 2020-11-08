@@ -28,12 +28,6 @@ export default {
         {url: 'socialEconomic', component: 'socialEconomicCondition'},
         {url: 'expertOpinion', component: 'expertOpinion'},
       ],
-      suburls: [
-        {url: 'sourceIncome', component: 'sourceIncome'},
-        {url: 'socialPayment', component: 'socialPayment'},
-        {url: 'childAllowance', component: 'childAllowance'},
-        {url: 'facilities', component: 'facilities'},
-      ],
       testurls: [
         {url: 'testBoykoList', component: 'testBoykoList'},
         {url: 'testGAGEList', component: 'testGAGEList'},
@@ -49,13 +43,6 @@ export default {
         if (this.url === this.urls[url].url) {
           if (this.urls.length - 1 !== parseInt(url))
             this.$router.push({name: this.urls[parseInt(url) + 1].component});
-        }
-      }
-      for (var suburl in this.suburls) {
-        if (this.url === this.suburls[suburl].url) {
-          if (this.suburls.length - 1 !== parseInt(suburl))
-            this.$router.push({name: this.suburls[parseInt(suburl) + 1].component});
-          else this.$router.push({name: 'expertOpinion'});
         }
       }
 
@@ -78,14 +65,6 @@ export default {
         if (this.url === this.urls[url].url)
           if (0 !== parseInt(url))
             this.$router.push({name: this.urls[parseInt(url) - 1].component});
-
-      for (var suburl in this.suburls) {
-        if (this.url === this.suburls[suburl].url) {
-          if (0 !== parseInt(suburl))
-            this.$router.push({name: this.suburls[parseInt(suburl) - 1].component});
-          else this.$router.push({name: 'socialEconomicCondition'});
-        }
-      }
 
       if (this.url === 'child' || this.url === 'childAdd') this.$router.push({name: 'childList'});
       if (this.url === 'husbandInformation' || this.url === 'husbandAdd') this.$router.push({name: 'husbandList'});

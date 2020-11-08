@@ -154,6 +154,23 @@ class SocialEconomicConditionSerializers(MyModelSerializer):
     income_level = ChoiceField(choices=SocialEconomicCondition.LEVEL)
     income_confirmation = ChoiceField(choices=SocialEconomicCondition.CONFIRMATION)
     client_security = ChoiceField(choices=SocialEconomicCondition.SECURITY)
+    # Источники дохода
+    salary = ChoiceField(choices=SocialEconomicCondition.SALARY)
+    alimony = ChoiceField(choices=YESNO)
+    material_means = ChoiceField(choices=SocialEconomicCondition.MEANS)
+    rent = ChoiceField(choices=SocialEconomicCondition.RENT)
+    benefits = ChoiceField(choices=YESNO)
+    # Социальные выплаты
+    basis_social_payments = ChoiceField(choices=SocialEconomicCondition.BASIS)
+    pension = ChoiceField(choices=SocialEconomicCondition.PENSION)
+    type_social_payment = ChoiceField(choices=SocialEconomicCondition.TYPE_SOCIAL_PAYMENT)
+    # Детские пособия и компенсационные выплаты
+    basis_payments = ChoiceField(choices=SocialEconomicCondition.BASIS)
+    type_benefit_payment = ChoiceField(choices=SocialEconomicCondition.TYPE_BENEFIT_PAYMENT)
+    # Льготы и меры социальной поддержки,предусмотренные для определенных категорий
+    basis_facilities = ChoiceField(choices=YESNO)
+    right_facilities = ChoiceField(choices=YESNO)
+    stage_registration_facilities = ChoiceField(choices=SocialEconomicCondition.STAGE)
 
     class Meta:
         model = SocialEconomicCondition
@@ -165,83 +182,6 @@ class SocialEconomicConditionCRUDSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = SocialEconomicCondition
-        fields = '__all__'
-
-
-class SourceIncomeSerializers(MyModelSerializer):
-    """Источники дохода"""
-    salary = ChoiceField(choices=SourceIncome.SALARY)
-    alimony = ChoiceField(choices=YESNO)
-    material_means = ChoiceField(choices=SourceIncome.MEANS)
-    rent = ChoiceField(choices=SourceIncome.RENT)
-    benefits = ChoiceField(choices=YESNO)
-
-    class Meta:
-        model = SourceIncome
-        fields = '__all__'
-
-
-class SourceIncomeCRUDSerializers(serializers.ModelSerializer):
-    """Источники дохода без обозначений и вариантов полей"""
-
-    class Meta:
-        model = SourceIncome
-        fields = '__all__'
-
-
-class SocialPaymentSerializers(MyModelSerializer):
-    """Социальные выплаты"""
-    basis_social_payments = ChoiceField(choices=BASIS)
-    pension = ChoiceField(choices=SocialPayment.PENSION)
-    type_social_payment = ChoiceField(choices=SocialPayment.TYPE_SOCIAL_PAYMENT)
-
-    class Meta:
-        model = SocialPayment
-        fields = '__all__'
-
-
-class SocialPaymentCRUDSerializers(serializers.ModelSerializer):
-    """Социальные выплаты без обозначений и вариантов полей"""
-
-    class Meta:
-        model = SocialPayment
-        fields = '__all__'
-
-
-class ChildAllowanceAndCompensationSerializers(MyModelSerializer):
-    """Детские пособия и компенсационные выплаты"""
-    basis_payments = ChoiceField(choices=BASIS)
-    type_benefit_payment = ChoiceField(choices=ChildAllowanceAndCompensation.TYPE_BENEFIT_PAYMENT)
-
-    class Meta:
-        model = ChildAllowanceAndCompensation
-        fields = '__all__'
-
-
-class ChildAllowanceAndCompensationCRUDSerializers(serializers.ModelSerializer):
-    """Детские пособия и компенсационные выплаты без обозначений и вариантов полей"""
-
-    class Meta:
-        model = ChildAllowanceAndCompensation
-        fields = '__all__'
-
-
-class FacilitiesSerializers(MyModelSerializer):
-    """Льготы и меры социальной поддержки,предусмотренные для определенных категорий"""
-    basis_facilities = ChoiceField(choices=YESNO)
-    right_facilities = ChoiceField(choices=YESNO)
-    stage_registration_facilities = ChoiceField(choices=Facilities.STAGE)
-
-    class Meta:
-        model = Facilities
-        fields = '__all__'
-
-
-class FacilitiesCRUDSerializers(serializers.ModelSerializer):
-    """Льготы и меры социальной поддержки,предусмотренные для определенных категорий без обозначений и вариантов полей"""
-
-    class Meta:
-        model = Facilities
         fields = '__all__'
 
 
@@ -333,6 +273,8 @@ class HusbandListSerializers(serializers.ModelSerializer):
 class HusbandInformationSerializers(MyModelSerializer):
     """Информация о муже/партнёре"""
     placementSocialSupport = ChoiceField(choices=HusbandInformation.PLACEMENT_SOCIAL_SUPPORT)
+    registrationMunicipalDistrict = ChoiceField(choices=HusbandInformation.MUNICIPAL_DISTRICT)
+    actualMunicipalDistrict = ChoiceField(choices=HusbandInformation.MUNICIPAL_DISTRICT)
     workPlace = ChoiceField(choices=HusbandInformation.WORK_PLACE)
     avDoc = ChoiceField(choices=YESNO)
     cityzenship = ChoiceField(choices=HusbandInformation.CITYZENSHIP)

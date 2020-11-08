@@ -13,7 +13,7 @@
     <next-back v-bind:url="'husbandAdd'"></next-back>
     <div class="container">
       <div class="card">
-        <div class="card-header">Добавление мужа/партнера</div>
+        <div class="card-header">Добавление партнёра (мужа/жены)</div>
         <validation-observer ref="observer" v-slot="{ handleSubmit }">
           <b-form @submit.stop.prevent="handleSubmit(save)" @reset="notSave" class="my-form">
             <b-form-group label-cols-sm="3" :label="labels[key]" label-align-sm="right"
@@ -30,8 +30,13 @@
               </validation-provider>
 
               <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                   v-else-if="['IPPSNumber','contractNumber','fullName','address'].includes(key)">
-                <b-form-input type="text" v-model="items[key]" :value="items[key]"
+                                   v-else-if="['aboutWork','aboutNoWork','kindOfDrug'].includes(key)">
+                <b-textarea v-model="items[key]" :value="items[key]" :state="getValidationState(validationContext)"/>
+              </validation-provider>
+
+              <validation-provider :rules="{required: false,length:6}" v-slot="validationContext"
+                                   v-else-if="['registrationAddressIndex','actualAddressIndex'].includes(key)">
+                <b-form-input v-model="items[key]" :value="items[key]" type="number"
                               :state="getValidationState(validationContext)"/>
               </validation-provider>
 
@@ -68,7 +73,8 @@
               </validation-provider>
 
               <validation-provider :rules="{required: false}" v-slot="validationContext" v-else>
-                <b-textarea v-model="items[key]" :value="items[key]" :state="getValidationState(validationContext)"/>
+                <b-form-input type="text" v-model="items[key]" :value="items[key]"
+                              :state="getValidationState(validationContext)"/>
               </validation-provider>
 
             </b-form-group>
@@ -155,95 +161,95 @@ export default {
 </script>
 
 <style scoped>
-  .container {
-    margin-top: 2%;
-    text-align: center;
-  }
+.container {
+  margin-top: 2%;
+  text-align: center;
+}
 
-  .card-header {
-    display: block;
-    font-size: 30px;
-    font-weight: 700;
-    padding: 30px 0;
-    /*margin-bottom: 20px;*/
-    color: #492727;
-    background-color: #D2B48C;
-    border-color: #D2B48C
-  }
+.card-header {
+  display: block;
+  font-size: 30px;
+  font-weight: 700;
+  padding: 30px 0;
+  /*margin-bottom: 20px;*/
+  color: #492727;
+  background-color: #D2B48C;
+  border-color: #D2B48C
+}
 
-  .card {
-    background-color: #f5eed5;
-    /*margin-bottom: 5%;*/
-  }
+.card {
+  background-color: #f5eed5;
+  /*margin-bottom: 5%;*/
+}
 
-  form .btn-default {
-    background-color: #D2B48C;
-    color: #492727;
-    margin: 10px;
-  }
+form .btn-default {
+  background-color: #D2B48C;
+  color: #492727;
+  margin: 10px;
+}
 
-  form .btn-default:hover {
-    background-color: #452424;
-    color: #D2B48C;
-  }
+form .btn-default:hover {
+  background-color: #452424;
+  color: #D2B48C;
+}
 
-  .btn-default:hover {
-    background-color: #E6DFC6;
-    color: black;
-  }
+.btn-default:hover {
+  background-color: #E6DFC6;
+  color: black;
+}
 
-  .my-form {
-    background-color: #f5eed5;
-  }
+.my-form {
+  background-color: #f5eed5;
+}
 
-  .my-form-group {
-    color: #492727;
-    margin-right: 3%;
-  }
+.my-form-group {
+  color: #492727;
+  margin-right: 3%;
+}
 
+.my-link {
+  background-color: #FFF8DC;
+  color: #492727;
+  font-size: 20px;
+  margin-left: 20px;
+}
+
+.btn-default-right {
+  float: right;
+  color: #492727;
+  font-size: 16px;
+}
+
+.btn-default-right:hover {
+  background-color: #E6DFC6;
+  color: black;
+}
+
+.my-block {
+  text-align: center;
+  color: #492727;
+  font-size: 18px;
+  padding: 3%;
+}
+
+@media only screen and (max-width: 768px) {
   .my-link {
-    background-color: #FFF8DC;
-    color: #492727;
-    font-size: 20px;
-    margin-left: 20px;
-  }
-
-  .btn-default-right {
-    float: right;
-    color: #492727;
     font-size: 16px;
+    margin-left: 0;
   }
+}
 
-  .btn-default-right:hover {
-    background-color: #E6DFC6;
-    color: black;
+@media only screen and (max-width: 650px) {
+  .my-link {
+    font-size: 14px;
+    margin-left: 0;
   }
+}
 
-  .my-block {
-    text-align: center;
-    color: #492727;
-    font-size: 18px;
-    padding: 3%;
+@media only screen and (max-width: 540px) {
+  .my-link {
+    font-size: 12px;
+    margin-left: 0;
   }
-
-  @media only screen and (max-width: 768px) {
-    .my-link {
-      font-size: 16px;
-      margin-left: 0;
-    }
-  }
-
-  @media only screen and (max-width: 650px) {
-    .my-link {
-      font-size: 14px;
-      margin-left: 0;
-    }
-  }
-
-  @media only screen and (max-width: 540px) {
-    .my-link {
-      font-size: 12px;
-      margin-left: 0;
-    }
-  }
+}
 </style>

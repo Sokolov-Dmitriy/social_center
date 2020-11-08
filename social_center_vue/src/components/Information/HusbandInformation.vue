@@ -21,8 +21,13 @@
             </validation-provider>
 
             <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                  v-else-if="['IPPSNumber','contractNumber','fullName','address'].includes(key)">
-              <b-form-input type="text" v-model="items[key]" :value="items[key]"
+                                 v-else-if="['aboutWork','aboutNoWork','kindOfDrug'].includes(key)">
+              <b-textarea v-model="items[key]" :value="items[key]" :state="getValidationState(validationContext)"/>
+            </validation-provider>
+
+            <validation-provider :rules="{required: false,length:6}" v-slot="validationContext"
+                                 v-else-if="['registrationAddressIndex','actualAddressIndex'].includes(key)">
+              <b-form-input v-model="items[key]" :value="items[key]" type="number"
                             :state="getValidationState(validationContext)"/>
             </validation-provider>
 
@@ -34,10 +39,10 @@
             </validation-provider>
 
             <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                   v-else-if="['DateOfCreationIPSO','ContractPeriod'].includes(key)">
-                <b-form-input type="date" v-model="items[key]" :value="items[key]"
-                              :state="getValidationState(validationContext)"/>
-              </validation-provider>
+                                 v-else-if="['DateOfCreationIPSO','ContractPeriod'].includes(key)">
+              <b-form-input type="date" v-model="items[key]" :value="items[key]"
+                            :state="getValidationState(validationContext)"/>
+            </validation-provider>
 
             <validation-provider :rules="{required: false}" v-slot="validationContext"
                                  v-else-if="key === 'dod'">
@@ -58,7 +63,8 @@
             </validation-provider>
 
             <validation-provider :rules="{required: false}" v-slot="validationContext" v-else>
-              <b-textarea v-model="items[key]" :value="items[key]" :state="getValidationState(validationContext)"/>
+              <b-form-input type="text" v-model="items[key]" :value="items[key]"
+                            :state="getValidationState(validationContext)"/>
             </validation-provider>
 
           </b-form-group>
@@ -71,96 +77,96 @@
 </template>
 
 <script>
-  import templateInfo from "../templateInfo";
-  import {ValidationObserver, ValidationProvider} from "vee-validate/dist/vee-validate.full";
+import templateInfo from "../templateInfo";
+import {ValidationObserver, ValidationProvider} from "vee-validate/dist/vee-validate.full";
 
-  export default {
-    name: "HusbandInformation",
-    components: {
-      templateInfo,
-      ValidationProvider,
-      ValidationObserver,
+export default {
+  name: "HusbandInformation",
+  components: {
+    templateInfo,
+    ValidationProvider,
+    ValidationObserver,
+  },
+  data() {
+    return {
+      add: false,
+      labels: '',
+      choices: '',
+      items: '',
+      id: ''
+    }
+  },
+  created() {
+    if (this.$route.params.id !== undefined)
+      sessionStorage.setItem('id_husband', this.$route.params.id);
+    this.id = sessionStorage.getItem('id_husband');
+  },
+  methods: {
+    addInfo() {
+      this.add = true;
+      $.ajax({
+        url: this.$store.state.baseUrl + "api/fields/",
+        type: "GET",
+        data: {model: 'HusbandInformation'},
+        success: (response) => {
+          this.labels = response.data.labels;
+          this.choices = response.data.choices;
+          if (this.$refs.template.edit !== '')
+            this.items = this.$refs.template.edit;
+          else
+            this.items = response.data.items;
+        },
+        error: (response) => {
+          if (response.status === 401) this.logOut();
+          else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+        }
+      })
     },
-    data() {
-      return {
-        add: false,
-        labels: '',
-        choices: '',
-        items: '',
-        id: ''
-      }
+    save() {
+      this.$refs.template.putRequest(this.items);
     },
-    created() {
-      if (this.$route.params.id !== undefined)
-        sessionStorage.setItem('id_husband', this.$route.params.id);
-      this.id = sessionStorage.getItem('id_husband');
+    postInfo() {
+      this.add = false;
     },
-    methods: {
-      addInfo() {
-        this.add = true;
-        $.ajax({
-          url: this.$store.state.baseUrl+"api/fields/",
-          type: "GET",
-          data: {model: 'HusbandInformation'},
-          success: (response) => {
-            this.labels = response.data.labels;
-            this.choices = response.data.choices;
-            if (this.$refs.template.edit !== '')
-              this.items = this.$refs.template.edit;
-            else
-              this.items = response.data.items;
-          },
-          error: (response) => {
-            if (response.status === 401) this.logOut();
-            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
-          }
-        })
-      },
-      save() {
-        this.$refs.template.putRequest(this.items);
-      },
-      postInfo() {
-        this.add = false;
-      },
-      notSave() {
-        this.add = false;
-        this.$refs.template.isHide = false;
-      },
-      getValidationState({dirty, validated, valid = null}) {
-        return dirty || validated ? valid : null;
-      },
-       getAge(dod) {
-        var date = new Date(dod);
-        var ageDifMs = Date.now() - date.getTime();
-        var ageDate = new Date(ageDifMs);
-        this.items['age'] = Math.abs(ageDate.getUTCFullYear() - 1970);
-      }
+    notSave() {
+      this.add = false;
+      this.$refs.template.isHide = false;
+    },
+    getValidationState({dirty, validated, valid = null}) {
+      return dirty || validated ? valid : null;
+    },
+    getAge(dod) {
+      var date = new Date(dod);
+      var ageDifMs = Date.now() - date.getTime();
+      var ageDate = new Date(ageDifMs);
+      this.items['age'] = Math.abs(ageDate.getUTCFullYear() - 1970);
     }
   }
+}
 </script>
 
 <style scoped>
-  .btn-default {
-    background-color: #D2B48C;
-    color: #492727;
-    margin: 10px;
-  }
+.btn-default {
+  background-color: #D2B48C;
+  color: #492727;
+  margin: 10px;
+}
 
-  .btn-default:hover {
-    background-color: #452424;
-    color: #D2B48C;
-  }
+.btn-default:hover {
+  background-color: #452424;
+  color: #D2B48C;
+}
 
-  .container {
-    text-align: center;
-  }
+.container {
+  text-align: center;
+}
 
-  .my-form {
-    background-color: #f5eed5;
-  }
+.my-form {
+  background-color: #f5eed5;
+}
 
-  .my-form-group {
-    color: #492727;
-    margin-right: 3%;
-  }
+.my-form-group {
+  color: #492727;
+  margin-right: 3%;
+}
 </style>

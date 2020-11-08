@@ -623,279 +623,6 @@ class SocialEconomicConditionView(APIView):
         return Response(status=201)
 
 
-class SourceIncomeView(APIView):
-    """Источники дохода"""
-
-    def get(self, request, pk=None):
-        """
-        Получение записи
-
-        :param request: Запрос с id Социально экономических условий проживания
-        :param pk: id Социально экономических условий проживания
-        :return: Источники дохода, в случае отсутствия записи No Content
-        """
-        if pk is None:
-            economic_condition = request.GET.get("economic_condition")
-        else:
-            economic_condition = pk
-        source_income = SourceIncome.objects.filter(economic_condition=economic_condition)
-        if source_income.exists():
-            if pk is None:
-                serializer = SourceIncomeSerializers(source_income, many=True)
-            else:
-                serializer = SourceIncomeCRUDSerializers(source_income, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=204)
-
-    def post(self, request):
-        """
-        Создание записи
-
-        :param request: Запрос с новыми данными
-        :return: Статус Created, в случае ошибки создания Bad Request
-        """
-        source_income = SourceIncomeCRUDSerializers(data=request.data)
-        if source_income.is_valid():
-            economic_condition = get_object_or_404(SocialEconomicCondition,
-                                                   id=self.request.data.get('economic_condition'))
-            source_income.save(economic_condition=economic_condition)
-            return Response(status=201)
-        else:
-            return Response(status=400)
-
-    def put(self, request, pk):
-        """
-        Обновление записи
-
-        :param request: Запрос с обновленными данными
-        :param pk: id обновляемой записи
-        :return: Статус Created
-        """
-        source_income = get_object_or_404(SourceIncome.objects.all(), pk=pk)
-        serializer = SourceIncomeCRUDSerializers(instance=source_income, data=request.data, partial=True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-        return Response(status=201)
-
-    def delete(self, request, pk):
-        """
-        Удаление записи
-
-        :param request: Запрос
-        :param pk: id удаляемой записи
-        :return: Статус Created
-        """
-        source_income = get_object_or_404(SourceIncome.objects.all(), pk=pk)
-        source_income.delete()
-        return Response(status=201)
-
-
-class SocialPaymentView(APIView):
-    """Социальные выплаты"""
-
-    def get(self, request, pk=None):
-        """
-        Получение записи
-
-        :param request: Запрос с id Социально экономических условий проживания
-        :param pk: id Социально экономических условий проживания
-        :return: Социальные выплаты, в случае отсутствия записи No Content
-        """
-        if pk is None:
-            economic_condition = request.GET.get("economic_condition")
-        else:
-            economic_condition = pk
-        social_payment = SocialPayment.objects.filter(economic_condition=economic_condition)
-        if social_payment.exists():
-            if pk is None:
-                serializer = SocialPaymentSerializers(social_payment, many=True)
-            else:
-                serializer = SocialPaymentCRUDSerializers(social_payment, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=204)
-
-    def post(self, request):
-        """
-        Создание записи
-
-        :param request: Запрос с новыми данными
-        :return: Статус Created, в случае ошибки создания Bad Request
-        """
-        social_payment = SocialPaymentCRUDSerializers(data=request.data)
-        if social_payment.is_valid():
-            economic_condition = get_object_or_404(SocialEconomicCondition,
-                                                   id=self.request.data.get('economic_condition'))
-            social_payment.save(economic_condition=economic_condition)
-            return Response(status=201)
-        else:
-            return Response(status=400)
-
-    def put(self, request, pk):
-        """
-        Обновление записи
-
-        :param request: Запрос с обновленными данными
-        :param pk: id обновляемой записи
-        :return: Статус Created
-        """
-        social_payment = get_object_or_404(SocialPayment.objects.all(), pk=pk)
-        serializer = SocialPaymentCRUDSerializers(instance=social_payment, data=request.data, partial=True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-        return Response(status=201)
-
-    def delete(self, request, pk):
-        """
-        Удаление записи
-
-        :param request: Запрос
-        :param pk: id удаляемой записи
-        :return: Статус Created
-        """
-        social_payment = get_object_or_404(SocialPayment.objects.all(), pk=pk)
-        social_payment.delete()
-        return Response(status=201)
-
-
-class ChildAllowanceAndCompensationView(APIView):
-    """Детские пособия и компенсационные выплаты"""
-
-    def get(self, request, pk=None):
-        """
-        Получение записи
-
-        :param request: Запрос с id Социально экономических условий проживания
-        :param pk: id Социально экономических условий проживания
-        :return: Детские пособия и компенсационные выплаты, в случае отсутствия записи No Content
-        """
-        if pk is None:
-            economic_condition = request.GET.get("economic_condition")
-        else:
-            economic_condition = pk
-        child_allowance = ChildAllowanceAndCompensation.objects.filter(economic_condition=economic_condition)
-        if child_allowance.exists():
-            if pk is None:
-                serializer = ChildAllowanceAndCompensationSerializers(child_allowance, many=True)
-            else:
-                serializer = ChildAllowanceAndCompensationCRUDSerializers(child_allowance, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=204)
-
-    def post(self, request):
-        """
-        Создание записи
-
-        :param request: Запрос с новыми данными
-        :return: Статус Created, в случае ошибки создания Bad Request
-        """
-        child_allowance = ChildAllowanceAndCompensationCRUDSerializers(data=request.data)
-        if child_allowance.is_valid():
-            economic_condition = get_object_or_404(SocialEconomicCondition,
-                                                   id=self.request.data.get('economic_condition'))
-            child_allowance.save(economic_condition=economic_condition)
-            return Response(status=201)
-        else:
-            return Response(status=400)
-
-    def put(self, request, pk):
-        """
-        Обновление записи
-
-        :param request: Запрос с обновленными данными
-        :param pk: id обновляемой записи
-        :return: Статус Created
-        """
-        child_allowance = get_object_or_404(ChildAllowanceAndCompensation.objects.all(), pk=pk)
-        serializer = ChildAllowanceAndCompensationCRUDSerializers(instance=child_allowance, data=request.data,
-                                                                  partial=True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-        return Response(status=201)
-
-    def delete(self, request, pk):
-        """
-        Удаление записи
-
-        :param request: Запрос
-        :param pk: id удаляемой записи
-        :return: Статус Created
-        """
-        child_allowance = get_object_or_404(ChildAllowanceAndCompensation.objects.all(), pk=pk)
-        child_allowance.delete()
-        return Response(status=201)
-
-
-class FacilitiesView(APIView):
-    """Льготы и меры социальной поддержки,предусмотренные для определенных категорий"""
-
-    def get(self, request, pk=None):
-        """
-        Получение записи
-
-        :param request: Запрос с id Социально экономических условий проживания
-        :param pk: id Социально экономических условий проживания
-        :return: Льготы и меры социальной поддержки, в случае отсутствия записи No Content
-        """
-        if pk is None:
-            economic_condition = request.GET.get("economic_condition")
-        else:
-            economic_condition = pk
-        facilities = Facilities.objects.filter(economic_condition=economic_condition)
-        if facilities.exists():
-            if pk is None:
-                serializer = FacilitiesSerializers(facilities, many=True)
-            else:
-                serializer = FacilitiesCRUDSerializers(facilities, many=True)
-            return Response(serializer.data)
-        else:
-            return Response(status=204)
-
-    def post(self, request):
-        """
-        Создание записи
-
-        :param request: Запрос с новыми данными
-        :return: Статус Created, в случае ошибки создания Bad Request
-        """
-        facilities = FacilitiesCRUDSerializers(data=request.data)
-        if facilities.is_valid():
-            economic_condition = get_object_or_404(SocialEconomicCondition,
-                                                   id=self.request.data.get('economic_condition'))
-            facilities.save(economic_condition=economic_condition)
-            return Response(status=201)
-        else:
-            return Response(status=400)
-
-    def put(self, request, pk):
-        """
-        Обновление записи
-
-        :param request: Запрос с обновленными данными
-        :param pk: id обновляемой записи
-        :return: Статус Created
-        """
-        facilities = get_object_or_404(Facilities.objects.all(), pk=pk)
-        serializer = FacilitiesCRUDSerializers(instance=facilities, data=request.data, partial=True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-        return Response(status=201)
-
-    def delete(self, request, pk):
-        """
-        Удаление записи
-
-        :param request: Запрос
-        :param pk: id удаляемой записи
-        :return: Статус Created
-        """
-        facilities = get_object_or_404(Facilities.objects.all(), pk=pk)
-        facilities.delete()
-        return Response(status=201)
-
-
 class ExpertOpinionView(APIView):
     """Заключение специалиста"""
 
@@ -1569,8 +1296,6 @@ MODEL = {'Client': Client, 'ASocialBehavior': ASocialBehavior,
          'ChronicDisease': ChronicDisease, 'Child': Child,
          'FamilyMembersInformation': FamilyMembersInformation, 'HusbandInformation': HusbandInformation,
          'SocialLivingCondition': SocialLivingCondition, 'SocialEconomicCondition': SocialEconomicCondition,
-         'SourceIncome': SourceIncome, 'SocialPayment': SocialPayment,
-         'ChildAllowanceAndCompensation': ChildAllowanceAndCompensation, 'Facilities': Facilities,
          'ExpertOpinion': ExpertOpinion, 'TestBoyko': TestBoyko, 'TestGAGE': TestGAGE, 'TestSOCRATES': TestSOCRATES}
 
 
@@ -1756,16 +1481,16 @@ def deleteExcessDataFromChild(serializer):
 def socialEconomCon():
     mainSerializer = SocialEconomicConditionSerializers(SocialEconomicCondition.objects.all(), many=True)
     arraySer = []
-    if (len(SourceIncomeSerializers(SourceIncome.objects.all(), many=True).data) != 0):
-        arraySer.append(SourceIncomeSerializers(SourceIncome.objects.all(), many=True))
-    if (len(SocialPaymentSerializers(SocialPayment.objects.all(), many=True).data) != 0):
-        arraySer.append(SocialPaymentSerializers(SocialPayment.objects.all(), many=True))
-    if (len(ChildAllowanceAndCompensationSerializers(ChildAllowanceAndCompensation.objects.all(),
-                                                     many=True).data) != 0):
-        arraySer.append(
-            ChildAllowanceAndCompensationSerializers(ChildAllowanceAndCompensation.objects.all(), many=True))
-    if (len(FacilitiesSerializers(Facilities.objects.all(), many=True).data) != 0):
-        arraySer.append(FacilitiesSerializers(Facilities.objects.all(), many=True))
+    # if (len(SourceIncomeSerializers(SourceIncome.objects.all(), many=True).data) != 0):
+    #     arraySer.append(SourceIncomeSerializers(SourceIncome.objects.all(), many=True))
+    # if (len(SocialPaymentSerializers(SocialPayment.objects.all(), many=True).data) != 0):
+    #     arraySer.append(SocialPaymentSerializers(SocialPayment.objects.all(), many=True))
+    # if (len(ChildAllowanceAndCompensationSerializers(ChildAllowanceAndCompensation.objects.all(),
+    #                                                  many=True).data) != 0):
+    #     arraySer.append(
+    #         ChildAllowanceAndCompensationSerializers(ChildAllowanceAndCompensation.objects.all(), many=True))
+    # if (len(FacilitiesSerializers(Facilities.objects.all(), many=True).data) != 0):
+    #     arraySer.append(FacilitiesSerializers(Facilities.objects.all(), many=True))
 
     for serializer in arraySer:
         for value in serializer.data:
@@ -1936,12 +1661,12 @@ def deleteIDForClient(serializer):
             # print(key + ' ')
             if key == 'passSeries' or key == 'passNumber':
 
-                if copy.get(key)==None:
+                if copy.get(key) == None:
                     print(copy.get(key))
-                    passArray=passArray
+                    passArray = passArray
                 else:
-                    passArray = passArray+" "+str(copy.get(key))
-                direct.update({'passSeries':passArray})
+                    passArray = passArray + " " + str(copy.get(key))
+                direct.update({'passSeries': passArray})
             else:
                 direct.update({key: copy.get(key)})
 
@@ -1949,7 +1674,7 @@ def deleteIDForClient(serializer):
         direct.update({'id': copy.get('id')})
         # print(copy.get('client'))
     array[0].pop('passNumber')
-    array[0].update({'passSeries':"Серия,номер"})
+    array[0].update({'passSeries': "Серия,номер"})
     # array[0].pop("id")
     # array[0].pop("client")
     # newArray.append(array[0].values())
@@ -2350,4 +2075,3 @@ class TestsAnswers(APIView):
             })
             num = num + 1
         return Response(dict)
-

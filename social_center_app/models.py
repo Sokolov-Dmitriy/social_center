@@ -109,7 +109,8 @@ class Client(models.Model):
 
     dateOfInterview = models.DateField("Дата проведения интервью", null=True, blank=True, default=None)
     code = models.TextField(verbose_name='Код клиента', null=True, blank=True, default=None)
-    formOfReferral = models.IntegerField("Форма обращения", choices=FORM_OF_REFERRAL, null=True, blank=True, default=None)
+    formOfReferral = models.IntegerField("Форма обращения", choices=FORM_OF_REFERRAL, null=True, blank=True,
+                                         default=None)
     placementSocialSupport = models.IntegerField("Постановка на социальное сопровождение",
                                                  choices=PLACEMENT_SOCIAL_SUPPORT, null=True, blank=True, default=None)
     DateOfCreationIPSO = models.DateField("Дата разработки ИППСУ", null=True, blank=True, default=None)
@@ -125,7 +126,8 @@ class Client(models.Model):
     passNumber = models.IntegerField("Номер паспорта", null=True, blank=True, default=None)
     passFromWhomIssue = models.TextField(verbose_name='Выдан', null=True, blank=True, default=None)
     passDateIssue = models.DateField("Дата выдачи", null=True, blank=True, default=None)
-    registrationAddressCity = models.TextField(verbose_name='Населенный пункт (АР)', null=True, blank=True, default=None)
+    registrationAddressCity = models.TextField(verbose_name='Населенный пункт (АР)', null=True, blank=True,
+                                               default=None)
     registrationAddressStreet = models.TextField(verbose_name='Улица (АР)', null=True, blank=True, default=None)
     registrationAddressHouseNum = models.TextField(verbose_name='Дом (АР)', null=True, blank=True, default=None)
     registrationAddressApNum = models.TextField(verbose_name='Номер квартиры (АР)', null=True, blank=True, default=None)
@@ -308,6 +310,7 @@ class SocialEconomicCondition(models.Model):
                     (3, 'невозможно подтвердить документально')]
     SECURITY = [(1, 'достаточное с учетом возраста и потребностей ребенка'), (2, 'удовлетворительное'),
                 (3, 'недостаточное')]
+
     client = models.OneToOneField(Client, on_delete=models.CASCADE)
     income_level = models.IntegerField(verbose_name='Уровень доходов клиента', choices=LEVEL, null=True,
                                        blank=True)
@@ -318,28 +321,11 @@ class SocialEconomicCondition(models.Model):
         verbose_name='Обеспеченность клиентки и ее детей полноценным питанием,одеждой,обувью,предметами личной гигиены',
         choices=SECURITY, null=True, blank=True)
 
-    class Meta:
-        verbose_name = 'Социально экономические условия проживания'
-        verbose_name_plural = 'Социально экономические условия проживания'
-
-
-class SourceIncome(models.Model):
-    """
-    Социальная диагностика
-    ======================
-
-    4. Сведения о социально-бытовом и социально-экономическом положении
-    -------------------------------------------------------------------
-
-    4.2 Социально-экономические условия проживания
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    Источники дохода
-    """
+    # Источники дохода
     SALARY = [(1, 'постоянно'), (2, 'переодически'), (3, 'редко')]
     MEANS = [(1, 'родственниками'), (2, 'партнером'), (3, 'мужем')]
     RENT = [(1, 'комнаты'), (2, 'оборудования'), (3, 'участка')]
-    economic_condition = models.OneToOneField(SocialEconomicCondition, on_delete=models.CASCADE)
+
     salary = models.IntegerField(verbose_name='Заработная плата', choices=SALARY, null=True, blank=True)
     alimony = models.IntegerField(verbose_name='Алименты/нотариальное соглашение о содержании ребенка', choices=YESNO,
                                   null=True, blank=True)
@@ -348,57 +334,22 @@ class SourceIncome(models.Model):
     rent = models.IntegerField(verbose_name='Сдача в аренду', choices=RENT, null=True, blank=True)
     benefits = models.IntegerField(verbose_name='Льготы по коммунальным услугам', choices=YESNO, null=True, blank=True)
 
-    class Meta:
-        verbose_name = 'Источники дохода'
-        verbose_name_plural = 'Источники дохода'
+    BASIS = [(1, 'нет оснований для оформления выплаты'), (2, 'имеется право на выплату'), (3, 'требует оформления'),
+             (4, 'находится в стадии оформления'), (5, 'выплачивается')]
 
-
-BASIS = [(1, 'нет оснований для оформления выплаты'), (2, 'имеется право на выплату'), (3, 'требует оформления'),
-         (4, 'находится в стадии оформления'), (5, 'выплачивается')]
-
-
-class SocialPayment(models.Model):
-    """
-    Социальная диагностика
-    ======================
-
-    4. Сведения о социально-бытовом и социально-экономическом положении
-    -------------------------------------------------------------------
-
-    4.2 Социально-экономические условия проживания
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    Социальные выплаты
-    """
+    # Социальные выплаты
     PENSION = [(1, 'по старости'), (2, 'по потере кормильца'), (3, 'по инвалидности')]
     TYPE_SOCIAL_PAYMENT = [(1, 'единовременные выплаты'), (2, 'ежемесячные выплаты'),
                            (3, 'государственная социальная помощь,доплата до прожиточного минимума'),
                            (4, 'государственная социальная помощь в трудной жизненной ситуации')]
-    economic_condition = models.OneToOneField(SocialEconomicCondition, on_delete=models.CASCADE)
+
     basis_social_payments = models.IntegerField(verbose_name='Основания для социальных выплат', choices=BASIS,
                                                 null=True, blank=True)
     pension = models.IntegerField(verbose_name='Пенсия', choices=PENSION, null=True, blank=True)
     type_social_payment = models.IntegerField(verbose_name='Вид социальной выплаты', choices=TYPE_SOCIAL_PAYMENT,
                                               null=True, blank=True)
 
-    class Meta:
-        verbose_name = 'Социальные выплаты'
-        verbose_name_plural = 'Социальные выплаты'
-
-
-class ChildAllowanceAndCompensation(models.Model):
-    """
-    Социальная диагностика
-    ======================
-
-    4. Сведения о социально-бытовом и социально-экономическом положении
-    -------------------------------------------------------------------
-
-    4.2 Социально-экономические условия проживания
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    Детские пособия и компенсационные выплаты
-    """
+    # Детские пособия и компенсационные выплаты
     TYPE_BENEFIT_PAYMENT = [(1, 'единовременная компенсационная выплата при рождении ребенка (СПБ)'),
                             (2, 'единовременное пособие при рождении ребенка (РФ)'),
                             (3, 'ежемесячное пособие на ребёнка в возрасте от рождения до 1 года (СПб)'),
@@ -408,31 +359,14 @@ class ChildAllowanceAndCompensation(models.Model):
                             (7, 'единовременное пособие женщинам, вставшим на учёт в ранние сроки (РФ)'),
                             (8, 'ежемесячное пособие по уходу за ребёнком (РФ)'),
                             (9, 'сертификат на получение материнского (семейного) капитала')]
-    economic_condition = models.OneToOneField(SocialEconomicCondition, on_delete=models.CASCADE)
+
     basis_payments = models.IntegerField(verbose_name='Основания для выплаты', choices=BASIS, null=True, blank=True)
     type_benefit_payment = models.IntegerField(verbose_name='Вид пособия/компенсационной выплаты',
                                                choices=TYPE_BENEFIT_PAYMENT, null=True, blank=True)
 
-    class Meta:
-        verbose_name = 'Детские пособия и компенсационные выплаты'
-        verbose_name_plural = 'Детские пособия и компенсационные выплаты'
-
-
-class Facilities(models.Model):
-    """
-    Социальная диагностика
-    ======================
-
-    4. Сведения о социально-бытовом и социально-экономическом положении
-    -------------------------------------------------------------------
-
-    4.2 Социально-экономические условия проживания
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    Льготы и меры социальной поддержки, предусмотренные для определённых категорий
-    """
+    # Льготы и меры социальной поддержки, предусмотренные для определённых категорий
     STAGE = [(1, 'оформлено полностью'), (2, 'частично оформлено'), (3, 'в стадии оформления'), (4, 'не оформлено')]
-    economic_condition = models.OneToOneField(SocialEconomicCondition, on_delete=models.CASCADE)
+
     basis_facilities = models.IntegerField(verbose_name='Основания для льгот', choices=YESNO, null=True, blank=True)
     right_facilities = models.IntegerField(verbose_name='Имеет право на льготы (указать)', choices=YESNO, null=True,
                                            blank=True)
@@ -441,8 +375,8 @@ class Facilities(models.Model):
     reason = models.TextField(verbose_name='Причина,по которой не оформлены льготы', null=True, blank=True)
 
     class Meta:
-        verbose_name = 'Льготы и меры социальной поддержки,предусмотренные для определенных категорий'
-        verbose_name_plural = 'Льготы и меры социальной поддержки,предусмотренные для определенных категорий'
+        verbose_name = 'Социально экономические условия проживания'
+        verbose_name_plural = 'Социально экономические условия проживания'
 
 
 class ASocialBehavior(models.Model):
@@ -637,7 +571,7 @@ class ChronicDisease(models.Model):
     reasonForNotGettingTreatment = models.TextField("Причина, по которой не получает лечение ВИЧ",
                                                     null=True,
                                                     blank=True)
-    whoKnow = models.IntegerField("Кто из членов семьи знает о ВИЧ-статусе клиента",
+    whoKnow = models.IntegerField("Знают ли члены семьи о ВИЧ-статусе клиента",
                                   choices=HIV_FAMILY_AWARENESS,
                                   null=True,
                                   blank=True)
@@ -689,6 +623,16 @@ class HusbandInformation(models.Model):
 
     3.2 Информация о муже/партнёре
     """
+    MUNICIPAL_DISTRICT = [
+        (1, 'Юго-Запад'),
+        (2, 'Южно-Приморский'),
+        (3, 'Сосновая Поляна'),
+        (4, 'Урицк'),
+        (5, 'Константиновское'),
+        (6, 'Горелово'),
+        (7, 'г.Красное Село')
+    ]
+
     WORK_PLACE = [(1, "постоянное"),
                   (2, "временное"),
                   (3, "эпизодическое"),
@@ -753,7 +697,21 @@ class HusbandInformation(models.Model):
     ContractPeriod = models.DateField("Срок действия договора", null=True, blank=True, default=None)
     contractNumber = models.TextField(verbose_name='Номер договора', null=True, blank=True, default=None)
     fullName = models.TextField("ФИО партнёра (мужа/жены)", null=True, blank=True, default=None)
-    address = models.TextField("Адрес", null=True, blank=True, default=None)
+    registrationAddressCity = models.TextField(verbose_name='Населенный пункт (АР)', null=True, blank=True,
+                                               default=None)
+    registrationAddressStreet = models.TextField(verbose_name='Улица (АР)', null=True, blank=True, default=None)
+    registrationAddressHouseNum = models.TextField(verbose_name='Дом (АР)', null=True, blank=True, default=None)
+    registrationAddressApNum = models.TextField(verbose_name='Номер квартиры (АР)', null=True, blank=True, default=None)
+    registrationAddressIndex = models.IntegerField("Почтовый индекс (АР)", null=True, blank=True, default=None)
+    registrationMunicipalDistrict = models.IntegerField("Муниципальный округ (АР)",
+                                                        choices=MUNICIPAL_DISTRICT, null=True, blank=True, default=None)
+    actualAddressCity = models.TextField(verbose_name='Населенный пункт (АФП)', null=True, blank=True, default=None)
+    actualAddressStreet = models.TextField(verbose_name='Улица (АФП)', null=True, blank=True, default=None)
+    actualAddressHouseNum = models.TextField(verbose_name='Дом (АФП)', null=True, blank=True, default=None)
+    actualAddressApNum = models.TextField(verbose_name='Номер квартиры (АФП)', null=True, blank=True, default=None)
+    actualAddressIndex = models.IntegerField("Почтовый индекс (АФП)", null=True, blank=True, default=None)
+    actualMunicipalDistrict = models.IntegerField("Муниципальный округ (АФП)",
+                                                  choices=MUNICIPAL_DISTRICT, null=True, blank=True, default=None)
     telephoneNumber = models.TextField("Телефон",
                                        max_length=15, null=True, blank=True, default=None)
     dod = models.DateField("Дата рождения", null=True, blank=True, default=None)

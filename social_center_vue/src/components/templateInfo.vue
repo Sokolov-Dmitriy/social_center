@@ -35,13 +35,12 @@
 <!--          </tr>-->
 <!--          </thead>-->
           <tbody v-for="(value,key) in labels" class="tbody">
-          <tr v-if="!['id','client','child','husband','economic_condition','specialist'].includes(key) ">
+          <tr v-if="!['id','client','child','husband','specialist'].includes(key) ">
             <td class="td-left">{{ labels[key] }}</td>
             <td>{{ items[key] }}</td>
           </tr>
           </tbody>
         </table>
-        <navigation v-if="!no_data && !isHide" v-bind:url="url" v-bind:id="id" class="noprint"></navigation>
         <!--        <button class="btn btn-default" type="button" v-if="no_data && !isHide" @click="addInfo">ДОБАВИТЬ <span-->
         <!--          class="fa fa-plus-circle fa-2x"/></button>-->
       </div>
@@ -52,7 +51,6 @@
 <script>
 import sideBar from "./sideBar";
 import navBar from "./navBars/navBar";
-import navigation from "./Information/navigation";
 import sideBarTest from "./Test/sideBarTest";
 import templateChild from "./Information/templateChild";
 import NextBack from "./Information/NextBack";
@@ -63,7 +61,6 @@ export default {
     NextBack,
     sideBar,
     navBar,
-    navigation,
     sideBarTest,
     templateChild
   },

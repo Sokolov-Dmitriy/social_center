@@ -14,10 +14,6 @@ import FamilyMembers from "../components/Information/FamilyMembers";
 import HusbandInformation from "../components/Information/HusbandInformation";
 import SocialLivingCondition from "../components/Information/SocialLivingCondition";
 import SocialEconomicCondition from "../components/Information/SocialEconomicCondition";
-import SourceIncome from "../components/Information/SourceIncome";
-import SocialPayment from "../components/Information/SocialPayment";
-import ChildAllowanceAndCompensation from "../components/Information/ChildAllowanceAndCompensation";
-import Facilities from "../components/Information/Facilities";
 import ExpertOpinion from "../components/Information/ExpertOpinion";
 import TestBoykoList from "../components/Test/TestBoykoList";
 import TestBoyko from "../components/Test/TestBoyko";
@@ -114,26 +110,6 @@ export const router = new Router({
       path: '/socialEconomic',
       name: 'socialEconomicCondition',
       component: SocialEconomicCondition
-    },
-    {
-      path: '/sourceIncome',
-      name: 'sourceIncome',
-      component: SourceIncome
-    },
-    {
-      path: '/socialPayment',
-      name: 'socialPayment',
-      component: SocialPayment
-    },
-    {
-      path: '/childAllowance',
-      name: 'childAllowance',
-      component: ChildAllowanceAndCompensation
-    },
-    {
-      path: '/facilities',
-      name: 'facilities',
-      component: Facilities
     },
     {
       path: '/expertOpinion',
