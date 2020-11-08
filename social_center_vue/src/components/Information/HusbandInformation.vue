@@ -52,7 +52,7 @@
 
             <validation-provider :rules="{required: false}" v-slot="validationContext"
                                  v-else-if="key === 'age'">
-              <b-form-input type="number" v-model="items[key]" :value="items[key]" min="1"
+              <b-form-input type="number" v-model="items[key]" :value="items[key]" min="0"
                             :state="getValidationState(validationContext)"/>
             </validation-provider>
 
@@ -139,7 +139,11 @@ export default {
       var date = new Date(dod);
       var ageDifMs = Date.now() - date.getTime();
       var ageDate = new Date(ageDifMs);
-      this.items['age'] = Math.abs(ageDate.getUTCFullYear() - 1970);
+      var dateNow = new Date(Date.now());
+      this.items['age'] = (dateNow.getDate() < date.getDate() ||
+        dateNow.getMonth() < date.getMonth() ||
+        dateNow.getFullYear() < date.getFullYear()) ?
+        -1 : Math.abs(ageDate.getUTCFullYear() - 1970);
     }
   }
 }

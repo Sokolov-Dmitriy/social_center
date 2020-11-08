@@ -4,7 +4,7 @@
     <button class="btn btn-default" type="button" v-b-toggle.sidebar-border>
       <span class="fa fa-bars fa-2x" style="color:#492727;"></span>
     </button>
-    <b-link to="/info" class="my-link">{{this.$store.state.fullName}}</b-link>
+    <b-link to="/info" class="my-link">{{ this.$store.state.fullName }}</b-link>
     <button class="btn btn-default-right" type="button" v-b-toggle.sidebar-test>
       <span class="fa fa-bars fa-2x" style="color:#492727;"></span>
     </button>
@@ -68,170 +68,174 @@
 </template>
 
 <script>
-  import sideBar from "../sideBar";
-  import navBar from "../navBars/navBar";
-  import {ValidationObserver, ValidationProvider} from "vee-validate/dist/vee-validate.full";
-  import sideBarTest from "../Test/sideBarTest";
-  import NextBack from "./NextBack";
+import sideBar from "../sideBar";
+import navBar from "../navBars/navBar";
+import {ValidationObserver, ValidationProvider} from "vee-validate/dist/vee-validate.full";
+import sideBarTest from "../Test/sideBarTest";
+import NextBack from "./NextBack";
 
-  export default {
-    name: "ChildAdd",
-    components: {
-      NextBack,
-      sideBar,
-      navBar,
-      ValidationProvider,
-      ValidationObserver,
-      sideBarTest
-    },
-    data() {
-      return {
-        // id: '',
-        items: '',
-        labels: '',
-        choices: '',
+export default {
+  name: "ChildAdd",
+  components: {
+    NextBack,
+    sideBar,
+    navBar,
+    ValidationProvider,
+    ValidationObserver,
+    sideBarTest
+  },
+  data() {
+    return {
+      // id: '',
+      items: '',
+      labels: '',
+      choices: '',
+    }
+  },
+  created() {
+    $.ajax({
+      url: this.$store.state.baseUrl + "api/fields/",
+      type: "GET",
+      data: {model: 'Child'},
+      success: (response) => {
+        this.labels = response.data.labels;
+        this.choices = response.data.choices;
+        this.items = response.data.items;
+      },
+      error: (response) => {
+        if (response.status === 401) this.logOut();
+        else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
       }
-    },
-    created() {
+    })
+  },
+  methods: {
+    save() {
+      this.items['client'] = parseInt(sessionStorage.getItem('id'));
       $.ajax({
-        url: this.$store.state.baseUrl + "api/fields/",
-        type: "GET",
-        data: {model: 'Child'},
+        url: this.$store.state.baseUrl + "api/child/",
+        type: "POST",
+        data: this.items,
+        context: this,
         success: (response) => {
-          this.labels = response.data.labels;
-          this.choices = response.data.choices;
-          this.items = response.data.items;
+          // alert("Данные добавлены.");
+          this.$router.push({name: 'childList'})
         },
         error: (response) => {
           if (response.status === 401) this.logOut();
-          else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+          else alert("Не удалось загрузить данные на сервер.\nПовторите попытку позже.")
         }
-      })
+      });
     },
-    methods: {
-      save() {
-        this.items['client'] = parseInt(sessionStorage.getItem('id'));
-        $.ajax({
-          url: this.$store.state.baseUrl + "api/child/",
-          type: "POST",
-          data: this.items,
-          context: this,
-          success: (response) => {
-            // alert("Данные добавлены.");
-            this.$router.push({name: 'childList'})
-          },
-          error: (response) => {
-            if (response.status === 401) this.logOut();
-            else alert("Не удалось загрузить данные на сервер.\nПовторите попытку позже.")
-          }
-        });
-      },
-      notSave() {
-        this.$router.push({name: 'childList'})
-      },
-      getValidationState({dirty, validated, valid = null}) {
-        return dirty || validated ? valid : null;
-      },
-      getAge(dod) {
-        var date = new Date(dod);
-        var ageDifMs = Date.now() - date.getTime();
-        var ageDate = new Date(ageDifMs);
-        this.items['age'] = Math.abs(ageDate.getUTCFullYear() - 1970);
-      }
+    notSave() {
+      this.$router.push({name: 'childList'})
+    },
+    getValidationState({dirty, validated, valid = null}) {
+      return dirty || validated ? valid : null;
+    },
+    getAge(dod) {
+      var date = new Date(dod);
+      var ageDifMs = Date.now() - date.getTime();
+      var ageDate = new Date(ageDifMs);
+      var dateNow = new Date(Date.now());
+      this.items['age'] = (dateNow.getDate() < date.getDate() ||
+        dateNow.getMonth() < date.getMonth() ||
+        dateNow.getFullYear() < date.getFullYear()) ?
+        -1 : Math.abs(ageDate.getUTCFullYear() - 1970);
     }
   }
+}
 </script>
 
 <style scoped>
-  .container {
-    margin-top: 2%;
-    text-align: center;
-  }
+.container {
+  margin-top: 2%;
+  text-align: center;
+}
 
-  .card-header {
-    display: block;
-    font-size: 30px;
-    font-weight: 700;
-    padding: 30px 0;
-    /*margin-bottom: 20px;*/
-    color: #492727;
-    background-color: #D2B48C;
-    border-color: #D2B48C
-  }
+.card-header {
+  display: block;
+  font-size: 30px;
+  font-weight: 700;
+  padding: 30px 0;
+  /*margin-bottom: 20px;*/
+  color: #492727;
+  background-color: #D2B48C;
+  border-color: #D2B48C
+}
 
-  .card {
-    background-color: #f5eed5;
-    /*margin-bottom: 5%;*/
-  }
+.card {
+  background-color: #f5eed5;
+  /*margin-bottom: 5%;*/
+}
 
-  form .btn-default {
-    background-color: #D2B48C;
-    color: #492727;
-    margin: 10px;
-  }
+form .btn-default {
+  background-color: #D2B48C;
+  color: #492727;
+  margin: 10px;
+}
 
-  form .btn-default:hover {
-    background-color: #452424;
-    color: #D2B48C;
-  }
+form .btn-default:hover {
+  background-color: #452424;
+  color: #D2B48C;
+}
 
-  .btn-default:hover {
-    background-color: #E6DFC6;
-    color: black;
-  }
+.btn-default:hover {
+  background-color: #E6DFC6;
+  color: black;
+}
 
-  .my-form {
-    background-color: #f5eed5;
-  }
+.my-form {
+  background-color: #f5eed5;
+}
 
-  .my-form-group {
-    color: #492727;
-    margin-right: 3%;
-  }
+.my-form-group {
+  color: #492727;
+  margin-right: 3%;
+}
 
+.my-link {
+  background-color: #FFF8DC;
+  color: #492727;
+  font-size: 20px;
+  margin-left: 20px;
+}
+
+.btn-default-right {
+  float: right;
+  color: #492727;
+  font-size: 16px;
+}
+
+.btn-default-right:hover {
+  background-color: #E6DFC6;
+  color: black;
+}
+
+.my-block {
+  text-align: center;
+  color: #492727;
+  font-size: 18px;
+  padding: 3%;
+}
+
+@media only screen and (max-width: 768px) {
   .my-link {
-    background-color: #FFF8DC;
-    color: #492727;
-    font-size: 20px;
-    margin-left: 20px;
-  }
-
-  .btn-default-right {
-    float: right;
-    color: #492727;
     font-size: 16px;
+    margin-left: 0;
   }
+}
 
-  .btn-default-right:hover {
-    background-color: #E6DFC6;
-    color: black;
+@media only screen and (max-width: 650px) {
+  .my-link {
+    font-size: 14px;
+    margin-left: 0;
   }
+}
 
-  .my-block {
-    text-align: center;
-    color: #492727;
-    font-size: 18px;
-    padding: 3%;
+@media only screen and (max-width: 540px) {
+  .my-link {
+    font-size: 12px;
+    margin-left: 0;
   }
-
-  @media only screen and (max-width: 768px) {
-    .my-link {
-      font-size: 16px;
-      margin-left: 0;
-    }
-  }
-
-  @media only screen and (max-width: 650px) {
-    .my-link {
-      font-size: 14px;
-      margin-left: 0;
-    }
-  }
-
-  @media only screen and (max-width: 540px) {
-    .my-link {
-      font-size: 12px;
-      margin-left: 0;
-    }
-  }
+}
 </style>

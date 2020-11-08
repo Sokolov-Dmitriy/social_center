@@ -30,7 +30,7 @@
             </validation-provider>
             <validation-provider :rules="{required: false}" v-slot="validationContext"
                                  v-else-if="['durationOfUse','durationOfRemissionD','durationOfRemissionA'].includes(key)">
-              <b-form-input type="number" v-model="items[key]" :value="items[key]" step="0.5" min="0.0" max="99.0"
+              <b-form-input type="number" v-model="items[key]" :value="items[key]" step="0.5" min="0" max="99.0"
                             :state="getValidationState(validationContext)"/>
             </validation-provider>
             <validation-provider :rules="{required: false}" v-slot="validationContext"

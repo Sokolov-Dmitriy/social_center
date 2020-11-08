@@ -38,7 +38,12 @@
               </validation-provider>
 
               <validation-provider :rules="{required: false}" v-slot="validationContext"
-                                   v-else-if="['age','adultsCount','minorsCount'].includes(key)">
+                                   v-else-if="['age'].includes(key)">
+                <b-form-input v-model="items[key]" :value="items[key]" type="number" min="0"
+                              :state="getValidationState(validationContext)"/>
+              </validation-provider>
+              <validation-provider :rules="{required: false}" v-slot="validationContext"
+                                   v-else-if="['adultsCount','minorsCount'].includes(key)">
                 <b-form-input v-model="items[key]" :value="items[key]" type="number" min="0"
                               :state="getValidationState(validationContext)"/>
               </validation-provider>
@@ -145,7 +150,11 @@ export default {
       var date = new Date(dod);
       var ageDifMs = Date.now() - date.getTime();
       var ageDate = new Date(ageDifMs);
-      this.items['age'] = Math.abs(ageDate.getUTCFullYear() - 1970);
+      var dateNow = new Date(Date.now());
+      this.items['age'] = (dateNow.getDate() < date.getDate() ||
+        dateNow.getMonth() < date.getMonth() ||
+        dateNow.getFullYear() < date.getFullYear()) ?
+        -1 : Math.abs(ageDate.getUTCFullYear() - 1970);
     }
   },
   // computed: {

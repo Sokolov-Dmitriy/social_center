@@ -342,30 +342,44 @@
           if (this.isChild(x)) {
             if (this.specialSimpleField.indexOf(this.matrixAll.labels[x]) === 0) {
               choices.push({
-                text: 'До 3 лет',
+                text: 'До полутора лет',
+                min: 0,
+                max: 1.5,
+                icon: 'iconfont icon-bofang',
+                children: []
+              });
+              choices.push({
+                text: 'До трех лет',
                 min: 0,
                 max: 3,
                 icon: 'iconfont icon-bofang',
                 children: []
               });
               choices.push({
-                text: 'От 4 до 6',
-                min: 4,
-                max: 6,
+                text: 'До семи лет',
+                min: 0,
+                max: 7,
                 icon: 'iconfont icon-bofang',
                 children: []
               });
               choices.push({
-                text: 'От 7 до 17',
-                min: 7,
-                max: 17,
+                text: 'От 8 до 10 лет',
+                min: 8,
+                max: 10,
                 icon: 'iconfont icon-bofang',
                 children: []
               });
               choices.push({
-                text: 'От 18 и старше',
-                min: 18,
-                max: 99999,
+                text: 'От 11 до 14 лет',
+                min: 11,
+                max: 14,
+                icon: 'iconfont icon-bofang',
+                children: []
+              });
+              choices.push({
+                text: 'От 15 до 18 лет',
+                min: 15,
+                max: 18,
                 icon: 'iconfont icon-bofang',
                 children: []
               });
@@ -373,22 +387,29 @@
           } else {
             if (this.specialSimpleField.indexOf(this.matrixAll.labels[x]) === 0) {
               choices.push({
-                text: 'До 18',
-                min: 0,
-                max: 17,
-                icon: 'iconfont icon-bofang',
-                children: []
-              });
-              choices.push({
-                text: 'От 18 до 35',
+                text: 'От 18 до 29',
                 min: 18,
-                max: 35,
+                max: 29,
                 icon: 'iconfont icon-bofang',
                 children: []
               });
               choices.push({
-                text: 'От 36 и выше',
-                min: 36,
+                text: 'От 30 до 39',
+                min: 30,
+                max: 39,
+                icon: 'iconfont icon-bofang',
+                children: []
+              });
+              choices.push({
+                text: 'От 40 до 55',
+                min: 40,
+                max: 55,
+                icon: 'iconfont icon-bofang',
+                children: []
+              });
+              choices.push({
+                text: 'От 56 и старше',
+                min: 56,
                 max: 99999,
                 icon: 'iconfont icon-bofang',
                 children: []
