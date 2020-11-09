@@ -159,10 +159,20 @@ export default {
       var ageDifMs = Date.now() - date.getTime();
       var ageDate = new Date(ageDifMs);
       var dateNow = new Date(Date.now());
-      this.items['age'] = (dateNow.getDate() < date.getDate() ||
-        dateNow.getMonth() < date.getMonth() ||
-        dateNow.getFullYear() < date.getFullYear()) ?
-        -1 : Math.abs(ageDate.getUTCFullYear() - 1970);
+      // var age = Math.abs(ageDate.getUTCFullYear() - 1970);
+      this.items['age'] = (
+        dateNow.getFullYear() < date.getFullYear()
+      ) ? -1 : (
+        (dateNow.getMonth() < date.getMonth()
+        ) ? -1 : (
+          (dateNow.getDate() < date.getDate()
+          ) ? -1 :
+            Math.abs(ageDate.getUTCFullYear() - 1970))
+      );
+      // this.items['age'] = (dateNow.getDate() < date.getDate() ||
+      //   dateNow.getMonth() < date.getMonth() ||
+      //   dateNow.getFullYear() < date.getFullYear()) ?
+      //   -1 : Math.abs(ageDate.getUTCFullYear() - 1970);
     }
   }
 }
