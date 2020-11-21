@@ -149,15 +149,36 @@ export default {
       //   dateNow.getMonth() < date.getMonth() ||
       //   dateNow.getFullYear() < date.getFullYear()) ?
       //   -1 : Math.abs(ageDate.getUTCFullYear() - 1970);
-      this.items['age'] = (
-        dateNow.getFullYear() < date.getFullYear()
-      ) ? -1 : (
-        (dateNow.getMonth() < date.getMonth()
-        ) ? -1 : (
-          (dateNow.getDate() < date.getDate()
-          ) ? -1 :
-            Math.abs(ageDate.getUTCFullYear() - 1970))
-      );
+      // this.items['age'] = (
+      //   dateNow.getFullYear() < date.getFullYear()
+      // ) ? -1 : (
+      //   (dateNow.getMonth() < date.getMonth()
+      //   ) ? -1 : (
+      //     (dateNow.getDate() < date.getDate()
+      //     ) ? -1 :
+      //       Math.abs(ageDate.getUTCFullYear() - 1970))
+      // );
+      if(dateNow.getFullYear() > date.getFullYear()){
+        this.items['age'] =  Math.abs(ageDate.getUTCFullYear() - 1970);
+      }else {
+        if(dateNow.getFullYear() < date.getFullYear()){
+          this.items['age'] = -1;
+        }else {
+          if(dateNow.getMonth() > date.getMonth()){
+            this.items['age'] =  Math.abs(ageDate.getUTCFullYear() - 1970);
+          }else {
+            if(dateNow.getMonth() < date.getMonth()){
+              this.items['age'] = -1;
+            }else {
+              if(dateNow.getDate() >= date.getDate()){
+                this.items['age'] =  Math.abs(ageDate.getUTCFullYear() - 1970);
+              }else {
+                this.items['age'] = -1;
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
