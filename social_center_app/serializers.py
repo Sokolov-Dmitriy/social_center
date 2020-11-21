@@ -535,7 +535,6 @@ class TypologicalGroupListSerializers(serializers.ModelSerializer):
 class TypologicalGroupSerializers(MyModelSerializer):
     """Типологическая группа"""
     group = ChoiceField(choices=TypologicalGroup.GROUP)
-    subgroup = ChoiceField(choices=TypologicalGroup.SUBGROUP)
 
     class Meta:
         model = TypologicalGroup
