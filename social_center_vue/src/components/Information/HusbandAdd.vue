@@ -1,16 +1,18 @@
 <template>
-  <div>
-    <nav-bar></nav-bar>
-    <button class="btn btn-default" type="button" v-b-toggle.sidebar-border>
-      <span class="fa fa-bars fa-2x" style="color:#492727;"></span>
-    </button>
-    <b-link to="/info" class="my-link">{{ this.$store.state.fullName }}</b-link>
-    <button class="btn btn-default-right" type="button" v-b-toggle.sidebar-test>
-      <span class="fa fa-bars fa-2x" style="color:#492727;"></span>
-    </button>
-    <side-bar-test></side-bar-test>
-    <side-bar></side-bar>
-    <next-back v-bind:url="'husbandAdd'"></next-back>
+  <div class="general">
+    <div class="header">
+      <nav-bar></nav-bar>
+      <button class="btn btn-default" type="button" v-b-toggle.sidebar-border>
+        <span class="fa fa-bars fa-2x" style="color:#492727;"></span>
+      </button>
+      <b-link to="/info" class="my-link">{{ this.$store.state.fullName }}</b-link>
+      <button class="btn btn-default-right" type="button" v-b-toggle.sidebar-test>
+        <span class="fa fa-bars fa-2x" style="color:#492727;"></span>
+      </button>
+      <side-bar-test></side-bar-test>
+      <side-bar></side-bar>
+      <next-back v-bind:url="'husbandAdd'"></next-back>
+    </div>
     <div class="container">
       <div class="card">
         <div class="card-header">Добавление партнёра (мужа/жены)</div>
@@ -88,6 +90,7 @@
         </validation-observer>
       </div>
     </div>
+    <MainFooter v-if="choices"></MainFooter>
   </div>
 </template>
 
@@ -97,6 +100,7 @@ import sideBar from "../sideBar";
 import navBar from "../navBars/navBar";
 import {ValidationObserver, ValidationProvider} from "vee-validate/dist/vee-validate.full";
 import sideBarTest from "../Test/sideBarTest";
+import MainFooter from "../footers/MainFooter";
 
 export default {
   name: "HusbandAdd",
@@ -106,7 +110,8 @@ export default {
     navBar,
     ValidationProvider,
     ValidationObserver,
-    sideBarTest
+    sideBarTest,
+    MainFooter,
   },
   data() {
     return {
@@ -130,6 +135,9 @@ export default {
         else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
       }
     })
+  },
+  mounted: function () {
+    this.templateBool = true
   },
   methods: {
     save() {
@@ -169,21 +177,21 @@ export default {
       //     ) ? -1 :
       //       Math.abs(ageDate.getUTCFullYear() - 1970))
       // );
-      if(dateNow.getFullYear() > date.getFullYear()){
-        this.items['age'] =  Math.abs(ageDate.getUTCFullYear() - 1970);
-      }else {
-        if(dateNow.getFullYear() < date.getFullYear()){
+      if (dateNow.getFullYear() > date.getFullYear()) {
+        this.items['age'] = Math.abs(ageDate.getUTCFullYear() - 1970);
+      } else {
+        if (dateNow.getFullYear() < date.getFullYear()) {
           this.items['age'] = -1;
-        }else {
-          if(dateNow.getMonth() > date.getMonth()){
-            this.items['age'] =  Math.abs(ageDate.getUTCFullYear() - 1970);
-          }else {
-            if(dateNow.getMonth() < date.getMonth()){
+        } else {
+          if (dateNow.getMonth() > date.getMonth()) {
+            this.items['age'] = Math.abs(ageDate.getUTCFullYear() - 1970);
+          } else {
+            if (dateNow.getMonth() < date.getMonth()) {
               this.items['age'] = -1;
-            }else {
-              if(dateNow.getDate() >= date.getDate()){
-                this.items['age'] =  Math.abs(ageDate.getUTCFullYear() - 1970);
-              }else {
+            } else {
+              if (dateNow.getDate() >= date.getDate()) {
+                this.items['age'] = Math.abs(ageDate.getUTCFullYear() - 1970);
+              } else {
                 this.items['age'] = -1;
               }
             }
@@ -200,6 +208,16 @@ export default {
 </script>
 
 <style scoped>
+.general {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.container, .header {
+  flex: 1;
+}
+
 .container {
   margin-top: 2%;
   text-align: center;

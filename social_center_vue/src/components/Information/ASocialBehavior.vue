@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="general">
     <template-info v-bind:url="'socialBehavior'" v-bind:header="'1. Сведения о клиенте'"
                    v-bind:subtitle="'1.2 Информация о противоправных действиях, правонарушениях, употреблении наркотиков, алкоголя'"
                    v-bind:identifier="id" v-bind:identifier_field="'client'" ref="template"
-                   @addInfo="addInfo" @postInfo="postInfo"></template-info>
+                   @addInfo="addInfo" @postInfo="postInfo" class="template-info"></template-info>
     <div class="container" v-if="add">
       <validation-observer ref="observer" v-slot="{ handleSubmit }">
         <b-form @submit.stop.prevent="handleSubmit(save)" @reset="notSave" class="my-form">
@@ -56,12 +56,16 @@
         </b-form>
       </validation-observer>
     </div>
+    <div v-if="templateBool">
+      <MainFooter v-if="this.$refs.template.labels || choices"></MainFooter>
+    </div>
   </div>
 </template>
 
 <script>
 import templateInfo from "../templateInfo";
 import {ValidationObserver, ValidationProvider} from "vee-validate/dist/vee-validate.full";
+import MainFooter from "../footers/MainFooter";
 
 export default {
   name: "ASocialBehavior",
@@ -69,6 +73,7 @@ export default {
     templateInfo,
     ValidationProvider,
     ValidationObserver,
+    MainFooter,
   },
   data() {
     return {
@@ -76,11 +81,15 @@ export default {
       labels: {},
       save_labels: '',
       choices: '',
-      id: ''
+      id: '',
+      templateBool: false
     }
   },
   created() {
     this.id = sessionStorage.getItem('id');
+  },
+  mounted: function () {
+    this.templateBool = true
   },
   methods: {
     addInfo() {
@@ -115,6 +124,7 @@ export default {
       this.add = false;
     },
     notSave() {
+      this.$refs.template.labels = this.save_labels;
       this.add = false;
       this.$refs.template.isHide = false;
     },
@@ -144,6 +154,21 @@ export default {
 </script>
 
 <style scoped>
+.general {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.template-info {
+  flex: 1;
+}
+
+.container {
+  text-align: center;
+  flex: 1000;
+}
+
 .btn-default {
   background-color: #D2B48C;
   color: #492727;
@@ -153,10 +178,6 @@ export default {
 .btn-default:hover {
   background-color: #452424;
   color: #D2B48C;
-}
-
-.container {
-  text-align: center;
 }
 
 .my-form {

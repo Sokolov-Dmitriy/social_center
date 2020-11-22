@@ -28,12 +28,12 @@
         <div class="card-header" v-html="header"></div>
         <div v-if="url!=='expertOpinion'" class="my-block">{{ subtitle }}</div>
         <table class="table table-hover" v-if="!isHide">
-<!--          <thead class="thead noprint">-->
-<!--          <tr>-->
-<!--            <th scope="col"><br></th>-->
-<!--            <th scope="col"><br></th>-->
-<!--          </tr>-->
-<!--          </thead>-->
+          <!--          <thead class="thead noprint">-->
+          <!--          <tr>-->
+          <!--            <th scope="col"><br></th>-->
+          <!--            <th scope="col"><br></th>-->
+          <!--          </tr>-->
+          <!--          </thead>-->
           <tbody v-for="(value,key) in labels" class="tbody">
           <tr v-if="!['id','client','child','husband','specialist'].includes(key) ">
             <td class="td-left">{{ labels[key] }}</td>
@@ -88,6 +88,7 @@ export default {
     addInfo() {
       this.$emit('addInfo');
       this.isHide = true;
+      this.labels = '';
     },
     getRequest() {
       var map = {};
@@ -226,6 +227,10 @@ export default {
   border-color: #f5eed5;
 }
 
+.table td, .table th {
+  border-color: #f5eed5;
+}
+
 .btn-default {
   color: #492727;
   font-size: 16px;
@@ -267,6 +272,10 @@ export default {
 }
 
 @media print {
+  .table td, .table th {
+    border-color: #dee2e6;
+  }
+
   .noprint {
     display: none;
   }

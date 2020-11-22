@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="general">
     <nav-bar></nav-bar>
     <div class="container">
       <div class="card">
@@ -83,12 +83,14 @@
         </validation-observer>
       </div>
     </div>
+    <MainFooter v-if="labels"></MainFooter>
   </div>
 </template>
 
 <script>
 import navBar from "./navBars/navBar";
 import {ValidationObserver, ValidationProvider} from "vee-validate/dist/vee-validate.full";
+import MainFooter from "./footers/MainFooter";
 
 export default {
   name: "Client",
@@ -96,6 +98,7 @@ export default {
     navBar,
     ValidationProvider,
     ValidationObserver,
+    MainFooter
   },
   data() {
     return {
@@ -160,21 +163,21 @@ export default {
       //     ) ? -1 :
       //       Math.abs(ageDate.getUTCFullYear() - 1970))
       // );
-      if(dateNow.getFullYear() > date.getFullYear()){
-        this.items['age'] =  Math.abs(ageDate.getUTCFullYear() - 1970);
-      }else {
-        if(dateNow.getFullYear() < date.getFullYear()){
+      if (dateNow.getFullYear() > date.getFullYear()) {
+        this.items['age'] = Math.abs(ageDate.getUTCFullYear() - 1970);
+      } else {
+        if (dateNow.getFullYear() < date.getFullYear()) {
           this.items['age'] = -1;
-        }else {
-          if(dateNow.getMonth() > date.getMonth()){
-            this.items['age'] =  Math.abs(ageDate.getUTCFullYear() - 1970);
-          }else {
-            if(dateNow.getMonth() < date.getMonth()){
+        } else {
+          if (dateNow.getMonth() > date.getMonth()) {
+            this.items['age'] = Math.abs(ageDate.getUTCFullYear() - 1970);
+          } else {
+            if (dateNow.getMonth() < date.getMonth()) {
               this.items['age'] = -1;
-            }else {
-              if(dateNow.getDate() >= date.getDate()){
-                this.items['age'] =  Math.abs(ageDate.getUTCFullYear() - 1970);
-              }else {
+            } else {
+              if (dateNow.getDate() >= date.getDate()) {
+                this.items['age'] = Math.abs(ageDate.getUTCFullYear() - 1970);
+              } else {
                 this.items['age'] = -1;
               }
             }
@@ -198,9 +201,16 @@ export default {
 </script>
 
 <style scoped>
+.general {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
 .container {
   margin-top: 2%;
   text-align: center;
+  flex: 1;
 }
 
 .card-header {

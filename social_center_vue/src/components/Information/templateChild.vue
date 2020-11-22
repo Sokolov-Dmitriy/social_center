@@ -107,6 +107,10 @@ export default {
   border-color: #f5eed5;
 }
 
+.table td, .table th {
+  border-color: #f5eed5;
+}
+
 .td-left {
   text-align: left;
   padding-left: 40px;
@@ -119,11 +123,11 @@ export default {
   padding: 20px;
 }
 
-td {
-  border-color: #f5eed5;
-}
-
 @media print {
+  .table td, .table th {
+    border-color: #dee2e6;
+  }
+
   .noprint {
     display: none;
   }

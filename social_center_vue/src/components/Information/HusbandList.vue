@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="general">
     <div class="noprint">
       <nav-bar></nav-bar>
       <button class="btn btn-default" type="button" v-b-toggle.sidebar-border>
@@ -35,7 +35,7 @@
           class="fa fa-plus-circle fa-2x"/></button>
       </div>
     </div>
-
+    <MainFooter v-if="husbands" class="noprint"></MainFooter>
   </div>
 </template>
 
@@ -44,6 +44,7 @@ import NextBack from "./NextBack";
 import sideBar from "../sideBar";
 import navBar from "../navBars/navBar";
 import sideBarTest from "../Test/sideBarTest";
+import MainFooter from "../footers/MainFooter";
 
 export default {
   name: "HusbandList",
@@ -51,7 +52,8 @@ export default {
     NextBack,
     sideBar,
     navBar,
-    sideBarTest
+    sideBarTest,
+    MainFooter
   },
   data() {
     return {
@@ -78,7 +80,7 @@ export default {
       /////////////////////////////
       ////////ВРЕМЕННООООООООО1
       /////////////////////////////////
-      if(this.husbands.length>=1){
+      if (this.husbands.length >= 1) {
         alert("По техническим причинам в данные момент нельзя добавить более одного партнера. \nВ ближайшее время проблема будет решена.")
       } else {
         this.$router.push({name: 'husbandAdd'})
@@ -92,9 +94,16 @@ export default {
 </script>
 
 <style scoped>
+.general {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
 .container {
   margin-top: 2%;
   text-align: center;
+  flex: 1;
 }
 
 .card-header {

@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="general">
     <template-info v-bind:url="'husbandInformation'" v-bind:header="'3. Сведения о членах семьи'"
                    v-bind:subtitle="'3.2 Информация о муже/партнёре'"
                    v-bind:identifier="id" v-bind:identifier_field="'husband'" ref="template" @addInfo="addInfo"
-                   @postInfo="postInfo"></template-info>
+                   @postInfo="postInfo" class="template-info"></template-info>
     <div class="container" v-if="add">
       <validation-observer ref="observer" v-slot="{ handleSubmit }">
         <b-form @submit.stop.prevent="handleSubmit(save)" @reset="notSave" class="my-form">
@@ -78,12 +78,16 @@
         </b-form>
       </validation-observer>
     </div>
+    <div v-if="templateBool">
+      <MainFooter v-if="this.$refs.template.labels || choices"></MainFooter>
+    </div>
   </div>
 </template>
 
 <script>
 import templateInfo from "../templateInfo";
 import {ValidationObserver, ValidationProvider} from "vee-validate/dist/vee-validate.full";
+import MainFooter from "../footers/MainFooter";
 
 export default {
   name: "HusbandInformation",
@@ -91,6 +95,7 @@ export default {
     templateInfo,
     ValidationProvider,
     ValidationObserver,
+    MainFooter,
   },
   data() {
     return {
@@ -98,13 +103,17 @@ export default {
       labels: '',
       choices: '',
       items: '',
-      id: ''
+      id: '',
+      templateBool: false
     }
   },
   created() {
     if (this.$route.params.id !== undefined)
       sessionStorage.setItem('id_husband', this.$route.params.id);
     this.id = sessionStorage.getItem('id_husband');
+  },
+  mounted: function () {
+    this.templateBool = true
   },
   methods: {
     addInfo() {
@@ -134,6 +143,7 @@ export default {
       this.add = false;
     },
     notSave() {
+      this.$refs.template.labels = this.labels;
       this.add = false;
       this.$refs.template.isHide = false;
     },
@@ -158,21 +168,21 @@ export default {
       //     ) ? -1 :
       //       Math.abs(ageDate.getUTCFullYear() - 1970))
       // );
-      if(dateNow.getFullYear() > date.getFullYear()){
-        this.items['age'] =  Math.abs(ageDate.getUTCFullYear() - 1970);
-      }else {
-        if(dateNow.getFullYear() < date.getFullYear()){
+      if (dateNow.getFullYear() > date.getFullYear()) {
+        this.items['age'] = Math.abs(ageDate.getUTCFullYear() - 1970);
+      } else {
+        if (dateNow.getFullYear() < date.getFullYear()) {
           this.items['age'] = -1;
-        }else {
-          if(dateNow.getMonth() > date.getMonth()){
-            this.items['age'] =  Math.abs(ageDate.getUTCFullYear() - 1970);
-          }else {
-            if(dateNow.getMonth() < date.getMonth()){
+        } else {
+          if (dateNow.getMonth() > date.getMonth()) {
+            this.items['age'] = Math.abs(ageDate.getUTCFullYear() - 1970);
+          } else {
+            if (dateNow.getMonth() < date.getMonth()) {
               this.items['age'] = -1;
-            }else {
-              if(dateNow.getDate() >= date.getDate()){
-                this.items['age'] =  Math.abs(ageDate.getUTCFullYear() - 1970);
-              }else {
+            } else {
+              if (dateNow.getDate() >= date.getDate()) {
+                this.items['age'] = Math.abs(ageDate.getUTCFullYear() - 1970);
+              } else {
                 this.items['age'] = -1;
               }
             }
@@ -185,6 +195,21 @@ export default {
 </script>
 
 <style scoped>
+.general {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.template-info {
+  flex: 1;
+}
+
+.container {
+  text-align: center;
+  flex: 1000;
+}
+
 .btn-default {
   background-color: #D2B48C;
   color: #492727;
@@ -194,10 +219,6 @@ export default {
 .btn-default:hover {
   background-color: #452424;
   color: #D2B48C;
-}
-
-.container {
-  text-align: center;
 }
 
 .my-form {

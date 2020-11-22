@@ -1,5 +1,6 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light color-ser">
+<!--  <nav class="navbar navbar-expand-lg color-ser fixed-top>-->
+  <nav class="navbar navbar-expand-lg color-ser">
     <a class="navbar-brand" href="#/"><span class="fa fa-home fa-2x"></span></a>
     <a class="navbar-brand marg-left" href="#/table"><span class="fa fa-table fa-2x"></span></a>
     <button class="btn" onclick="window.print()"><span class="fa fa-print fa-2x"></span></button>
