@@ -1,140 +1,145 @@
 <template>
-  <div class="container">
-    <span class="heading">Выберите пункты для формирования таблицы</span>
-    <div class="checkboxes">
-      <b-form-checkbox class="checkbox" id="0" v-model="checkValue[0]" v-on:change="chooseAll(checkValue[0])"
-                       v-bind:checked="checkValue[0]">Выбрать все
-      </b-form-checkbox>
-    </div>
-
-    <!--    <div class="checkboxes">-->
-    <!--      <b-form-checkbox class="checkbox" v-model="checkValue[1]"-->
-    <!--                       v-bind:checked="checkValue[1]">Сведения о клиенте(общее)-->
-    <!--      </b-form-checkbox>-->
-    <!--    </div>-->
-
-    <div class="checkboxes">
-      <b-form-checkbox class="checkbox" id="1" v-on:change="setChoose(checkValue[1],2,4)"
-                       v-model="checkValue[1]" v-bind:checked="checkValue[1]">1. Сведения о клиенте
-        <i class="fa fa-sort-desc" aria-hidden="true" v-if="hide1===false" @click="hideFirstBlock"></i>
-        <i class="fa fa-caret-right" aria-hidden="true" v-if="hide1===true" @click="hideFirstBlock"></i>
-      </b-form-checkbox>
-    </div>
-
-    <div class="checkboxes">
-      <div class="div-my" v-bind:hidden="hide1">
-        <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[2],1)"
-                         v-model="checkValue[2]"
-                         v-bind:checked="checkValue[2]">1.1. Общая информация
-        </b-form-checkbox>
-        <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[3],1)"
-                         v-model="checkValue[3]"
-                         v-bind:checked="checkValue[3]">1.2. Информация о противоправных действиях, правонарушениях,
-          употреблении наркотиков, алкоголя
-        </b-form-checkbox>
-        <b-form-checkbox class="checkbox" type="checkbox" v-on:change="setFalse(checkValue[4],1)"
-                         v-model="checkValue[4]" v-bind:checked="checkValue[4]">1.3. Информация о наличии хронического
-          заболевания
+  <div class="general">
+    <div class="container">
+      <span class="heading">Выберите пункты для формирования таблицы</span>
+      <div class="checkboxes">
+        <b-form-checkbox class="checkbox" id="0" v-model="checkValue[0]" v-on:change="chooseAll(checkValue[0])"
+                         v-bind:checked="checkValue[0]">Выбрать все
         </b-form-checkbox>
       </div>
-    </div>
 
-    <div class="checkboxes">
-      <b-form-checkbox class="checkbox" v-bind:checked="checkValue[5]" v-model="checkValue[5]">
-        2. Сведения о детях
-      </b-form-checkbox>
-    </div>
+      <!--    <div class="checkboxes">-->
+      <!--      <b-form-checkbox class="checkbox" v-model="checkValue[1]"-->
+      <!--                       v-bind:checked="checkValue[1]">Сведения о клиенте(общее)-->
+      <!--      </b-form-checkbox>-->
+      <!--    </div>-->
 
-    <div class="checkboxes">
-      <b-form-checkbox class="checkbox" v-on:change="setChoose(checkValue[6],7,8)"
-                       v-model="checkValue[6]" v-bind:checked="checkValue[6]">3. Сведения о членах семьи
-        <i class="fa fa-sort-desc" aria-hidden="true" v-if="hide2===false" @click="hideSecondBlock"></i>
-        <i class="fa fa-caret-right" aria-hidden="true" v-if="hide2===true" @click="hideSecondBlock"></i>
-      </b-form-checkbox>
-    </div>
-
-    <div class="checkboxes">
-      <div class="div-my" v-bind:hidden="hide2">
-        <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[7],6)" v-model="checkValue[7]"
-                         v-bind:checked="checkValue[7]">3.1. Общие сведения
-        </b-form-checkbox>
-        <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[8],6)" v-model="checkValue[8]"
-                         v-bind:checked="checkValue[8]">3.2. Информация о
-          муже/партнёре
+      <div class="checkboxes">
+        <b-form-checkbox class="checkbox" id="1" v-on:change="setChoose(checkValue[1],2,4)"
+                         v-model="checkValue[1]" v-bind:checked="checkValue[1]">1. Сведения о клиенте
+          <i class="fa fa-sort-desc" aria-hidden="true" v-if="hide1===false" @click="hideFirstBlock"></i>
+          <i class="fa fa-caret-right" aria-hidden="true" v-if="hide1===true" @click="hideFirstBlock"></i>
         </b-form-checkbox>
       </div>
-    </div>
 
-    <div class="checkboxes">
-      <b-form-checkbox class="checkbox" v-on:change="setChoose(checkValue[9],10,11)" v-model="checkValue[9]"
-                       v-bind:checked="checkValue[9]">4. Сведения о социально-бытовом и
-        социально-экономическом положении
-        <i class="fa fa-sort-desc" aria-hidden="true" v-if="hide3===false" @click="hideThirdBlock"></i>
-        <i class="fa fa-caret-right" aria-hidden="true" v-if="hide3===true" @click="hideThirdBlock"></i>
-      </b-form-checkbox>
-    </div>
-
-    <div class="checkboxes">
-      <div class="div-my" v-bind:hidden="hide3">
-        <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[10],9)"
-                         v-model="checkValue[10]" v-bind:checked="checkValue[10]">4.1. Социально-бытовые условия
-        </b-form-checkbox>
-        <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[11],9)" v-model="checkValue[11]"
-                         v-bind:checked="checkValue[11]">
-          4.2. Социально-экономические условия проживания
-        </b-form-checkbox>
-      </div>
-    </div>
-
-    <div class="checkboxes">
-      <b-form-checkbox class="checkbox" v-bind:checked="checkValue[12]" v-model="checkValue[12]">5. Заключение
-        специалиста
-      </b-form-checkbox>
-    </div>
-
-    <!--      занесение тестов -->
-    <div class="checkboxes">
-      <b-form-checkbox class="checkbox" v-on:change="setChoose(checkValue[13],14,21)" v-model="checkValue[14]"
-                       v-bind:checked="checkValue[13]">6.Тесты
-        <i class="fa fa-sort-desc" aria-hidden="true" v-if="hide4===false" @click="hide4Block"></i>
-        <i class="fa fa-caret-right" aria-hidden="true" v-if="hide4===true" @click="hide4Block"></i></b-form-checkbox>
-    </div>
-    <div class="checkboxes">
-      <div class="div-my" v-bind:hidden="hide4">
-        <b-form-checkbox class="checkbox" v-on:change="setChoose(checkValue[14],15,17)"
-                         v-model="checkValue[14]" v-bind:checked="checkValue[14]">Первичная диагностика
-          <i class="fa fa-sort-desc" aria-hidden="true" v-if="hide5===false" @click="hide5Block"></i>
-          <i class="fa fa-caret-right" aria-hidden="true" v-if="hide5===true" @click="hide5Block"></i></b-form-checkbox>
-        <div class="div-my" v-bind:hidden="hide5">
-          <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[15],14)"
-                           v-model="checkValue[15]" v-bind:checked="checkValue[15]">Бойко
+      <div class="checkboxes">
+        <div class="div-my" v-bind:hidden="hide1">
+          <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[2],1)"
+                           v-model="checkValue[2]"
+                           v-bind:checked="checkValue[2]">1.1. Общая информация
           </b-form-checkbox>
-          <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[16],14)" v-model="checkValue[16]"
-                           v-bind:checked="checkValue[16]">GAGE
+          <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[3],1)"
+                           v-model="checkValue[3]"
+                           v-bind:checked="checkValue[3]">1.2. Информация о противоправных действиях, правонарушениях,
+            употреблении наркотиков, алкоголя
           </b-form-checkbox>
-          <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[17],14)" v-model="checkValue[17]"
-                           v-bind:checked="checkValue[17]">SOCRATES
-          </b-form-checkbox>
-        </div>
-        <b-form-checkbox class="checkbox" v-on:change="setChoose(checkValue[18],19,21)"
-                         v-model="checkValue[18]" v-bind:checked="checkValue[18]">Вторичная диагностика
-          <i class="fa fa-sort-desc fa-2x" aria-hidden="true" v-if="hide6===false" @click="hide6Block"></i>
-          <i class="fa fa-caret-right" aria-hidden="true" v-if="hide6===true" @click="hide6Block"></i></b-form-checkbox>
-        <div class="div-my" v-bind:hidden="hide6">
-          <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[19],18)"
-                           v-model="checkValue[19]" v-bind:checked="checkValue[19]">Бойко
-          </b-form-checkbox>
-          <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[20],18)" v-model="checkValue[20]"
-                           v-bind:checked="checkValue[20]">GAGE
-          </b-form-checkbox>
-          <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[21],18)" v-model="checkValue[21]"
-                           v-bind:checked="checkValue[21]">SOCRATES
+          <b-form-checkbox class="checkbox" type="checkbox" v-on:change="setFalse(checkValue[4],1)"
+                           v-model="checkValue[4]" v-bind:checked="checkValue[4]">1.3. Информация о наличии хронического
+            заболевания
           </b-form-checkbox>
         </div>
       </div>
-    </div>
 
-    <button type="button" class="btn btn-primary" v-on:click="chooseChecked">Сформировать таблицу</button>
+      <div class="checkboxes">
+        <b-form-checkbox class="checkbox" v-bind:checked="checkValue[5]" v-model="checkValue[5]">
+          2. Сведения о детях
+        </b-form-checkbox>
+      </div>
+
+      <div class="checkboxes">
+        <b-form-checkbox class="checkbox" v-on:change="setChoose(checkValue[6],7,8)"
+                         v-model="checkValue[6]" v-bind:checked="checkValue[6]">3. Сведения о членах семьи
+          <i class="fa fa-sort-desc" aria-hidden="true" v-if="hide2===false" @click="hideSecondBlock"></i>
+          <i class="fa fa-caret-right" aria-hidden="true" v-if="hide2===true" @click="hideSecondBlock"></i>
+        </b-form-checkbox>
+      </div>
+
+      <div class="checkboxes">
+        <div class="div-my" v-bind:hidden="hide2">
+          <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[7],6)" v-model="checkValue[7]"
+                           v-bind:checked="checkValue[7]">3.1. Общие сведения
+          </b-form-checkbox>
+          <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[8],6)" v-model="checkValue[8]"
+                           v-bind:checked="checkValue[8]">3.2. Информация о
+            муже/партнёре
+          </b-form-checkbox>
+        </div>
+      </div>
+
+      <div class="checkboxes">
+        <b-form-checkbox class="checkbox" v-on:change="setChoose(checkValue[9],10,11)" v-model="checkValue[9]"
+                         v-bind:checked="checkValue[9]">4. Сведения о социально-бытовом и
+          социально-экономическом положении
+          <i class="fa fa-sort-desc" aria-hidden="true" v-if="hide3===false" @click="hideThirdBlock"></i>
+          <i class="fa fa-caret-right" aria-hidden="true" v-if="hide3===true" @click="hideThirdBlock"></i>
+        </b-form-checkbox>
+      </div>
+
+      <div class="checkboxes">
+        <div class="div-my" v-bind:hidden="hide3">
+          <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[10],9)"
+                           v-model="checkValue[10]" v-bind:checked="checkValue[10]">4.1. Социально-бытовые условия
+          </b-form-checkbox>
+          <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[11],9)" v-model="checkValue[11]"
+                           v-bind:checked="checkValue[11]">
+            4.2. Социально-экономические условия проживания
+          </b-form-checkbox>
+        </div>
+      </div>
+
+      <div class="checkboxes">
+        <b-form-checkbox class="checkbox" v-bind:checked="checkValue[12]" v-model="checkValue[12]">5. Заключение
+          специалиста
+        </b-form-checkbox>
+      </div>
+
+      <!--      занесение тестов -->
+      <div class="checkboxes">
+        <b-form-checkbox class="checkbox" v-on:change="setChoose(checkValue[13],14,21)" v-model="checkValue[14]"
+                         v-bind:checked="checkValue[13]">6.Тесты
+          <i class="fa fa-sort-desc" aria-hidden="true" v-if="hide4===false" @click="hide4Block"></i>
+          <i class="fa fa-caret-right" aria-hidden="true" v-if="hide4===true" @click="hide4Block"></i></b-form-checkbox>
+      </div>
+      <div class="checkboxes">
+        <div class="div-my" v-bind:hidden="hide4">
+          <b-form-checkbox class="checkbox" v-on:change="setChoose(checkValue[14],15,17)"
+                           v-model="checkValue[14]" v-bind:checked="checkValue[14]">Первичная диагностика
+            <i class="fa fa-sort-desc" aria-hidden="true" v-if="hide5===false" @click="hide5Block"></i>
+            <i class="fa fa-caret-right" aria-hidden="true" v-if="hide5===true" @click="hide5Block"></i>
+          </b-form-checkbox>
+          <div class="div-my" v-bind:hidden="hide5">
+            <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[15],14)"
+                             v-model="checkValue[15]" v-bind:checked="checkValue[15]">Бойко
+            </b-form-checkbox>
+            <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[16],14)" v-model="checkValue[16]"
+                             v-bind:checked="checkValue[16]">GAGE
+            </b-form-checkbox>
+            <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[17],14)" v-model="checkValue[17]"
+                             v-bind:checked="checkValue[17]">SOCRATES
+            </b-form-checkbox>
+          </div>
+          <b-form-checkbox class="checkbox" v-on:change="setChoose(checkValue[18],19,21)"
+                           v-model="checkValue[18]" v-bind:checked="checkValue[18]">Вторичная диагностика
+            <i class="fa fa-sort-desc fa-2x" aria-hidden="true" v-if="hide6===false" @click="hide6Block"></i>
+            <i class="fa fa-caret-right" aria-hidden="true" v-if="hide6===true" @click="hide6Block"></i>
+          </b-form-checkbox>
+          <div class="div-my" v-bind:hidden="hide6">
+            <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[19],18)"
+                             v-model="checkValue[19]" v-bind:checked="checkValue[19]">Бойко
+            </b-form-checkbox>
+            <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[20],18)" v-model="checkValue[20]"
+                             v-bind:checked="checkValue[20]">GAGE
+            </b-form-checkbox>
+            <b-form-checkbox class="checkbox" v-on:change="setFalse(checkValue[21],18)" v-model="checkValue[21]"
+                             v-bind:checked="checkValue[21]">SOCRATES
+            </b-form-checkbox>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary" v-on:click="chooseChecked">Сформировать таблицу</button>
+    </div>
+    <MainFooter class="noprint"></MainFooter>
   </div>
 
 </template>
@@ -142,8 +147,13 @@
 <script>
 // import $ from "jquery";
 
+import MainFooter from "../footers/MainFooter";
+
 export default {
   name: "SelectionMenu",
+  components: {
+    MainFooter
+  },
   data() {
     return {
       hide1: true,
@@ -226,6 +236,12 @@ export default {
 </script>
 
 <style scoped>
+.general {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
 .container {
   margin-top: 90px;
   text-align: center;
@@ -233,6 +249,7 @@ export default {
   /*margin-left: 100px;*/
   background-color: #D2B48C;
   border-radius: 40px;
+  flex: 1;
 }
 
 .div-my {

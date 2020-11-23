@@ -38,7 +38,7 @@
       </validation-observer>
     </div>
     <div v-if="templateBool">
-      <MainFooter v-if="this.$refs.template.labels || choices"></MainFooter>
+      <MainFooter v-if="this.$refs.template.labels || choices" class="noprint"></MainFooter>
     </div>
   </div>
 </template>
@@ -148,5 +148,11 @@ export default {
 .my-form-group {
   color: #492727;
   margin-right: 3%;
+}
+
+@media print {
+  .noprint {
+    display: none;
+  }
 }
 </style>

@@ -79,7 +79,7 @@
       </validation-observer>
     </div>
     <div v-if="templateBool">
-      <MainFooter v-if="this.$refs.template.labels || choices"></MainFooter>
+      <MainFooter v-if="this.$refs.template.labels || choices" class="noprint"></MainFooter>
     </div>
   </div>
 </template>
@@ -235,5 +235,11 @@ export default {
   color: #492727;
   font-size: 16px;
   padding: 2%;
+}
+
+@media print {
+  .noprint {
+    display: none;
+  }
 }
 </style>

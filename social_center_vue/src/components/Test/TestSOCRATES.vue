@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="general">
     <template-test v-bind:url="'testSOCRATES'" v-bind:identifier="id" ref="template" @addInfo="addInfo"
                    v-bind:header="'Тест SOCRATES'" v-bind:identifier_field="'test'"
-                   @postInfo="postInfo" @newID="newID"></template-test>
+                   @postInfo="postInfo" @newID="newID" class="template-test"></template-test>
     <div class="container" v-if="add">
       <validation-observer ref="observer" v-slot="{ handleSubmit }">
         <b-form @submit.stop.prevent="handleSubmit(save)" @reset="notSave" class="my-form">
@@ -20,109 +20,135 @@
         </b-form>
       </validation-observer>
     </div>
+    <div v-if="templateBool">
+      <MainFooter v-if="$refs.template.labels || choices" class="noprint"></MainFooter>
+    </div>
   </div>
 </template>
 
 <script>
-  import templateTest from "./templateTest";
-  import {ValidationObserver, ValidationProvider} from "vee-validate/dist/vee-validate.full";
+import templateTest from "./templateTest";
+import {ValidationObserver, ValidationProvider} from "vee-validate/dist/vee-validate.full";
+import MainFooter from "../footers/MainFooter";
 
-  export default {
-    name: "TestSOCRATES",
-    components: {
-      templateTest,
-      ValidationProvider,
-      ValidationObserver,
+export default {
+  name: "TestSOCRATES",
+  components: {
+    templateTest,
+    ValidationProvider,
+    ValidationObserver,
+    MainFooter,
+  },
+  data() {
+    return {
+      add: false,
+      labels: '',
+      choices: '',
+      items: '',
+      id: '',
+      attempt: '',
+      templateBool: false
+    }
+  },
+  created() {
+    if (this.$route.params.id !== undefined && this.$route.params.attempt) {
+      sessionStorage.setItem('id_test', this.$route.params.id);
+      sessionStorage.setItem('test_attempt', this.$route.params.attempt);
+    }
+    this.id = sessionStorage.getItem('id_test');
+    this.attempt = sessionStorage.getItem('test_attempt');
+  },
+  mounted: function () {
+    this.templateBool = true
+  },
+  methods: {
+    addInfo() {
+      this.add = true;
+      $.ajax({
+        url: this.$store.state.baseUrl + "api/fields/",
+        type: "GET",
+        data: {model: 'TestSOCRATES'},
+        success: (response) => {
+          this.labels = response.data.labels;
+          this.choices = response.data.choices;
+          if (this.$refs.template.edit !== '')
+            this.items = this.$refs.template.edit;
+          else
+            this.items = response.data.items;
+        },
+        error: (response) => {
+          if (response.status === 401) this.logOut();
+          else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
+        }
+      })
     },
-    data() {
-      return {
-        add: false,
-        labels: '',
-        choices: '',
-        items: '',
-        id: '',
-        attempt: '',
-      }
+    save() {
+      this.items['client'] = parseInt(sessionStorage.getItem('id'));
+      this.items['attempt'] = parseInt(sessionStorage.getItem('test_attempt'));
+      if (this.$refs.template.edit !== '')
+        this.$refs.template.putRequest(this.items);
+      else this.$refs.template.postRequest(this.items);
     },
-    created() {
-      if (this.$route.params.id !== undefined && this.$route.params.attempt) {
-        sessionStorage.setItem('id_test', this.$route.params.id);
-        sessionStorage.setItem('test_attempt', this.$route.params.attempt);
-      }
-      this.id = sessionStorage.getItem('id_test');
-      this.attempt = sessionStorage.getItem('test_attempt');
+    postInfo() {
+      this.add = false;
     },
-    methods: {
-      addInfo() {
-        this.add = true;
-        $.ajax({
-          url: this.$store.state.baseUrl + "api/fields/",
-          type: "GET",
-          data: {model: 'TestSOCRATES'},
-          success: (response) => {
-            this.labels = response.data.labels;
-            this.choices = response.data.choices;
-            if (this.$refs.template.edit !== '')
-              this.items = this.$refs.template.edit;
-            else
-              this.items = response.data.items;
-          },
-          error: (response) => {
-            if (response.status === 401) this.logOut();
-            else alert("Не удалось получить данные с сервера.\nПовторите попытку позже.")
-          }
-        })
-      },
-      save() {
-        this.items['client'] = parseInt(sessionStorage.getItem('id'));
-        this.items['attempt'] = parseInt(sessionStorage.getItem('test_attempt'));
-        if (this.$refs.template.edit !== '')
-          this.$refs.template.putRequest(this.items);
-        else this.$refs.template.postRequest(this.items);
-      },
-      postInfo() {
-        this.add = false;
-      },
-      notSave() {
-        this.add = false;
-        this.$refs.template.isHide = false;
-      },
-      getValidationState({dirty, validated, valid = null}) {
-        return dirty || validated ? valid : null;
-      },
-      newID(id) {
-        sessionStorage.setItem('id_test', id);
-        this.id = id;
-      }
+    notSave() {
+      this.$refs.template.labels = this.labels;
+      this.add = false;
+      this.$refs.template.isHide = false;
+    },
+    getValidationState({dirty, validated, valid = null}) {
+      return dirty || validated ? valid : null;
+    },
+    newID(id) {
+      sessionStorage.setItem('id_test', id);
+      this.id = id;
     }
   }
+}
 </script>
 
 <style scoped>
-  .btn-default {
-    background-color: #D2B48C;
-    color: #492727;
-    margin: 10px;
-  }
+.general {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
 
-  .btn-default:hover {
-    background-color: #452424;
-    color: #D2B48C;
-  }
+.template-test {
+  flex: 1;
+}
 
-  .container {
-    text-align: center;
-  }
+.container {
+  text-align: center;
+  flex: 1000;
+}
 
-  .my-form {
-    background-color: #f5eed5;
-  }
+.btn-default {
+  background-color: #D2B48C;
+  color: #492727;
+  margin: 10px;
+}
 
-  .my-form-group {
-    color: #492727;
-    margin-right: 3%;
-    margin-left: 3%;
-    /*margin-top: 3%;*/
-  }
+.btn-default:hover {
+  background-color: #452424;
+  color: #D2B48C;
+}
 
+.my-form {
+  background-color: #f5eed5;
+}
+
+.my-form-group {
+  color: #492727;
+  margin-right: 3%;
+  margin-left: 3%;
+  /*margin-top: 3%;*/
+}
+
+@media print {
+  .noprint {
+    display: none;
+  }
+}
 </style>

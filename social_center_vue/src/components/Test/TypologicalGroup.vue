@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="general">
     <div class="noprint">
       <nav-bar></nav-bar>
       <button class="btn btn-default" type="button" v-b-toggle.sidebar-border>
@@ -23,6 +23,7 @@
         <!--        <div class="text" v-html="subtext"></div>-->
       </div>
     </div>
+    <MainFooter v-if="no_data || header" class="noprint"></MainFooter>
   </div>
 </template>
 
@@ -31,6 +32,7 @@ import sideBar from "../sideBar";
 import navBar from "../navBars/navBar";
 import sideBarTest from "./sideBarTest";
 import NextBack from "../Information/NextBack";
+import MainFooter from "../footers/MainFooter";
 
 export default {
   name: "TypologicalGroup",
@@ -38,7 +40,8 @@ export default {
     NextBack,
     sideBar,
     navBar,
-    sideBarTest
+    sideBarTest,
+    MainFooter
   },
   data() {
     return {
@@ -281,10 +284,17 @@ export default {
 </script>
 
 <style scoped>
+.general {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
 .container {
   margin-top: 2%;
   text-align: center;
   margin-bottom: 3%;
+  flex: 1;
 }
 
 .card-header {
