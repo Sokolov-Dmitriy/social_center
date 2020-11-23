@@ -175,7 +175,7 @@ export default {
   border-color: #f5eed5;
 }
 
-td {
+.table td, .table th {
   border-color: #f5eed5;
 }
 
