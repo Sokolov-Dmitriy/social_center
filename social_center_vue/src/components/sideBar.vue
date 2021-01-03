@@ -23,6 +23,8 @@
             <b-list-group-item class="my-link" to="/familyMembers">3.1 Общие сведения</b-list-group-item>
             <b-list-group-item class="my-link" to="/husbandList">3.2 Информация о муже/партнёре
             </b-list-group-item>
+            <b-list-group-item class="my-link" to="/anotherMembersList">3.3 Сведения о других членах семьи
+            </b-list-group-item>
           </b-list-group>
         </b-list-group-item>
 

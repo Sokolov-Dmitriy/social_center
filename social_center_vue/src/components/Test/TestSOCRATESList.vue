@@ -116,34 +116,7 @@ export default {
 </script>
 
 <style scoped>
-.general {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-}
-
-.container {
-  margin-top: 2%;
-  text-align: center;
-  flex: 1;
-}
-
-.my-link {
-  background-color: #FFF8DC;
-  color: #492727;
-  font-size: 20px;
-  margin-left: 20px;
-}
-
-.btn-default:hover {
-  background-color: #E6DFC6;
-  color: black;
-}
-
-.btn-default {
-  color: #492727;
-  font-size: 16px;
-}
+@import "../../assets/css/list-style.css";
 
 .btn-graphic {
   color: #492727;
@@ -153,86 +126,5 @@ export default {
 .btn-graphic:hover {
   background-color: #E6DFC6;
   color: black;
-}
-
-.btn-default-right {
-  float: right;
-  color: #492727;
-  font-size: 16px;
-}
-
-.btn-default-right:hover {
-  background-color: #E6DFC6;
-  color: black;
-}
-
-.card-header {
-  display: block;
-  font-size: 30px;
-  font-weight: 700;
-  padding: 30px 0;
-  color: #492727;
-  background-color: #D2B48C;
-  /*border-color: #D2B48C*/
-}
-
-.card {
-  background-color: #f5eed5;
-}
-
-.thead {
-  background-color: #D2B48C;
-  color: #492727;
-}
-
-.tbody {
-  color: #492727;
-  text-align: center;
-  border-color: #f5eed5;
-}
-
-.table td, .table th {
-  border-color: #f5eed5;
-}
-
-.btn-add {
-  margin-top: 6px;
-  background-color: #D2B48C;
-  color: #492727;
-  border-color: #D2B48C;
-}
-
-.btn-add:hover {
-  margin-top: 6px;
-  background-color: #492727;
-  color: #D2B48C;
-  border-color: #492727;
-}
-
-@media print {
-  .noprint {
-    display: none;
-  }
-}
-
-@media only screen and (max-width: 768px) {
-  .my-link {
-    font-size: 16px;
-    margin-left: 0;
-  }
-}
-
-@media only screen and (max-width: 650px) {
-  .my-link {
-    font-size: 14px;
-    margin-left: 0;
-  }
-}
-
-@media only screen and (max-width: 540px) {
-  .my-link {
-    font-size: 12px;
-    margin-left: 0;
-  }
 }
 </style>

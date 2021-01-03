@@ -36,6 +36,9 @@ import EnterEmail from "../components/Reset/EnterEmail";
 import ConfirmPassword from "../components/Reset/ConfirmPassword";
 import HusbandList from "../components/Information/HusbandList";
 import HusbandAdd from "../components/Information/HusbandAdd";
+import AnotherFamilyMembersList from "../components/Information/AnotherFamilyMembersList";
+import AnotherFamilyMembers from "../components/Information/AnotherFamilyMembers";
+import AnotherFamilyMembersAdd from "../components/Information/AnotherFamilyMembersAdd";
 
 Vue.use(Router)
 
@@ -215,7 +218,22 @@ export const router = new Router({
       path: '/husbandAdd',
       name: 'husbandAdd',
       component: HusbandAdd
-    }
+    },
+    {
+      path: '/anotherMembersList',
+      name: 'anotherMembersList',
+      component: AnotherFamilyMembersList
+    },
+    {
+      path: '/anotherFamilyMembers',
+      name: 'anotherFamilyMembers',
+      component: AnotherFamilyMembers
+    },
+    {
+      path: '/anotherFamilyMembersAdd',
+      name: 'anotherFamilyMembersAdd',
+      component: AnotherFamilyMembersAdd
+    },
   ],
 });
 router.beforeEach((to, from, next) => {
@@ -225,7 +243,7 @@ router.beforeEach((to, from, next) => {
     $.ajaxSetup({
       headers: {'Authorization': null}
     });
-    if(['enterEmail','confirmPassword'].includes(to.name)) next();
+    if (['enterEmail', 'confirmPassword'].includes(to.name)) next();
     else next({name: 'login'});
   } else next()
 });

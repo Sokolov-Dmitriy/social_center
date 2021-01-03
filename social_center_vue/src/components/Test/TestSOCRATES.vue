@@ -109,46 +109,9 @@ export default {
 </script>
 
 <style scoped>
-.general {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-}
-
-.template-test {
-  flex: 1;
-}
-
-.container {
-  text-align: center;
-  flex: 1000;
-}
-
-.btn-default {
-  background-color: #D2B48C;
-  color: #492727;
-  margin: 10px;
-}
-
-.btn-default:hover {
-  background-color: #452424;
-  color: #D2B48C;
-}
-
-.my-form {
-  background-color: #f5eed5;
-}
+@import "../../assets/css/edit-style.css";
 
 .my-form-group {
-  color: #492727;
-  margin-right: 3%;
   margin-left: 3%;
-  /*margin-top: 3%;*/
-}
-
-@media print {
-  .noprint {
-    display: none;
-  }
 }
 </style>

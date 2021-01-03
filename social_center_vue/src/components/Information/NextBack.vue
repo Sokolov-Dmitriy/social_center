@@ -24,6 +24,7 @@ export default {
         {url: 'childList', component: 'childList'},
         {url: 'familyMembers', component: 'familyMembers'},
         {url: 'husbandList', component: 'husbandList'},
+        {url: 'anotherMembersList', component: 'anotherMembersList'},
         {url: 'socialLiving', component: 'socialLivingCondition'},
         {url: 'socialEconomic', component: 'socialEconomicCondition'},
         {url: 'expertOpinion', component: 'expertOpinion'},
@@ -47,7 +48,8 @@ export default {
       }
 
       if (this.url === 'child' || this.url === 'childAdd') this.$router.push({name: 'familyMembers'});
-      if (this.url === 'husbandInformation' || this.url === 'husbandAdd') this.$router.push({name: 'socialLivingCondition'});
+      if (this.url === 'husbandInformation' || this.url === 'husbandAdd') this.$router.push({name: 'anotherMembersList'});
+      if (this.url === 'anotherFamilyMembers' || this.url === 'anotherFamilyMembersAdd') this.$router.push({name: 'socialLivingCondition'});
 
       for (var testurl in this.testurls) {
         if (this.url === this.testurls[testurl].url) {
@@ -68,6 +70,7 @@ export default {
 
       if (this.url === 'child' || this.url === 'childAdd') this.$router.push({name: 'childList'});
       if (this.url === 'husbandInformation' || this.url === 'husbandAdd') this.$router.push({name: 'husbandList'});
+      if (this.url === 'anotherFamilyMembers' || this.url === 'anotherFamilyMembersAdd') this.$router.push({name: 'anotherMembersList'});
 
       for (var testurl in this.testurls) {
         if (this.url === this.testurls[testurl].url) {

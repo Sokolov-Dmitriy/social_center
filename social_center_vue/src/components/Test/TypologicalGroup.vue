@@ -284,6 +284,8 @@ export default {
 </script>
 
 <style scoped>
+@import "../../assets/css/link-style.css";
+
 .general {
   display: flex;
   min-height: 100vh;
@@ -332,13 +334,6 @@ export default {
   color: black;
 }
 
-.my-link {
-  background-color: #FFF8DC;
-  color: #492727;
-  font-size: 20px;
-  margin-left: 20px;
-}
-
 .header {
   font-size: 18px;
   color: #492727;
@@ -362,24 +357,4 @@ export default {
   }
 }
 
-@media only screen and (max-width: 768px) {
-  .my-link {
-    font-size: 16px;
-    margin-left: 0;
-  }
-}
-
-@media only screen and (max-width: 650px) {
-  .my-link {
-    font-size: 14px;
-    margin-left: 0;
-  }
-}
-
-@media only screen and (max-width: 540px) {
-  .my-link {
-    font-size: 12px;
-    margin-left: 0;
-  }
-}
 </style>

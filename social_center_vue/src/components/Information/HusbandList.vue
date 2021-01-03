@@ -94,83 +94,9 @@ export default {
 </script>
 
 <style scoped>
-.general {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-}
-
-.container {
-  margin-top: 2%;
-  text-align: center;
-  flex: 1;
-}
-
-.card-header {
-  display: block;
-  font-size: 30px;
-  font-weight: 700;
-  padding: 30px 0;
-  /*margin-bottom: 20px;*/
-  color: #492727;
-  background-color: #D2B48C;
-  /*border-color: #D2B48C*/
-}
-
-.card {
-  background-color: #f5eed5;
-  /*margin-bottom: 5%;*/
-}
-
-.my-link {
-  background-color: #FFF8DC;
-  color: #492727;
-  font-size: 20px;
-  margin-left: 20px;
-}
-
-.thead {
-  background-color: #D2B48C;
-  color: #492727;
-}
-
-.tbody {
-  color: #492727;
-  text-align: center;
-  border-color: #f5eed5;
-}
-
-/*td .btn{*/
-/*  background-color: #D2B48C;*/
-/*  color: #492727;*/
-/*  border-color: #D2B48C;*/
-/*}*/
-.btn-default:hover {
-  background-color: #E6DFC6;
-  color: black;
-}
-
-.btn-default {
-  color: #492727;
-  font-size: 16px;
-}
-
-.btn-default-right {
-  float: right;
-  color: #492727;
-  font-size: 16px;
-}
-
-.btn-default-right:hover {
-  background-color: #E6DFC6;
-  color: black;
-}
+@import "../../assets/css/list-style.css";
 
 @media print {
-  .noprint {
-    display: none;
-  }
-
   .tbody {
     page-break-after: auto;
     page-break-inside: avoid;
@@ -179,24 +105,4 @@ export default {
   }
 }
 
-@media only screen and (max-width: 768px) {
-  .my-link {
-    font-size: 16px;
-    margin-left: 0;
-  }
-}
-
-@media only screen and (max-width: 650px) {
-  .my-link {
-    font-size: 14px;
-    margin-left: 0;
-  }
-}
-
-@media only screen and (max-width: 540px) {
-  .my-link {
-    font-size: 12px;
-    margin-left: 0;
-  }
-}
 </style>

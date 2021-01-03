@@ -802,6 +802,25 @@ class HusbandInformation(models.Model):
         verbose_name_plural = 'Информация о муже/партнёре'
 
 
+class AnotherFamilyMembers(models.Model):
+    """
+    Социальная диагностика
+    ======================
+
+    3. Сведения о членах семьи
+    --------------------------
+
+    3.3 Сведения о других членах семьи
+    """
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+
+    who_is = models.TextField("Кем приходится", null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Сведения о других членах семьи'
+        verbose_name_plural = 'Сведения о других членах семьи'
+
+
 class User(AbstractUser):
     patronymic = models.CharField("Отчество",
                                   max_length=60, null=True, blank=True)

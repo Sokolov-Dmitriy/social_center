@@ -308,6 +308,30 @@ class HusbandInformationCRUDSerializers(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class AnotherFamilyMembersListSerializers(serializers.ModelSerializer):
+    """Список других членов семьи"""
+
+    class Meta:
+        model = AnotherFamilyMembers
+        fields = ('id', 'who_is')
+
+
+class AnotherFamilyMembersSerializers(MyModelSerializer):
+    """Сведения о других членах семьи"""
+
+    class Meta:
+        model = AnotherFamilyMembers
+        fields = '__all__'
+
+
+class AnotherFamilyMembersCRUDSerializers(serializers.ModelSerializer):
+    """Сведения о других членах семьи без обозначений и вариантов полей"""
+
+    class Meta:
+        model = AnotherFamilyMembers
+        fields = '__all__'
+
+
 class UserSerializers(serializers.ModelSerializer):
     """Специалист"""
 

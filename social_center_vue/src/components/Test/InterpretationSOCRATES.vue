@@ -182,59 +182,7 @@ export default {
 </script>
 
 <style scoped>
-.general {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-}
-
-.container {
-  margin-top: 2%;
-  text-align: center;
-  flex: 1;
-}
-
-.my-link {
-  background-color: #FFF8DC;
-  color: #492727;
-  font-size: 20px;
-  margin-left: 20px;
-}
-
-.btn-default:hover {
-  background-color: #E6DFC6;
-  color: black;
-}
-
-.btn-default {
-  color: #492727;
-  font-size: 16px;
-}
-
-.btn-default-right {
-  float: right;
-  color: #492727;
-  font-size: 16px;
-}
-
-.btn-default-right:hover {
-  background-color: #E6DFC6;
-  color: black;
-}
-
-.card-header {
-  display: block;
-  font-size: 30px;
-  font-weight: 700;
-  padding: 30px 0;
-  color: #492727;
-  background-color: #D2B48C;
-  /*border-color: #D2B48C*/
-}
-
-.card {
-  background-color: #f5eed5;
-}
+@import "../../assets/css/graphic-style.css";
 
 .thead {
   background-color: #D2B48C;
@@ -251,73 +199,17 @@ export default {
   font-weight: bolder;
 }
 
-.chart-container {
-  width: 85% !important;
-  margin: 0 auto;
-}
-
 .chart-container2 {
-  width: 85% !important;
   height: 100px;
-  margin: 0 auto 20px;
 }
 
-.subtitle {
-  display: block;
-  font-size: 20px;
-  font-weight: 600;
-  padding: 20px 0;
-  color: #492727;
-  background-color: #D2B48C;
-}
 
 @media print {
-  .noprint {
-    display: none;
-  }
-
-  .chart-container {
-    min-height: 100%;
-    max-width: 100%;
-    max-height: 100%;
-    height: auto !important;
-    width: auto !important;
-  }
-
-  .chart-container2 {
-    min-height: 100%;
-    max-width: 100%;
-    max-height: 100%;
-    height: auto !important;
-    width: auto !important;
-  }
-
   .tbody {
     page-break-after: auto;
     page-break-inside: avoid;
     border: none !important;
     margin-bottom: 20px !important;
-  }
-}
-
-@media only screen and (max-width: 768px) {
-  .my-link {
-    font-size: 16px;
-    margin-left: 0;
-  }
-}
-
-@media only screen and (max-width: 650px) {
-  .my-link {
-    font-size: 14px;
-    margin-left: 0;
-  }
-}
-
-@media only screen and (max-width: 540px) {
-  .my-link {
-    font-size: 12px;
-    margin-left: 0;
   }
 }
 </style>

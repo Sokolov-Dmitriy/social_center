@@ -35,7 +35,7 @@
           <!--          </tr>-->
           <!--          </thead>-->
           <tbody v-for="(value,key) in labels" class="tbody">
-          <tr v-if="!['id','client','child','husband','specialist'].includes(key) ">
+          <tr v-if="!['id','client','child','husband','specialist','family_member'].includes(key) ">
             <td class="td-left">{{ labels[key] }}</td>
             <td>{{ items[key] }}</td>
           </tr>
@@ -132,6 +132,7 @@ export default {
           if (this.url === 'client') this.$router.push({name: 'mainwindow'});
           else if (this.url === 'child') this.$router.push({name: 'childList'});
           else if (this.url === 'husbandInformation') this.$router.push({name: 'husbandList'});
+          else if (this.url === 'anotherFamilyMembers') this.$router.push({name: 'anotherMembersList'});
         },
         error: (response) => {
           if (response.status === 401) this.logOut();
@@ -194,118 +195,5 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  margin-top: 2%;
-  text-align: center;
-}
-
-.card-header {
-  display: block;
-  font-size: 30px;
-  font-weight: 700;
-  padding: 30px 0;
-  color: #492727;
-  background-color: #D2B48C;
-}
-
-.card {
-  background-color: #f5eed5;
-}
-
-.thead {
-  background-color: #D2B48C;
-  color: #492727;
-}
-
-.table {
-  table-layout: fixed;
-}
-
-.tbody {
-  color: #492727;
-  text-align: center;
-  border-color: #f5eed5;
-}
-
-.table td, .table th {
-  border-color: #f5eed5;
-}
-
-.btn-default {
-  color: #492727;
-  font-size: 16px;
-}
-
-.btn-default:hover {
-  background-color: #E6DFC6;
-  color: black;
-}
-
-.btn-default-right {
-  float: right;
-  color: #492727;
-  font-size: 16px;
-}
-
-.btn-default-right:hover {
-  background-color: #E6DFC6;
-  color: black;
-}
-
-.my-link {
-  background-color: #FFF8DC;
-  color: #492727;
-  font-size: 20px;
-  margin-left: 20px;
-}
-
-.td-left {
-  text-align: left;
-  padding-left: 40px;
-}
-
-.my-block {
-  text-align: center;
-  color: #492727;
-  font-size: 18px;
-  padding: 20px;
-}
-
-@media print {
-  .table td, .table th {
-    border-color: #dee2e6;
-  }
-
-  .noprint {
-    display: none;
-  }
-
-  .tbody {
-    page-break-after: auto;
-    page-break-inside: avoid;
-    border: none !important;
-    margin-bottom: 20px !important;
-  }
-}
-
-@media only screen and (max-width: 768px) {
-  .my-link {
-    font-size: 16px;
-    margin-left: 0;
-  }
-}
-
-@media only screen and (max-width: 650px) {
-  .my-link {
-    font-size: 14px;
-    margin-left: 0;
-  }
-}
-
-@media only screen and (max-width: 540px) {
-  .my-link {
-    font-size: 12px;
-    margin-left: 0;
-  }
-}
+@import "../assets/css/view-style.css";
 </style>

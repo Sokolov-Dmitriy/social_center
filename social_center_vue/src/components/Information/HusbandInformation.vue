@@ -195,51 +195,12 @@ export default {
 </script>
 
 <style scoped>
-.general {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-}
-
-.template-info {
-  flex: 1;
-}
-
-.container {
-  text-align: center;
-  flex: 1000;
-}
-
-.btn-default {
-  background-color: #D2B48C;
-  color: #492727;
-  margin: 10px;
-}
-
-.btn-default:hover {
-  background-color: #452424;
-  color: #D2B48C;
-}
-
-.my-form {
-  background-color: #f5eed5;
-}
-
-.my-form-group {
-  color: #492727;
-  margin-right: 3%;
-}
+@import "../../assets/css/edit-style.css";
 
 .my-little-block {
   text-align: center;
   color: #492727;
   font-size: 16px;
   padding: 2%;
-}
-
-@media print {
-  .noprint {
-    display: none;
-  }
 }
 </style>

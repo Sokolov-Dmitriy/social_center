@@ -488,6 +488,89 @@ class HusbandInformationView(APIView):
         return Response(status=201)
 
 
+class AnotherFamilyMembersListView(APIView):
+    """Список других членов семьи"""
+
+    def get(self, request):
+        """
+        Получение записи
+
+        :param request: Запрос с id Клиента
+        :return: Список других членов семьи клиента
+        """
+        client = request.GET.get("client")
+        family_member_list = AnotherFamilyMembers.objects.filter(client=client)
+        serializer = AnotherFamilyMembersListSerializers(family_member_list, many=True)
+        return Response(serializer.data)
+
+
+class AnotherFamilyMembersView(APIView):
+    """Сведения о других членах семьи"""
+
+    def get(self, request, pk=None):
+        """
+        Получение записи
+
+        :param request: Запрос с id члена семьи
+        :param pk: id члена семьи
+        :return: Сведения о других членах семьи, в случае отсутствия записи No Content
+        """
+        if pk is None:
+            family_member = request.GET.get("family_member")
+        else:
+            family_member = pk
+        family = AnotherFamilyMembers.objects.filter(pk=family_member)
+        if family.exists():
+            if pk is None:
+                serializer = AnotherFamilyMembersSerializers(family, many=True)
+            else:
+                serializer = AnotherFamilyMembersCRUDSerializers(family, many=True)
+            return Response(serializer.data)
+        else:
+            return Response(status=204)
+
+    def post(self, request):
+        """
+        Создание записи
+
+        :param request: Запрос с новыми данными
+        :return: Статус Created, в случае ошибки создания Bad Request
+        """
+        family = AnotherFamilyMembersCRUDSerializers(data=request.data)
+        if family.is_valid():
+            client = get_object_or_404(Client, id=self.request.data.get('client'))
+            family.save(client=client)
+            return Response(status=201)
+        else:
+            return Response(status=400)
+
+    def put(self, request, pk):
+        """
+        Обновление записи
+
+        :param request: Запрос с обновленными данными
+        :param pk: id обновляемой записи
+        :return: Статус Created
+        """
+        family = get_object_or_404(AnotherFamilyMembers.objects.all(), pk=pk)
+        serializer = AnotherFamilyMembersCRUDSerializers(instance=family, data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+        return Response(status=201)
+
+    def delete(self, request, pk):
+        """
+        Удаление записи
+
+        :param request: Запрос
+        :param pk: id удаляемой записи
+        :return: Статус Created
+        """
+        family = get_object_or_404(AnotherFamilyMembers.objects.all(), pk=pk)
+        family.delete()
+        return Response(status=201)
+
+
 class SocialLivingConditionView(APIView):
     """Социально бытовые условия"""
 
@@ -1295,8 +1378,9 @@ def get_model_fields(model):
 MODEL = {'Client': Client, 'ASocialBehavior': ASocialBehavior,
          'ChronicDisease': ChronicDisease, 'Child': Child,
          'FamilyMembersInformation': FamilyMembersInformation, 'HusbandInformation': HusbandInformation,
-         'SocialLivingCondition': SocialLivingCondition, 'SocialEconomicCondition': SocialEconomicCondition,
-         'ExpertOpinion': ExpertOpinion, 'TestBoyko': TestBoyko, 'TestGAGE': TestGAGE, 'TestSOCRATES': TestSOCRATES}
+         'AnotherFamilyMembers': AnotherFamilyMembers, 'SocialLivingCondition': SocialLivingCondition,
+         'SocialEconomicCondition': SocialEconomicCondition, 'ExpertOpinion': ExpertOpinion,
+         'TestBoyko': TestBoyko, 'TestGAGE': TestGAGE, 'TestSOCRATES': TestSOCRATES}
 
 
 class FieldsView(APIView):

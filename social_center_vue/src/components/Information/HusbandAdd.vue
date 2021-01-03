@@ -208,112 +208,12 @@ export default {
 </script>
 
 <style scoped>
-.general {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-}
-
-.container, .header {
-  flex: 1;
-}
-
-.container {
-  margin-top: 2%;
-  text-align: center;
-}
-
-.card-header {
-  display: block;
-  font-size: 30px;
-  font-weight: 700;
-  padding: 30px 0;
-  /*margin-bottom: 20px;*/
-  color: #492727;
-  background-color: #D2B48C;
-  border-color: #D2B48C
-}
-
-.card {
-  background-color: #f5eed5;
-  /*margin-bottom: 5%;*/
-}
-
-form .btn-default {
-  background-color: #D2B48C;
-  color: #492727;
-  margin: 10px;
-}
-
-form .btn-default:hover {
-  background-color: #452424;
-  color: #D2B48C;
-}
-
-.btn-default:hover {
-  background-color: #E6DFC6;
-  color: black;
-}
-
-.my-form {
-  background-color: #f5eed5;
-}
-
-.my-form-group {
-  color: #492727;
-  margin-right: 3%;
-}
-
-.my-link {
-  background-color: #FFF8DC;
-  color: #492727;
-  font-size: 20px;
-  margin-left: 20px;
-}
-
-.btn-default-right {
-  float: right;
-  color: #492727;
-  font-size: 16px;
-}
-
-.btn-default-right:hover {
-  background-color: #E6DFC6;
-  color: black;
-}
-
-.my-block {
-  text-align: center;
-  color: #492727;
-  font-size: 18px;
-  padding: 3%;
-}
+@import "../../assets/css/add-style.css";
 
 .my-little-block {
   text-align: center;
   color: #492727;
   font-size: 16px;
   padding: 2%;
-}
-
-@media only screen and (max-width: 768px) {
-  .my-link {
-    font-size: 16px;
-    margin-left: 0;
-  }
-}
-
-@media only screen and (max-width: 650px) {
-  .my-link {
-    font-size: 14px;
-    margin-left: 0;
-  }
-}
-
-@media only screen and (max-width: 540px) {
-  .my-link {
-    font-size: 12px;
-    margin-left: 0;
-  }
 }
 </style>

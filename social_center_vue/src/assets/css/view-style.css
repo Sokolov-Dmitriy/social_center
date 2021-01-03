@@ -1,0 +1,88 @@
+@import "../../assets/css/link-style.css";
+
+.container {
+  margin-top: 2%;
+  text-align: center;
+}
+
+.card-header {
+  display: block;
+  font-size: 30px;
+  font-weight: 700;
+  padding: 30px 0;
+  color: #492727;
+  background-color: #D2B48C;
+}
+
+.card {
+  background-color: #f5eed5;
+}
+
+.thead {
+  background-color: #D2B48C;
+  color: #492727;
+}
+
+.table {
+  table-layout: fixed;
+}
+
+.tbody {
+  color: #492727;
+  text-align: center;
+  border-color: #f5eed5;
+}
+
+.table td, .table th {
+  border-color: #f5eed5;
+}
+
+.btn-default {
+  color: #492727;
+  font-size: 16px;
+}
+
+.btn-default:hover {
+  background-color: #E6DFC6;
+  color: black;
+}
+
+.btn-default-right {
+  float: right;
+  color: #492727;
+  font-size: 16px;
+}
+
+.btn-default-right:hover {
+  background-color: #E6DFC6;
+  color: black;
+}
+
+.td-left {
+  text-align: left;
+  padding-left: 40px;
+}
+
+.my-block {
+  text-align: center;
+  color: #492727;
+  font-size: 18px;
+  padding: 20px;
+}
+
+@media print {
+  .table td, .table th {
+    border-color: #dee2e6;
+  }
+
+  .noprint {
+    display: none;
+  }
+
+  .tbody {
+    page-break-after: auto;
+    page-break-inside: avoid;
+    border: none !important;
+    margin-bottom: 20px !important;
+  }
+}
