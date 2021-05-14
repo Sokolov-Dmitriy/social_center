@@ -161,21 +161,23 @@ REST_FRAMEWORK = {
 # все запросы, которые идут на бекенд разрешены
 CORS_ORIGIN_ALLOW_ALL = True
 
-if DEBUG:
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-#
 # if DEBUG:
-#     EMAIL_USE_TLS = True
-#     EMAIL_HOST = 'smtp.yandex.ru'
-#     EMAIL_PORT = 465
-#     EMAIL_HOST_USER = 'sokolovds.com@yandex.ru'
-#     EMAIL_HOST_PASSWORD = 'sokolovDD2'
+#     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'sokolovds.com@gmail.com'
+EMAIL_HOST_PASSWORD = 'sokolovds'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': '#/confirmPassword/{uid}/{token}',
     # 'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'SEND_CONFIRMATION_EMAIL': True,
+    # 'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,
+    # 'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
 }
 
 # настройки разработки и продакшена
