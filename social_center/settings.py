@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
+
 # дополненный пользователь
 AUTH_USER_MODEL = 'social_center_app.User'
 
@@ -164,22 +165,38 @@ CORS_ORIGIN_ALLOW_ALL = True
 # if DEBUG:
 #     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+
 # EMAIL_USE_TLS = True
 # EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = "sokolovds.com@gmail.com"
+# EMAIL_HOST_PASSWORD = "sokolovds"
 # EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'sokolovds.com@gmail.com'
-# # EMAIL_HOST_USER = 'hookah.itmo@yandex.ru'
-# EMAIL_HOST_PASSWORD = 'sokolovds'
+#UZ2Rx5}yeuKa
+
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'sokolovds.com@mail.ru'
 EMAIL_HOST = 'smtp.mail.ru'
 EMAIL_PORT = 2525
 EMAIL_HOST_USER = "sokolovds.com@mail.ru"
-EMAIL_HOST_PASSWORD = "BMr5RsngqY"
-EMAIL_USE_TLS = True
+# EMAIL_HOST_PASSWORD = "BMr5RsngqY"
+EMAIL_HOST_PASSWORD = "yuwefbgshifweyusebc"
+
+
+DOMAIN = 'sokolovds.com'
+SITE_NAME = 'КСЦОН Красносельского района'
+
+
 
 
 DJOSER = {
+    'EMAIL': {
+        'activation': 'core.email.ActivationEmail',
+        "password_reset": "social_center.email.PasswordResetEmail",
+    },
     'PASSWORD_RESET_CONFIRM_URL': '#/confirmPassword/{uid}/{token}',
     # 'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
