@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid myfooter">
     <div class="d-flex justify-content-center">
-      <h6>2020, КЦСОН Красносельского района</h6>
+      <h6>2020-2021, КЦСОН Красносельского района</h6>
     </div>
   </div>
 </template>

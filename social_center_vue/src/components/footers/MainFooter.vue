@@ -2,7 +2,7 @@
   <footer>
     <div class="logo">
       <img src="static/logo.png" alt="Логотип">
-      <p>2020, КЦСОН Красносельского района</p>
+      <p>2020-2021, КЦСОН Красносельского района</p>
     </div>
     <div class="description">
       <p>
